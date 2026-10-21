@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Todo List</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✅</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+:root{
+  --bg:#eceeea; --panel:#f9faf8; --panel-2:#f1f3ef; --line:#dde1db; --line-strong:#c6ccc4;
+  --ink:#1e282c; --muted:#5f6b70; --faint:#97a19f;
+  --accent:#1f6f68; --accent-soft:#dcebe8; --accent-ink:#ffffff;
+  --danger:#b8352d; --danger-soft:#f6e1de;
+  --done:#9aa3a0; --red:#d32f2f;
+  --cat-none:#c6ccc4; --cat-client:#2f62c9; --cat-internal:#7a4cc2; --cat-large:#b7791f;
+  --radius-lg:12px; --radius:8px; --radius-sm:6px;
+  --shadow:0 1px 0 rgba(30,40,44,.04), 0 2px 6px rgba(30,40,44,.06);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121617; --panel:#191e20; --panel-2:#20272a; --line:#2b3336; --line-strong:#3c464a;
+    --ink:#e4e9e7; --muted:#9aa6a8; --faint:#6a7679;
+    --accent:#5fb8ae; --accent-soft:#1d3532; --accent-ink:#0d1a19;
+    --danger:#ef7a70; --danger-soft:#3a2321;
+    --done:#5f6a6c; --red:#ff6b62;
+    --cat-none:#3c464a; --cat-client:#7aa2f2; --cat-internal:#b493ec; --cat-large:#e0a84f;
+    --shadow:0 1px 0 rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 Manrope, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;min-width:1100px;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.muted{color:var(--muted)}
+.small{font-size:12.5px}
+.spacer{flex:1}
+
+/* Buttons */
+.btn{border:1px solid var(--line-strong);background:var(--panel);border-radius:var(--radius);padding:7px 12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--panel-2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--muted)}
+.btn.ghost:hover{background:var(--panel-2);color:var(--ink)}
+.btn.danger{color:var(--danger)}
+.btn.small{padding:4px 9px;font-size:13px}
+.btn.block{width:100%}
+.btn:disabled{opacity:.55;cursor:default}
+.icon-btn{flex:none;width:28px;height:28px;border:0;background:transparent;border-radius:6px;color:var(--muted);font-size:18px;line-height:1;cursor:pointer}
+.icon-btn:hover{background:var(--panel-2);color:var(--ink)}
+
+/* Fields */
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.field-label{font-size:12px;font-weight:700;color:var(--muted)}
+.input{width:100%;border:1px solid var(--line-strong);background:var(--panel);border-radius:var(--radius-sm);padding:7px 9px;min-width:0}
+.input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.input.invalid{border-color:var(--danger);box-shadow:0 0 0 3px var(--danger-soft)}
+.title-input{font-size:16px;font-weight:700}
+input[type=date].input{padding:6px 8px}
+
+/* Rich text */
+.rich{min-height:34px;max-height:240px;overflow-y:auto;overflow-wrap:anywhere;cursor:text}
+.rich:empty::before{content:attr(data-placeholder);color:var(--faint);pointer-events:none}
+.rich-toolbar{display:none;flex-wrap:wrap;gap:3px;margin-bottom:5px}
+.rich-wrap:focus-within .rich-toolbar{display:flex}
+.tb-btn{display:inline-flex;align-items:center;gap:5px;height:26px;min-width:28px;padding:0 7px;border:1px solid var(--line);background:var(--panel-2);border-radius:5px;font-size:12.5px;cursor:pointer;justify-content:center}
+.tb-btn:hover{border-color:var(--line-strong)}
+.tb-sep{width:1px;background:var(--line);margin:3px 3px}
+.swatch{width:11px;height:11px;border-radius:3px;display:inline-block;border:1px solid rgba(0,0,0,.15)}
+.sw-ink{background:var(--ink)}
+.fmt{overflow-wrap:anywhere}
+.fmt span[style*="color: rgb(0, 0, 0)"], .fmt font[color="#000000"]{color:var(--ink)!important}
+.fmt span[style*="color: rgb(211, 47, 47)"], .fmt font[color="#d32f2f"]{color:var(--red)!important}
+.fmt span[style*="background-color: rgb(255, 235, 59)"]{color:#1e282c;border-radius:2px}
+
+/* App frame */
+.main{height:100vh;display:flex;flex-direction:column}
+.topbar{height:52px;flex:none;display:flex;align-items:center;gap:16px;padding:0 20px;background:var(--panel);border-bottom:1px solid var(--line)}
+.brand{font-weight:800;font-size:17px;letter-spacing:-.01em}
+.topbar-slot{flex:1;display:flex;align-items:center;gap:8px}
+.topbar-user{display:flex;align-items:center;gap:8px}
+.columns{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:12px}
+.col{min-height:0;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden}
+.col-head{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:52px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.col-head h2{margin:0;font-size:15px;font-weight:800;letter-spacing:-.01em}
+.col-scroll{flex:1;min-height:0;overflow-y:auto;padding:14px 16px}
+.col-foot{flex:none;display:flex;align-items:center;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
+.loading{color:var(--faint);padding:20px 0;text-align:center}
+
+/* Task editor */
+.items-label{margin:16px 0 8px}
+.item-ed{border:1px solid var(--line);border-radius:var(--radius);padding:10px;margin-bottom:8px;background:var(--panel-2)}
+.item-ed-top{display:flex;gap:8px;align-items:center}
+.item-ed-top .it-title{flex:1;font-weight:600}
+.item-ed.is-done .it-title{text-decoration:line-through;color:var(--done)}
+.item-ed-meta{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.item-ed-meta .input{width:auto}
+.item-ed-meta .it-atype{flex:1 1 130px}
+.item-ed-meta .it-aname{flex:1 1 120px}
+.item-ed-meta .it-due{flex:0 0 150px}
+.it-desc{margin-bottom:8px}
+
+/* Checkbox */
+.check{appearance:none;-webkit-appearance:none;width:18px;height:18px;flex:none;margin:0;border:1.5px solid var(--line-strong);border-radius:5px;background:var(--panel);cursor:pointer;display:inline-grid;place-content:center}
+.check:hover{border-color:var(--accent)}
+.check:checked{background:var(--accent);border-color:var(--accent)}
+.check:checked::after{content:"";width:9px;height:5px;border-left:2px solid var(--accent-ink);border-bottom:2px solid var(--accent-ink);transform:translate(0,-1px) rotate(-45deg)}
+
+/* Week */
+.overdue-strip{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;padding:9px 16px;border:0;border-bottom:1px solid var(--line);background:var(--danger-soft);color:var(--danger);font-weight:700;text-align:left;cursor:pointer}
+.overdue-strip:hover{filter:brightness(.98)}
+.overdue-strip.none{background:var(--panel);color:var(--faint);font-weight:600;cursor:default}
+.strip-go{font-size:12.5px;text-decoration:underline;text-underline-offset:2px}
+.day + .day{margin-top:20px}
+.day-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding-bottom:6px;margin-bottom:8px;border-bottom:2px solid var(--line)}
+.day-name{font-size:21px;font-weight:800;letter-spacing:-.025em;display:flex;align-items:center;gap:8px}
+.day-date{color:var(--muted);font-weight:600;font-size:13px}
+.day.today .day-head{border-bottom-color:var(--accent)}
+.day.today .day-name{color:var(--accent)}
+.day-badge{font-size:11px;font-weight:700;letter-spacing:0;padding:2px 8px;border-radius:999px;background:var(--panel-2);color:var(--muted)}
+.day.today .day-badge{background:var(--accent-soft);color:var(--accent)}
+.day-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.day-empty{grid-column:1/-1;padding:12px;color:var(--faint);font-size:13px;border:1px dashed var(--line);border-radius:var(--radius);text-align:center}
+.wk-card{display:flex;flex-direction:column;align-items:stretch;gap:3px;min-width:0;width:100%;padding:8px 10px;text-align:left;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--cat-color);border-radius:var(--radius);box-shadow:var(--shadow)}
+.wk-card:hover{border-color:var(--line-strong);border-left-color:var(--cat-color)}
+.wk-card.selected{outline:2px solid var(--accent);outline-offset:1px}
+.wk-card.all-done{opacity:.6}
+.wk-title{font-weight:700;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wk-item{font-size:12.5px;color:var(--muted);line-height:1.35;overflow-wrap:anywhere}
+.wk-item.done{text-decoration:line-through;color:var(--done)}
+.wk-more{font-size:12px;font-weight:700;color:var(--accent)}
+
+/* Right column */
+.tabs{display:flex;gap:3px;padding:3px;background:var(--panel-2);border-radius:var(--radius)}
+.tab{display:flex;align-items:center;gap:6px;border:0;background:transparent;padding:5px 10px;border-radius:6px;font-weight:700;color:var(--muted);cursor:pointer}
+.tab.active{background:var(--panel);color:var(--ink);box-shadow:var(--shadow)}
+.tab-count{font-size:11.5px;min-width:20px;padding:0 6px;border-radius:999px;background:var(--line);color:var(--muted);text-align:center}
+.tab[data-tab=overdue] .tab-count.has{background:var(--danger);color:#fff}
+.filters{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.chip-toggle{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 8px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--faint);font-size:12.5px;font-weight:600;cursor:pointer}
+.chip-toggle .dot{width:8px;height:8px;border-radius:50%;background:var(--cat-color);opacity:.45}
+.chip-toggle.on{background:var(--panel-2);color:var(--ink);border-color:var(--line-strong)}
+.chip-toggle.on .dot{opacity:1}
+.cat-none{--cat-color:var(--cat-none)} .cat-client{--cat-color:var(--cat-client)} .cat-internal{--cat-color:var(--cat-internal)} .cat-large{--cat-color:var(--cat-large)}
+
+.task-card{display:block;margin-bottom:10px;padding:12px 12px 10px;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--cat-color);border-radius:var(--radius);box-shadow:var(--shadow);cursor:pointer}
+.task-card:hover{border-color:var(--line-strong);border-left-color:var(--cat-color)}
+.task-card.selected{outline:2px solid var(--accent);outline-offset:1px}
+.task-card.expanded{cursor:default}
+.task-card.flash{animation:flash 1.1s ease-out}
+@keyframes flash{0%{box-shadow:0 0 0 7px var(--accent-soft)}100%{box-shadow:var(--shadow)}}
+@media (prefers-reduced-motion: reduce){.task-card.flash{animation:none}}
+.tc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.tc-head-text{min-width:0}
+.tc-title{font-weight:800;font-size:15px;letter-spacing:-.01em;overflow-wrap:anywhere}
+.tc-sub{color:var(--muted);font-size:13px;margin-top:2px}
+.tc-meta{flex:none;display:flex;align-items:center;gap:8px}
+.tc-progress{font-size:12px;font-weight:700;color:var(--faint)}
+.cat-tag{font-size:11.5px;font-weight:700;color:var(--cat-color);background:color-mix(in srgb, var(--cat-color) 15%, transparent);padding:2px 8px;border-radius:999px;white-space:nowrap}
+.tc-items{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
+.tc-item{display:flex;align-items:center;gap:8px;font-size:13.5px}
+.tc-item-title{flex:1;min-width:0;overflow-wrap:anywhere}
+.tc-item.done .tc-item-title{text-decoration:line-through;color:var(--done)}
+.tc-item.done .pill,.tc-item.done .tc-link{opacity:.55}
+.pill{flex:none;font-size:11.5px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line);color:var(--muted);white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis}
+.pill.due-over{background:var(--danger-soft);border-color:transparent;color:var(--danger)}
+.pill.due-today{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.tc-link{flex:none;font-size:12px;font-weight:700;color:var(--accent);text-decoration:none}
+.tc-link:hover{text-decoration:underline}
+.tc-edit-head{display:flex;align-items:center;justify-content:space-between;margin:-4px -4px 8px 0}
+.tc-edit-foot{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.list-empty{padding:28px 12px;text-align:center;color:var(--faint);border:1px dashed var(--line);border-radius:var(--radius)}
+
+/* Auth / config */
+.center-screen{min-height:100vh;display:grid;place-items:center;padding:24px}
+.auth-card{width:380px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);padding:26px;box-shadow:var(--shadow)}
+.auth-card h1{margin:0 0 4px;font-size:22px;font-weight:800;letter-spacing:-.02em}
+.auth-card p{margin:0 0 18px}
+.form-error{color:var(--danger);font-weight:600;margin:0 0 12px!important}
+.auth-card code{background:var(--panel-2);padding:1px 5px;border-radius:4px;font-size:12.5px}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:24px;z-index:50;transform:translate(-50%,16px);padding:9px 14px;border-radius:8px;background:var(--ink);color:var(--panel);font-weight:700;opacity:0;pointer-events:none;transition:opacity .18s, transform .18s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.error{background:var(--danger);color:#fff}
+</style>
+</head>
+<body>
+
+<!-- Shown until SUPABASE_URL / SUPABASE_KEY are filled in below -->
+<div id="config-screen" class="center-screen" hidden>
+  <div class="auth-card">
+    <h1>Almost there</h1>
+    <p class="muted" id="config-msg">Open <code>index.html</code>, find <code>SUPABASE_URL</code> and <code>SUPABASE_KEY</code> near the top of the script, and paste in your Supabase project URL and publishable key.</p>
+  </div>
+</div>
+
+<div id="login-screen" class="center-screen" hidden>
+  <form class="auth-card" id="login-form">
+    <h1>Todo List</h1>
+    <p class="muted">Sign in to see your tasks.</p>
+    <label class="field"><span class="field-label">Email</span><input class="input" type="email" id="login-email" autocomplete="username" required></label>
+    <label class="field"><span class="field-label">Password</span><input class="input" type="password" id="login-password" autocomplete="current-password" required></label>
+    <p class="form-error" id="login-error" hidden></p>
+    <button class="btn primary block" type="submit" id="login-btn">Sign in</button>
+  </form>
+</div>
+
+<div id="main" class="main" hidden>
+  <header class="topbar">
+    <div class="brand">Todo List</div>
+    <!-- Space reserved for future buttons -->
+    <div class="topbar-slot" id="topbar-slot"></div>
+    <div class="topbar-user">
+      <span class="muted small" id="user-email"></span>
+      <button class="btn ghost small" id="signout-btn" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <div class="columns">
+    <!-- Left: new task -->
+    <section class="col" aria-label="New task">
+      <div class="col-head"><h2>New task</h2><span class="muted small" id="draft-status"></span></div>
+      <div class="col-scroll" id="new-form"></div>
+      <div class="col-foot">
+        <button class="btn ghost" id="clear-draft" type="button">Clear</button>
+        <span class="spacer"></span>
+        <button class="btn primary" id="add-task-btn" type="button">Add task to board</button>
+      </div>
+    </section>
+
+    <!-- Middle: next 7 days -->
+    <section class="col" aria-label="Next 7 days">
+      <div class="col-head"><h2>Next 7 days</h2></div>
+      <button class="overdue-strip none" id="overdue-strip" type="button" disabled></button>
+      <div class="col-scroll" id="week-days"></div>
+    </section>
+
+    <!-- Right: all tasks -->
+    <section class="col" aria-label="All tasks">
+      <div class="col-head">
+        <div class="tabs" role="tablist" id="tabs">
+          <button class="tab active" data-tab="current" role="tab" type="button">Current <span class="tab-count">0</span></button>
+          <button class="tab" data-tab="overdue" role="tab" type="button">Overdue <span class="tab-count">0</span></button>
+          <button class="tab" data-tab="completed" role="tab" type="button">Completed <span class="tab-count">0</span></button>
+        </div>
+      </div>
+      <div class="filters" id="filters"></div>
+      <div class="col-scroll" id="task-list"></div>
+    </section>
+  </div>
+</div>
+
+<datalist id="assignee-list"></datalist>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   SETTINGS: paste your Supabase details here
+   (Supabase dashboard: Connect button, or Project Settings > API Keys)
+   ============================================================ */
+const SUPABASE_URL = 'https://jszsbjrqkacjgsyurvhj.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_R5LX1qeF8q8WT_1TapmwBQ_wExo_ncY';
+
+/* ============================================================ */
+const CATEGORIES = [
+  { id: 'None', cls: 'cat-none' },
+  { id: 'Client-Request', cls: 'cat-client' },
+  { id: 'Internal-Request', cls: 'cat-internal' },
+  { id: 'Large Project', cls: 'cat-large' },
+];
+const TAB_LABEL = { current: 'Current', overdue: 'Overdue', completed: 'Completed' };
+const PREVIEW_CHARS = 60;
+const WD_LONG = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const WD_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MON_LONG = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MON_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+const state = {
+  user: null, started: false, tasks: [],
+  tab: 'current', filter: new Set(CATEGORIES.map(c => c.id)),
+  selectedId: null, editor: null,
+  today: null, draftEditor: null, draftTimer: null, draftChain: Promise.resolve(),
+};
+let sb = null;
+
+/* ---------- Helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
+const catCls = id => (CATEGORIES.find(c => c.id === id) || CATEGORIES[0]).cls;
+const truncate = (s, n) => (s.length > n ? s.slice(0, n).trimEnd() + '…' : s);
+const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const findTask = id => state.tasks.find(t => t.id === id);
+const textOf = html => { const d = document.createElement('div'); d.innerHTML = html || ''; return d.textContent.trim(); };
+
+const pad = n => String(n).padStart(2, '0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const parseYmd = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const todayStr = () => ymd(new Date());
+function ordinal(n) { const s = ['th','st','nd','rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
+function formatDue(s) {
+  const t = parseYmd(state.today);
+  if (s === state.today) return 'Today';
+  if (s === ymd(addDays(t, 1))) return 'Tomorrow';
+  if (s === ymd(addDays(t, -1))) return 'Yesterday';
+  const d = parseYmd(s);
+  return `${WD_SHORT[d.getDay()]} ${d.getDate()} ${MON_SHORT[d.getMonth()]}` + (d.getFullYear() !== t.getFullYear() ? ` ${d.getFullYear()}` : '');
+}
+function normLink(raw) {
+  const s = (raw || '').trim();
+  if (!s) return null;
+  if (/^(https?:|mailto:)/i.test(s)) return s;
+  return 'https://' + s.replace(/^[a-z][a-z0-9+.-]*:\/*/i, '');
+}
+const safeHref = l => (l && /^(https?:|mailto:)/i.test(l) ? l : null);
+
+let toastTimer;
+function toast(msg, isError = false) {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.toggle('error', isError);
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), isError ? 4500 : 2600);
+}
+
+/* ---------- Task status ---------- */
+const itemOverdue = it => !it.done && !!it.due && it.due < state.today;
+function taskStatus(t) {
+  const items = t.items || [];
+  if (items.length && items.every(i => i.done)) return 'completed';
+  if (items.some(itemOverdue)) return 'overdue';
+  return 'current';
+}
+function nextDue(t) { return (t.items || []).filter(i => !i.done && i.due).map(i => i.due).sort()[0] || null; }
+
+/* ---------- Rich text: sanitising ---------- */
+function parseColor(str) {
+  if (!str) return null;
+  str = String(str).trim().toLowerCase();
+  let m = str.match(/^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)(?:[,\s/]+([\d.]+))?\s*\)$/);
+  if (m) return { r: +m[1], g: +m[2], b: +m[3], a: m[4] === undefined ? 1 : +m[4] };
+  m = str.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/);
+  if (m) { let h = m[1]; if (h.length === 3) h = [...h].map(c => c + c).join(''); return { r: parseInt(h.slice(0,2),16), g: parseInt(h.slice(2,4),16), b: parseInt(h.slice(4,6),16), a: 1 }; }
+  if (str === 'red') return { r: 255, g: 0, b: 0, a: 1 };
+  if (str === 'yellow') return { r: 255, g: 255, b: 0, a: 1 };
+  return null;
+}
+const isRed = c => { c = parseColor(c); return !!c && c.a > 0 && c.r >= 150 && c.g < 120 && c.b < 120; };
+const isYellow = c => { c = parseColor(c); return !!c && c.a > 0 && c.r >= 200 && c.g >= 180 && c.b < 170; };
+const RED_SPAN = '<span style="color: rgb(211, 47, 47);">';
+const HL_SPAN = '<span style="background-color: rgb(255, 235, 59);">';
+
+// Keeps only bold / italic / underline / red text / yellow highlight / line breaks.
+function sanitizeHTML(html) {
+  if (!html) return '';
+  const doc = new DOMParser().parseFromString(`<body>${html}</body>`, 'text/html');
+  return serialise(doc.body).replace(/^(<br>)+|(<br>)+$/g, '');
+}
+function serialise(node) {
+  let s = '';
+  node.childNodes.forEach(ch => {
+    if (ch.nodeType === 3) { s += esc(ch.nodeValue); return; }
+    if (ch.nodeType !== 1) return;
+    const tag = ch.tagName;
+    if (tag === 'BR') { s += '<br>'; return; }
+    if (['SCRIPT','STYLE','IFRAME','OBJECT','IMG','SVG','TEMPLATE'].includes(tag)) return;
+    let inner = serialise(ch);
+    const st = ch.style || {};
+    const fw = st.fontWeight, deco = (st.textDecoration || '') + ' ' + (st.textDecorationLine || '');
+    const color = st.color || (tag === 'FONT' ? ch.getAttribute('color') : '');
+    const bg = st.backgroundColor;
+    if (inner) {
+      if (tag === 'B' || tag === 'STRONG' || fw === 'bold' || +fw >= 600) inner = `<b>${inner}</b>`;
+      if (tag === 'I' || tag === 'EM' || st.fontStyle === 'italic') inner = `<i>${inner}</i>`;
+      if (tag === 'U' || deco.includes('underline')) inner = `<u>${inner}</u>`;
+      if (isRed(color)) inner = `${RED_SPAN}${inner}</span>`;
+      if (tag === 'MARK' || isYellow(bg)) inner = `${HL_SPAN}${inner}</span>`;
+    }
+    if (['DIV','P','LI','H1','H2','H3','H4','H5','H6','BLOCKQUOTE'].includes(tag)) {
+      if (s && !s.endsWith('<br>')) s += '<br>';
+    }
+    s += inner;
+  });
+  return s;
+}
+
+/* ---------- Rich text: editor ---------- */
+const TOOLBAR = [
+  { cmd: 'bold', html: '<b>B</b>', title: 'Bold' },
+  { cmd: 'italic', html: '<i>I</i>', title: 'Italic' },
+  { cmd: 'underline', html: '<u>U</u>', title: 'Underline' },
+  { sep: true },
+  { cmd: 'hl', html: '<span class="swatch" style="background:#ffeb3b"></span>Highlight', title: 'Highlight (click again to remove)' },
+  { cmd: 'red', html: '<span class="swatch" style="background:#d32f2f"></span>Red', title: 'Red text' },
+  { cmd: 'black', html: '<span class="swatch sw-ink"></span>Black', title: 'Black text' },
+  { sep: true },
+  { cmd: 'clear', html: 'Clear', title: 'Clear formatting' },
+];
+function buildRich(html, placeholder) {
+  const wrap = document.createElement('div');
+  wrap.className = 'rich-wrap';
+  const tb = document.createElement('div');
+  tb.className = 'rich-toolbar';
+  const ed = document.createElement('div');
+  ed.className = 'input rich fmt';
+  ed.contentEditable = 'true';
+  ed.setAttribute('role', 'textbox');
+  ed.setAttribute('aria-multiline', 'true');
+  ed.setAttribute('aria-label', placeholder || 'Text');
+  ed.dataset.placeholder = placeholder || '';
+  ed.innerHTML = sanitizeHTML(html || '');
+  TOOLBAR.forEach(b => {
+    if (b.sep) { const s = document.createElement('span'); s.className = 'tb-sep'; tb.appendChild(s); return; }
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'tb-btn'; btn.innerHTML = b.html; btn.title = b.title;
+    btn.addEventListener('mousedown', e => e.preventDefault()); // keep the text selection
+    btn.addEventListener('click', () => applyFmt(b.cmd, ed));
+    tb.appendChild(btn);
+  });
+  ed.addEventListener('paste', e => {
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    document.execCommand('insertText', false, text);
+  });
+  ed.addEventListener('input', () => { if (!ed.textContent.trim() && ed.innerHTML !== '') ed.innerHTML = ''; });
+  wrap.append(tb, ed);
+  return { el: wrap, editor: ed, getHTML: () => sanitizeHTML(ed.innerHTML) };
+}
+function applyFmt(cmd, ed) {
+  const sel = window.getSelection();
+  if (!sel.rangeCount || !ed.contains(sel.anchorNode)) { ed.focus(); return; }
+  const exec = (c, v = null, css = false) => { document.execCommand('styleWithCSS', false, css); return document.execCommand(c, false, v); };
+  switch (cmd) {
+    case 'bold': case 'italic': case 'underline': exec(cmd); break;
+    case 'hl': {
+      const on = isYellow(document.queryCommandValue('backColor')) || isYellow(document.queryCommandValue('hiliteColor'));
+      const val = on ? 'transparent' : '#ffeb3b';
+      if (!exec('hiliteColor', val, true)) exec('backColor', val, true);
+      break;
+    }
+    case 'red': exec('foreColor', '#d32f2f', true); break;
+    case 'black': exec('foreColor', '#000000', true); break;
+    case 'clear': exec('removeFormat'); exec('hiliteColor', 'transparent', true); break;
+  }
+  ed.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+/* ---------- Task editor (used for the new-task form and for editing) ---------- */
+function buildItemEditor(it, mode, onRemove) {
+  const el = document.createElement('div');
+  el.className = 'item-ed';
+  const id = it.id || uid();
+  el.innerHTML = `
+    <div class="item-ed-top">
+      ${mode === 'edit' ? '<input type="checkbox" class="check it-done" aria-label="Done">' : ''}
+      <input class="input it-title" placeholder="Checklist item" maxlength="300" aria-label="Item title">
+      <button type="button" class="icon-btn it-remove" title="Remove item" aria-label="Remove item">×</button>
+    </div>
+    <div class="item-ed-meta">
+      <select class="input it-atype" aria-label="Assignee">
+        <option value="">No assignee</option><option value="me">Me</option><option value="other">Someone else</option>
+      </select>
+      <input class="input it-aname" list="assignee-list" placeholder="Name" maxlength="80" aria-label="Assignee name">
+      <input type="date" class="input it-due" aria-label="Due date">
+    </div>
+    <div class="it-desc"></div>
+    <input class="input it-link" type="url" placeholder="Link (optional)" maxlength="2000" aria-label="Link">`;
+  const titleIn = el.querySelector('.it-title');
+  const atype = el.querySelector('.it-atype');
+  const aname = el.querySelector('.it-aname');
+  const dueIn = el.querySelector('.it-due');
+  const linkIn = el.querySelector('.it-link');
+  const doneCb = el.querySelector('.it-done');
+  const desc = buildRich(it.description, 'Description (optional)');
+  el.querySelector('.it-desc').appendChild(desc.el);
+
+  titleIn.value = it.title || '';
+  dueIn.value = it.due || '';
+  linkIn.value = it.link || '';
+  if (it.assignee === 'Me') atype.value = 'me';
+  else if (it.assignee) { atype.value = 'other'; aname.value = it.assignee; }
+  aname.hidden = atype.value !== 'other';
+  if (doneCb) { doneCb.checked = !!it.done; el.classList.toggle('is-done', doneCb.checked); doneCb.addEventListener('change', () => el.classList.toggle('is-done', doneCb.checked)); }
+
+  atype.addEventListener('change', () => { aname.hidden = atype.value !== 'other'; if (!aname.hidden) aname.focus(); });
+  el.querySelector('.it-remove').addEventListener('click', () => onRemove(api));
+
+  const api = {
+    el, titleIn,
+    getData: () => ({
+      id,
+      title: titleIn.value,
+      description: desc.getHTML(),
+      link: linkIn.value,
+      assignee: atype.value === 'me' ? 'Me' : atype.value === 'other' ? (aname.value.trim() || null) : null,
+      due: dueIn.value || null,
+      done: doneCb ? doneCb.checked : false,
+    }),
+  };
+  return api;
+}
+
+function buildTaskEditor(data, mode) {
+  data = data || {};
+  const root = document.createElement('div');
+  root.className = 'task-editor';
+  root.innerHTML = `
+    <label class="field"><span class="field-label">Title</span><input class="input title-input ed-title" maxlength="200" placeholder="What needs doing?"></label>
+    <div class="field"><span class="field-label">Sub-title</span><div class="ed-sub"></div></div>
+    <label class="field"><span class="field-label">Category</span>
+      <select class="input ed-cat">${CATEGORIES.map(c => `<option value="${esc(c.id)}">${esc(c.id)}</option>`).join('')}</select></label>
+    <div class="items-label field-label">Checklist</div>
+    <div class="ed-items"></div>
+    <button type="button" class="btn small ed-add-item">+ Add item</button>`;
+  const titleIn = root.querySelector('.ed-title');
+  titleIn.value = data.title || '';
+  const sub = buildRich(data.subtitle, 'Optional');
+  root.querySelector('.ed-sub').appendChild(sub.el);
+  const catSel = root.querySelector('.ed-cat');
+  catSel.value = CATEGORIES.some(c => c.id === data.category) ? data.category : 'None';
+  const box = root.querySelector('.ed-items');
+  const itemApis = [];
+  const changed = () => root.dispatchEvent(new Event('input', { bubbles: true }));
+  const removeItem = api => { const i = itemApis.indexOf(api); if (i > -1) itemApis.splice(i, 1); api.el.remove(); changed(); };
+  const addItem = (it, focus) => {
+    const api = buildItemEditor(it || {}, mode, removeItem);
+    itemApis.push(api); box.appendChild(api.el);
+    if (focus) api.titleIn.focus();
+  };
+  (data.items && data.items.length ? data.items : [{}]).forEach(it => addItem(it));
+  root.querySelector('.ed-add-item').addEventListener('click', () => { addItem({}, true); changed(); });
+
+  return {
+    el: root, titleIn, itemApis,
+    getData: () => ({ title: titleIn.value, subtitle: sub.getHTML(), category: catSel.value, items: itemApis.map(a => a.getData()) }),
+  };
+}
+
+// Validates an editor's contents and returns a clean task, or an error message.
+function normaliseFromEditor(api) {
+  api.el.querySelectorAll('.invalid').forEach(x => x.classList.remove('invalid'));
+  const d = api.getData();
+  const title = d.title.trim();
+  let error = null;
+  if (!title) { api.titleIn.classList.add('invalid'); error = 'Add a title for the task.'; }
+  const items = [];
+  d.items.forEach((it, i) => {
+    const t = it.title.trim();
+    const hasOther = textOf(it.description) || it.link.trim() || it.assignee || it.due;
+    if (!t && !hasOther) return; // blank row: ignore
+    if (!t) { api.itemApis[i].titleIn.classList.add('invalid'); error = error || 'Each checklist item needs a title.'; return; }
+    items.push({ ...it, title: t, link: normLink(it.link) });
+  });
+  if (error) return { error };
+  if (!items.length) items.push({ id: uid(), title: 'Clarify steps', description: '', link: null, assignee: null, due: null, done: false });
+  return { task: { title, subtitle: d.subtitle, category: d.category, items } };
+}
+
+/* ---------- Data ---------- */
+async function loadTasks() {
+  const { data, error } = await sb.from('tasks').select('*').order('created_at', { ascending: true });
+  if (error) { console.error(error); toast('Couldn’t load your tasks. Refresh the page to try again.', true); return false; }
+  state.tasks = data.map(t => ({ ...t, items: Array.isArray(t.items) ? t.items : [] }));
+  return true;
+}
+async function loadDraft() {
+  const { data, error } = await sb.from('task_drafts').select('data').eq('user_id', state.user.id).maybeSingle();
+  if (error) { console.error(error); return null; }
+  return data ? data.data : null;
+}
+
+/* ---------- Draft (left column) ---------- */
+function setDraftStatus(s) { $('#draft-status').textContent = s; }
+function mountDraft(data) {
+  const api = buildTaskEditor(data, 'draft');
+  const box = $('#new-form');
+  box.innerHTML = '';
+  box.appendChild(api.el);
+  state.draftEditor = api;
+  api.el.addEventListener('input', scheduleDraftSave);
+  api.el.addEventListener('change', scheduleDraftSave);
+}
+function scheduleDraftSave() {
+  setDraftStatus('Editing…');
+  clearTimeout(state.draftTimer);
+  state.draftTimer = setTimeout(saveDraft, 700);
+}
+function saveDraft() {
+  clearTimeout(state.draftTimer);
+  state.draftTimer = null;
+  if (!state.draftEditor || !state.user) return Promise.resolve();
+  const data = state.draftEditor.getData();
+  setDraftStatus('Saving draft…');
+  state.draftChain = state.draftChain.then(async () => {
+    const { error } = await sb.from('task_drafts').upsert({ user_id: state.user.id, data, updated_at: new Date().toISOString() });
+    if (error) { console.error(error); setDraftStatus('Draft not saved'); }
+    else if (!state.draftTimer) setDraftStatus('Draft saved');
+  });
+  return state.draftChain;
+}
+function draftHasContent() {
+  const d = state.draftEditor.getData();
+  return !!(d.title.trim() || textOf(d.subtitle) || d.items.some(i => i.title.trim() || textOf(i.description) || i.link.trim() || i.assignee || i.due));
+}
+async function clearDraft() {
+  if (draftHasContent() && !confirm('Clear this draft?')) return;
+  mountDraft(null);
+  await saveDraft();
+  setDraftStatus('');
+}
+async function addTask() {
+  const res = normaliseFromEditor(state.draftEditor);
+  if (res.error) { toast(res.error, true); return; }
+  const task = res.task;
+  task.completed_at = taskStatus(task) === 'completed' ? new Date().toISOString() : null;
+  const btn = $('#add-task-btn');
+  btn.disabled = true;
+  const { data, error } = await sb.from('tasks').insert(task).select().single();
+  btn.disabled = false;
+  if (error) { console.error(error); toast('Couldn’t add the task. Check your connection and try again.', true); return; }
+  state.tasks.push({ ...data, items: data.items || [] });
+  mountDraft(null);
+  await saveDraft();
+  setDraftStatus('');
+  renderAll();
+  toast('Task added to board');
+}
+
+/* ---------- Editing (right column) ---------- */
+function openEditor(id) {
+  if (state.editor && state.editor.taskId === id) return true;
+  if (state.editor && state.editor.dirty && !confirm('Discard your unsaved changes to the open task?')) return false;
+  const t = findTask(id);
+  if (!t) return false;
+  const api = buildTaskEditor(t, 'edit');
+  const card = document.createElement('article');
+  card.className = `task-card expanded ${catCls(t.category)}`;
+  card.dataset.id = id;
+  card.innerHTML = `<div class="tc-edit-head"><span class="field-label">Edit task</span><button type="button" class="icon-btn ed-close" aria-label="Close without saving" title="Close">×</button></div>`;
+  card.appendChild(api.el);
+  const foot = document.createElement('div');
+  foot.className = 'tc-edit-foot';
+  foot.innerHTML = `<button type="button" class="btn ghost danger ed-delete">Delete task</button><span class="spacer"></span>
+    <button type="button" class="btn ed-cancel">Cancel</button><button type="button" class="btn primary ed-save">Save changes</button>`;
+  card.appendChild(foot);
+
+  const ed = { taskId: id, card, api, dirty: false };
+  const markDirty = () => { ed.dirty = true; };
+  api.el.addEventListener('input', markDirty);
+  api.el.addEventListener('change', markDirty);
+  api.el.querySelector('.ed-cat').addEventListener('change', e => {
+    card.className = card.className.replace(/\bcat-[a-z]+\b/, catCls(e.target.value));
+  });
+  card.querySelector('.ed-close').addEventListener('click', () => closeEditor());
+  foot.querySelector('.ed-cancel').addEventListener('click', () => closeEditor());
+  foot.querySelector('.ed-save').addEventListener('click', saveEdit);
+  foot.querySelector('.ed-delete').addEventListener('click', () => deleteTask(id));
+  state.editor = ed;
+  return true;
+}
+function closeEditor(force) {
+  if (!state.editor) return;
+  if (!force && state.editor.dirty && !confirm('Discard your unsaved changes?')) return;
+  state.editor = null;
+  state.selectedId = null;
+  renderAll();
+}
+async function saveEdit() {
+  const ed = state.editor;
+  if (!ed) return;
+  const res = normaliseFromEditor(ed.api);
+  if (res.error) { toast(res.error, true); return; }
+  const t = findTask(ed.taskId);
+  const upd = res.task;
+  upd.completed_at = taskStatus(upd) === 'completed' ? (t.completed_at || new Date().toISOString()) : null;
+  const btn = ed.card.querySelector('.ed-save');
+  btn.disabled = true;
+  const { data, error } = await sb.from('tasks').update(upd).eq('id', t.id).select().single();
+  btn.disabled = false;
+  if (error) { console.error(error); toast('Couldn’t save your changes. Try again.', true); return; }
+  Object.assign(t, data, { items: data.items || [] });
+  state.editor = null;
+  state.selectedId = null;
+  const st = taskStatus(t);
+  renderAll();
+  toast(st !== state.tab ? `Changes saved. Task moved to ${TAB_LABEL[st]}.` : 'Changes saved');
+}
+async function deleteTask(id) {
+  const t = findTask(id);
+  if (!t || !confirm(`Delete “${t.title}”? This can’t be undone.`)) return;
+  const { error } = await sb.from('tasks').delete().eq('id', id);
+  if (error) { console.error(error); toast('Couldn’t delete the task. Try again.', true); return; }
+  state.tasks = state.tasks.filter(x => x.id !== id);
+  state.editor = null;
+  state.selectedId = null;
+  renderAll();
+  toast('Task deleted');
+}
+async function toggleItem(taskId, itemId, done) {
+  const t = findTask(taskId);
+  const it = t && t.items.find(i => i.id === itemId);
+  if (!it) return;
+  const before = { items: JSON.parse(JSON.stringify(t.items)), completed_at: t.completed_at };
+  const prev = taskStatus(t);
+  it.done = done;
+  const st = taskStatus(t);
+  t.completed_at = st === 'completed' ? (t.completed_at || new Date().toISOString()) : null;
+  renderAll();
+  if (st !== prev) toast(st === 'completed' ? 'Task complete. Moved to Completed.' : `Task moved to ${TAB_LABEL[st]}`);
+  const { error } = await sb.from('tasks').update({ items: t.items, completed_at: t.completed_at }).eq('id', t.id);
+  if (error) { console.error(error); Object.assign(t, before); renderAll(); toast('Couldn’t save that change. Try again.', true); }
+}
+
+// Highlight a task, open it on the right (switching tab / filter if needed) and scroll to it.
+function selectTask(id) {
+  const t = findTask(id);
+  if (!t || !openEditor(id)) return;
+  state.selectedId = id;
+  state.tab = taskStatus(t);
+  state.filter.add(t.category);
+  renderAll();
+  requestAnimationFrame(() => {
+    const card = document.querySelector(`#task-list .task-card[data-id="${CSS.escape(id)}"]`);
+    if (!card) return;
+    card.scrollIntoView({ block: 'nearest', behavior: reducedMotion() ? 'auto' : 'smooth' });
+    card.classList.remove('flash'); void card.offsetWidth; card.classList.add('flash');
+  });
+}
+
+/* ---------- Rendering ---------- */
+function renderAll() { renderWeek(); renderRight(); updateAssigneeList(); }
+
+function renderWeek() {
+  const overdue = state.tasks.reduce((n, t) => n + t.items.filter(itemOverdue).length, 0);
+  const strip = $('#overdue-strip');
+  strip.classList.toggle('none', !overdue);
+  strip.disabled = !overdue;
+  strip.innerHTML = overdue
+    ? `<span>${overdue} overdue item${overdue === 1 ? '' : 's'}</span><span class="strip-go">Show</span>`
+    : '<span>Nothing overdue</span>';
+
+  const base = parseYmd(state.today);
+  let html = '';
+  for (let i = 0; i < 7; i++) {
+    const d = addDays(base, i), ds = ymd(d);
+    const entries = state.tasks
+      .map(t => ({ t, due: t.items.filter(it => it.due === ds) }))
+      .filter(e => e.due.length)
+      .map(e => ({ ...e, allDone: e.due.every(x => x.done) }))
+      .sort((a, b) => (a.allDone - b.allDone) || String(a.t.created_at).localeCompare(String(b.t.created_at)));
+    const badge = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : '';
+    html += `<section class="day ${i === 0 ? 'today' : ''}">
+      <header class="day-head">
+        <div class="day-name">${WD_LONG[d.getDay()]}${badge ? `<span class="day-badge">${badge}</span>` : ''}</div>
+        <div class="day-date">${ordinal(d.getDate())} of ${MON_LONG[d.getMonth()]}</div>
+      </header>
+      <div class="day-body">${entries.length ? entries.map(weekCardHTML).join('') : '<div class="day-empty">No items due on this day</div>'}</div>
+    </section>`;
+  }
+  $('#week-days').innerHTML = html;
+}
+function weekCardHTML(e) {
+  const shown = e.due.slice(0, 2), more = e.due.length - shown.length;
+  return `<button type="button" class="wk-card ${catCls(e.t.category)} ${e.allDone ? 'all-done' : ''} ${state.selectedId === e.t.id ? 'selected' : ''}" data-id="${esc(e.t.id)}">
+    <span class="wk-title">${esc(e.t.title)}</span>
+    ${shown.map(it => `<span class="wk-item ${it.done ? 'done' : ''}">${esc(truncate(it.title, PREVIEW_CHARS))}</span>`).join('')}
+    ${more > 0 ? `<span class="wk-more">+${more} more</span>` : ''}
+  </button>`;
+}
+
+function sortTasks(list, tab) {
+  if (tab === 'completed') return list.sort((a, b) => String(b.completed_at || '').localeCompare(String(a.completed_at || '')));
+  return list.sort((a, b) => {
+    const da = nextDue(a), db = nextDue(b);
+    if (da && db && da !== db) return da < db ? -1 : 1;
+    if (da && !db) return -1;
+    if (!da && db) return 1;
+    return String(a.created_at).localeCompare(String(b.created_at));
+  });
+}
+function renderRight() {
+  const visible = state.tasks.filter(t => state.filter.has(t.category));
+  const counts = { current: 0, overdue: 0, completed: 0 };
+  visible.forEach(t => counts[taskStatus(t)]++);
+  document.querySelectorAll('#tabs .tab').forEach(b => {
+    const tab = b.dataset.tab;
+    b.classList.toggle('active', tab === state.tab);
+    b.setAttribute('aria-selected', tab === state.tab);
+    const c = b.querySelector('.tab-count');
+    c.textContent = counts[tab];
+    c.classList.toggle('has', counts[tab] > 0);
+  });
+
+  $('#filters').innerHTML = '<span class="field-label">Show</span>' + CATEGORIES.map(c =>
+    `<button type="button" class="chip-toggle ${c.cls} ${state.filter.has(c.id) ? 'on' : ''}" data-cat="${esc(c.id)}" aria-pressed="${state.filter.has(c.id)}"><span class="dot"></span>${esc(c.id)}</button>`).join('');
+
+  const list = $('#task-list');
+  const tasks = sortTasks(visible.filter(t => taskStatus(t) === state.tab), state.tab);
+  list.innerHTML = '';
+  if (!tasks.length) {
+    const msg = !state.filter.size ? 'Choose at least one category above to see tasks.'
+      : { current: 'No current tasks. Add one from the New task panel.', overdue: 'Nothing overdue.', completed: 'Completed tasks will appear here.' }[state.tab];
+    list.innerHTML = `<div class="list-empty">${msg}</div>`;
+    return;
+  }
+  tasks.forEach(t => {
+    if (state.editor && state.editor.taskId === t.id) {
+      state.editor.card.classList.toggle('selected', state.selectedId === t.id);
+      list.appendChild(state.editor.card);
+    } else {
+      list.insertAdjacentHTML('beforeend', taskCardHTML(t));
+    }
+  });
+}
+function taskCardHTML(t) {
+  const done = t.items.filter(i => i.done).length;
+  const items = t.items.map(it => {
+    const dueCls = !it.due ? '' : itemOverdue(it) ? 'due-over' : (it.due === state.today && !it.done ? 'due-today' : '');
+    const href = safeHref(it.link);
+    return `<li class="tc-item ${it.done ? 'done' : ''}" data-item="${esc(it.id)}">
+      <input type="checkbox" class="check tc-check" ${it.done ? 'checked' : ''} aria-label="Mark ${esc(it.title)} as done">
+      <span class="tc-item-title">${esc(it.title)}</span>
+      ${href ? `<a class="tc-link" href="${esc(href)}" target="_blank" rel="noopener noreferrer" title="${esc(href)}">Link</a>` : ''}
+      ${it.assignee ? `<span class="pill" title="${esc(it.assignee)}">${esc(it.assignee)}</span>` : ''}
+      ${it.due ? `<span class="pill ${dueCls}">${esc(formatDue(it.due))}</span>` : ''}
+    </li>`;
+  }).join('');
+  return `<article class="task-card ${catCls(t.category)} ${state.selectedId === t.id ? 'selected' : ''}" data-id="${esc(t.id)}" tabindex="0">
+    <div class="tc-head">
+      <div class="tc-head-text">
+        <div class="tc-title">${esc(t.title)}</div>
+        ${textOf(t.subtitle) ? `<div class="tc-sub fmt">${sanitizeHTML(t.subtitle)}</div>` : ''}
+      </div>
+      <div class="tc-meta">${t.category !== 'None' ? `<span class="cat-tag">${esc(t.category)}</span>` : ''}<span class="tc-progress">${done}/${t.items.length}</span></div>
+    </div>
+    <ul class="tc-items">${items}</ul>
+  </article>`;
+}
+function updateAssigneeList() {
+  const names = new Set();
+  state.tasks.forEach(t => t.items.forEach(i => { if (i.assignee && i.assignee !== 'Me') names.add(i.assignee); }));
+  $('#assignee-list').innerHTML = [...names].sort((a, b) => a.localeCompare(b)).map(n => `<option value="${esc(n)}">`).join('');
+}
+
+/* ---------- Events ---------- */
+function wireEvents() {
+  $('#add-task-btn').addEventListener('click', addTask);
+  $('#clear-draft').addEventListener('click', clearDraft);
+  $('#overdue-strip').addEventListener('click', () => { state.tab = 'overdue'; renderRight(); });
+  $('#week-days').addEventListener('click', e => {
+    const card = e.target.closest('.wk-card');
+    if (card) selectTask(card.dataset.id);
+  });
+  $('#tabs').addEventListener('click', e => {
+    const b = e.target.closest('.tab');
+    if (b) { state.tab = b.dataset.tab; renderRight(); }
+  });
+  $('#filters').addEventListener('click', e => {
+    const b = e.target.closest('.chip-toggle');
+    if (!b) return;
+    const c = b.dataset.cat;
+    state.filter.has(c) ? state.filter.delete(c) : state.filter.add(c);
+    renderRight();
+  });
+  const list = $('#task-list');
+  list.addEventListener('change', e => {
+    if (!e.target.classList.contains('tc-check')) return;
+    const card = e.target.closest('.task-card'), li = e.target.closest('.tc-item');
+    toggleItem(card.dataset.id, li.dataset.item, e.target.checked);
+  });
+  list.addEventListener('click', e => {
+    if (e.target.closest('.tc-check, .tc-link')) return;
+    const card = e.target.closest('.task-card:not(.expanded)');
+    if (card) selectTask(card.dataset.id);
+  });
+  list.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' || !e.target.matches('.task-card:not(.expanded)')) return;
+    e.preventDefault();
+    selectTask(e.target.dataset.id);
+  });
+  $('#signout-btn').addEventListener('click', async () => {
+    if (state.editor && state.editor.dirty && !confirm('Discard your unsaved changes and sign out?')) return;
+    if (state.draftTimer) await saveDraft();
+    await state.draftChain;
+    await sb.auth.signOut();
+  });
+  document.addEventListener('visibilitychange', async () => {
+    if (!state.started) return;
+    if (document.visibilityState === 'hidden') { if (state.draftTimer) saveDraft(); return; }
+    checkDay();
+    if (state.editor) return; // don't disturb an open edit
+    if (await loadTasks()) renderAll();
+  });
+  window.addEventListener('beforeunload', e => {
+    if (state.draftTimer) saveDraft();
+    if (state.editor && state.editor.dirty) { e.preventDefault(); e.returnValue = ''; }
+  });
+}
+function checkDay() {
+  const t = todayStr();
+  if (t !== state.today) { state.today = t; renderAll(); }
+}
+
+/* ---------- Screens & auth ---------- */
+function show(which) {
+  $('#config-screen').hidden = which !== 'config';
+  $('#login-screen').hidden = which !== 'login';
+  $('#main').hidden = which !== 'main';
+}
+async function start(user) {
+  if (state.started) return;
+  state.started = true;
+  state.user = user;
+  state.today = todayStr();
+  $('#user-email').textContent = user.email || '';
+  show('main');
+  $('#week-days').innerHTML = $('#task-list').innerHTML = '<div class="loading">Loading your tasks…</div>';
+  const [, draft] = await Promise.all([loadTasks(), loadDraft()]);
+  mountDraft(draft);
+  renderAll();
+}
+function resetState() {
+  Object.assign(state, { user: null, started: false, tasks: [], tab: 'current', selectedId: null, editor: null, draftEditor: null });
+  state.filter = new Set(CATEGORIES.map(c => c.id));
+  clearTimeout(state.draftTimer); state.draftTimer = null;
+  $('#new-form').innerHTML = ''; setDraftStatus('');
+}
+async function init() {
+  if (SUPABASE_URL.includes('YOUR-') || SUPABASE_KEY.includes('YOUR-')) { show('config'); return; }
+  if (!window.supabase) {
+    $('#config-msg').textContent = 'The Supabase library didn’t load. Check your internet connection and refresh the page.';
+    show('config'); return;
+  }
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  wireEvents();
+  setInterval(() => { if (state.started) checkDay(); }, 60000);
+
+  $('#login-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const err = $('#login-error'), btn = $('#login-btn');
+    err.hidden = true; btn.disabled = true; btn.textContent = 'Signing in…';
+    const { data, error } = await sb.auth.signInWithPassword({ email: $('#login-email').value.trim(), password: $('#login-password').value });
+    btn.disabled = false; btn.textContent = 'Sign in';
+    if (error) { err.textContent = error.message === 'Invalid login credentials' ? 'That email and password don’t match. Try again.' : error.message; err.hidden = false; return; }
+    $('#login-password').value = '';
+    start(data.user);
+  });
+  sb.auth.onAuthStateChange((event) => {
+    if (event === 'SIGNED_OUT') { resetState(); show('login'); }
+  });
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) start(session.user); else show('login');
+}
+init();
+</script>
+</body>
+</html>
