@@ -11,19 +11,19 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <style>
 :root{
-  --bg:#eceeea; --panel:#f9faf8; --panel-2:#f1f3ef; --line:#dde1db; --line-strong:#c6ccc4;
+  --bg:#eceeea; --panel:#f9faf8; --panel-2:#f1f3ef; --line:#dde1db; --line-strong:#c6ccc4; --rule:#e6e9e3;
   --ink:#1e282c; --muted:#5f6b70; --faint:#97a19f;
   --accent:#1f6f68; --accent-soft:#dcebe8; --accent-ink:#ffffff;
   --danger:#b8352d; --danger-soft:#f6e1de;
   --done:#9aa3a0; --red:#d32f2f;
   --cat-none:#c6ccc4; --cat-client:#2f62c9; --cat-internal:#7a4cc2; --cat-large:#b7791f;
-  --radius-lg:12px; --radius:8px; --radius-sm:6px;
-  --shadow:0 1px 0 rgba(30,40,44,.04), 0 2px 6px rgba(30,40,44,.06);
+  --radius-lg:11px; --radius:7px; --radius-sm:5px;
+  --shadow:0 1px 0 rgba(30,40,44,.04), 0 2px 5px rgba(30,40,44,.06);
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --bg:#121617; --panel:#191e20; --panel-2:#20272a; --line:#2b3336; --line-strong:#3c464a;
+    --bg:#121617; --panel:#191e20; --panel-2:#20272a; --line:#2b3336; --line-strong:#3c464a; --rule:#252c2f;
     --ink:#e4e9e7; --muted:#9aa6a8; --faint:#6a7679;
     --accent:#5fb8ae; --accent-soft:#1d3532; --accent-ink:#0d1a19;
     --danger:#ef7a70; --danger-soft:#3a2321;
@@ -36,45 +36,43 @@
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{height:100%;margin:0}
-body{background:var(--bg);color:var(--ink);font:14px/1.45 Manrope, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;min-width:1100px;-webkit-font-smoothing:antialiased}
-button,input,select{font:inherit;color:inherit}
+body{background:var(--bg);color:var(--ink);font:12.6px/1.45 Manrope, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;min-width:1000px;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .muted{color:var(--muted)}
-.small{font-size:12.5px}
+.small{font-size:11.3px}
 .spacer{flex:1}
+svg.ic{width:13px;height:13px;display:block}
 
 /* Buttons */
-.btn{border:1px solid var(--line-strong);background:var(--panel);border-radius:var(--radius);padding:7px 12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn{border:1px solid var(--line-strong);background:var(--panel);border-radius:var(--radius);padding:6px 11px;font-weight:600;cursor:pointer;white-space:nowrap}
 .btn:hover{background:var(--panel-2)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .btn.primary:hover{filter:brightness(1.06)}
 .btn.ghost{background:transparent;border-color:transparent;color:var(--muted)}
 .btn.ghost:hover{background:var(--panel-2);color:var(--ink)}
 .btn.danger{color:var(--danger)}
-.btn.small{padding:4px 9px;font-size:13px}
+.btn.small{padding:4px 8px;font-size:11.7px}
 .btn.block{width:100%}
 .btn:disabled{opacity:.55;cursor:default}
-.icon-btn{flex:none;width:28px;height:28px;border:0;background:transparent;border-radius:6px;color:var(--muted);font-size:18px;line-height:1;cursor:pointer}
+.icon-btn{flex:none;width:25px;height:25px;border:0;background:transparent;border-radius:5px;color:var(--muted);display:inline-grid;place-items:center;cursor:pointer}
 .icon-btn:hover{background:var(--panel-2);color:var(--ink)}
 
-/* Fields */
-.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
-.field-label{font-size:12px;font-weight:700;color:var(--muted)}
-.input{width:100%;border:1px solid var(--line-strong);background:var(--panel);border-radius:var(--radius-sm);padding:7px 9px;min-width:0}
+/* Fields (login) */
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:11px}
+.field-label{font-size:10.8px;font-weight:700;color:var(--muted)}
+.input{width:100%;border:1px solid var(--line-strong);background:var(--panel);border-radius:var(--radius-sm);padding:6px 8px;min-width:0}
 .input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.input.invalid{border-color:var(--danger);box-shadow:0 0 0 3px var(--danger-soft)}
-.title-input{font-size:16px;font-weight:700}
-input[type=date].input{padding:6px 8px}
 
 /* Rich text */
-.rich{min-height:34px;max-height:240px;overflow-y:auto;overflow-wrap:anywhere;cursor:text}
+.rich{min-height:1.45em;max-height:220px;overflow-y:auto;overflow-wrap:anywhere;cursor:text;outline:none;padding:1px 0}
 .rich:empty::before{content:attr(data-placeholder);color:var(--faint);pointer-events:none}
-.rich-toolbar{display:none;flex-wrap:wrap;gap:3px;margin-bottom:5px}
+.rich-toolbar{display:none;flex-wrap:wrap;gap:3px;margin:2px 0 4px}
 .rich-wrap:focus-within .rich-toolbar{display:flex}
-.tb-btn{display:inline-flex;align-items:center;gap:5px;height:26px;min-width:28px;padding:0 7px;border:1px solid var(--line);background:var(--panel-2);border-radius:5px;font-size:12.5px;cursor:pointer;justify-content:center}
+.tb-btn{display:inline-flex;align-items:center;gap:4px;height:22px;min-width:24px;padding:0 6px;border:1px solid var(--line);background:var(--panel-2);border-radius:5px;font-size:11.3px;cursor:pointer;justify-content:center}
 .tb-btn:hover{border-color:var(--line-strong)}
-.tb-sep{width:1px;background:var(--line);margin:3px 3px}
-.swatch{width:11px;height:11px;border-radius:3px;display:inline-block;border:1px solid rgba(0,0,0,.15)}
+.tb-sep{width:1px;background:var(--line);margin:3px 2px}
+.swatch{width:10px;height:10px;border-radius:3px;display:inline-block;border:1px solid rgba(0,0,0,.15)}
 .sw-ink{background:var(--ink)}
 .fmt{overflow-wrap:anywhere}
 .fmt span[style*="color: rgb(0, 0, 0)"], .fmt font[color="#000000"]{color:var(--ink)!important}
@@ -83,112 +81,157 @@ input[type=date].input{padding:6px 8px}
 
 /* App frame */
 .main{height:100vh;display:flex;flex-direction:column}
-.topbar{height:52px;flex:none;display:flex;align-items:center;gap:16px;padding:0 20px;background:var(--panel);border-bottom:1px solid var(--line)}
-.brand{font-weight:800;font-size:17px;letter-spacing:-.01em}
-.topbar-slot{flex:1;display:flex;align-items:center;gap:8px}
-.topbar-user{display:flex;align-items:center;gap:8px}
-.columns{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:12px}
+.topbar{height:47px;flex:none;display:flex;align-items:center;gap:14px;padding:0 18px;background:var(--panel);border-bottom:1px solid var(--line)}
+.brand{font-weight:800;font-size:15.3px;letter-spacing:-.01em}
+.topbar-slot{flex:1;display:flex;align-items:center;gap:7px}
+.topbar-user{display:flex;align-items:center;gap:7px}
+.columns{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;padding:11px}
 .col{min-height:0;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden}
-.col-head{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:52px;padding:10px 16px;border-bottom:1px solid var(--line)}
-.col-head h2{margin:0;font-size:15px;font-weight:800;letter-spacing:-.01em}
-.col-scroll{flex:1;min-height:0;overflow-y:auto;padding:14px 16px}
-.col-foot{flex:none;display:flex;align-items:center;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
-.loading{color:var(--faint);padding:20px 0;text-align:center}
+.col-head{flex:none;display:flex;align-items:center;justify-content:space-between;gap:7px;min-height:47px;padding:9px 14px;border-bottom:1px solid var(--line)}
+.col-head h2{margin:0;font-size:13.5px;font-weight:800;letter-spacing:-.01em}
+.col-scroll{flex:1;min-height:0;overflow-y:auto;padding:13px 16px}
+.col-foot{flex:none;display:flex;align-items:center;gap:7px;padding:11px 14px;border-top:1px solid var(--line)}
+.loading{color:var(--faint);padding:18px 0;text-align:center}
 
-/* Task editor */
-.items-label{margin:16px 0 8px}
-.item-ed{border:1px solid var(--line);border-radius:var(--radius);padding:10px;margin-bottom:8px;background:var(--panel-2)}
-.item-ed-top{display:flex;gap:8px;align-items:center}
-.item-ed-top .it-title{flex:1;font-weight:600}
-.item-ed.is-done .it-title{text-decoration:line-through;color:var(--done)}
-.item-ed-meta{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
-.item-ed-meta .input{width:auto}
-.item-ed-meta .it-atype{flex:1 1 130px}
-.item-ed-meta .it-aname{flex:1 1 120px}
-.item-ed-meta .it-due{flex:0 0 150px}
-.it-desc{margin-bottom:8px}
+/* Paper task editor */
+.paper .pe-title{display:block;width:100%;border:0;border-bottom:1px solid transparent;background:transparent;padding:1px 0 3px;font-size:16.2px;font-weight:800;letter-spacing:-.015em;outline:none}
+.paper .pe-title:focus{border-bottom-color:var(--line)}
+.paper .pe-title::placeholder{color:var(--faint)}
+.paper .pe-title.invalid{border-bottom-color:var(--danger)}
+.paper .pe-title.invalid::placeholder{color:var(--danger)}
+.pe-sub{color:var(--muted);margin-top:2px}
+.pe-meta{display:flex;align-items:center;gap:7px;margin:8px 0 6px}
+.pe-cat{appearance:none;-webkit-appearance:none;border:1px solid var(--line);border-radius:999px;background:var(--panel-2);padding:2px 22px 2px 9px;font-size:11.3px;font-weight:700;color:var(--cat-color);cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 11px) 50%,calc(100% - 7px) 50%;background-size:4px 4px;background-repeat:no-repeat}
+.pe-cat.cat-none{color:var(--muted)}
+.pe-lines{border-top:1px solid var(--rule)}
+.line{position:relative;display:flex;align-items:flex-start;gap:7px;padding:5px 0;border-bottom:1px solid var(--rule)}
+.line.invalid{border-bottom-color:var(--danger)}
+.line.invalid .line-text::placeholder{color:var(--danger)}
+.line.dragging{opacity:.35}
+.line-grip{position:absolute;left:-15px;top:7px;width:13px;height:16px;padding:0;border:0;background:transparent;color:var(--faint);cursor:grab;opacity:0;display:grid;place-items:center}
+.line:hover .line-grip{opacity:1}
+.line-grip:active{cursor:grabbing}
+.line-bullet{flex:none;width:13px;height:13px;margin-top:3px;border:1.5px solid var(--line-strong);border-radius:50%}
+.line .check{margin-top:1px}
+.line-main{flex:1;min-width:0}
+.line-row{display:flex;align-items:flex-start;gap:5px}
+.line-text{flex:1;min-width:0;display:block;border:0;background:transparent;resize:none;overflow:hidden;padding:0;margin:0;line-height:1.45;height:1.45em;outline:none}
+.line-text::placeholder{color:var(--faint)}
+.line.done .line-text{text-decoration:line-through;color:var(--done)}
+.line-tags{flex:none;display:flex;gap:4px;margin-top:1px}
+.ltag{border:1px solid var(--line);background:var(--panel-2);border-radius:999px;padding:0 7px;font-size:10.8px;font-weight:700;line-height:16px;color:var(--muted);white-space:nowrap;max-width:110px;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.ltag.over{background:var(--danger-soft);border-color:transparent;color:var(--danger)}
+.ltag.today{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.line.done .ltag{opacity:.55}
+.line-tools{flex:none;display:none;gap:1px}
+.line:hover .line-tools,.line:focus-within .line-tools{display:flex}
+.tool{width:20px;height:19px;border:0;background:transparent;border-radius:4px;color:var(--faint);display:grid;place-items:center;cursor:pointer;padding:0}
+.tool:hover{background:var(--panel-2);color:var(--ink)}
+.tool.has{color:var(--accent)}
+.tool-remove:hover{color:var(--danger)}
+.det{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:4px 0 1px}
+.det-desc{display:block;font-size:11.7px;color:var(--muted)}
+.det-input{border:1px solid var(--line);background:var(--panel);border-radius:5px;padding:2px 7px;font-size:11.7px;min-width:0}
+.det-input:focus{outline:none;border-color:var(--accent)}
+.det-chip{border:1px solid var(--line);background:var(--panel-2);border-radius:999px;padding:1px 8px;font-size:11.3px;font-weight:700;color:var(--muted);cursor:pointer}
+.det-chip:hover{color:var(--ink);border-color:var(--line-strong)}
+.det-clear{border:0;background:transparent;color:var(--faint);font-size:11.3px;font-weight:600;cursor:pointer;padding:1px 4px}
+.det-clear:hover{color:var(--danger)}
+.det-link{flex-wrap:nowrap;color:var(--faint)}
+.det-link .link-in{flex:1;border:0;background:transparent;padding:1px 0;color:var(--accent);font-size:11.7px}
+.det-link .link-in::placeholder{color:var(--faint)}
+.det-open{font-size:11.3px;font-weight:700;color:var(--accent);text-decoration:none}
+.det-open:hover{text-decoration:underline}
+.line-ghost{padding:6px 0 6px 20px;border-bottom:1px solid var(--rule);color:var(--faint);cursor:text}
+.line-ghost:hover{color:var(--muted)}
+.pe-hint{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:10px;font-size:10.8px;color:var(--faint)}
+.pe-hint kbd,.pe-hint code{font:inherit;font-weight:700;color:var(--muted)}
 
 /* Checkbox */
-.check{appearance:none;-webkit-appearance:none;width:18px;height:18px;flex:none;margin:0;border:1.5px solid var(--line-strong);border-radius:5px;background:var(--panel);cursor:pointer;display:inline-grid;place-content:center}
+.check{appearance:none;-webkit-appearance:none;width:16px;height:16px;flex:none;margin:0;border:1.5px solid var(--line-strong);border-radius:5px;background:var(--panel);cursor:pointer;display:inline-grid;place-content:center}
 .check:hover{border-color:var(--accent)}
 .check:checked{background:var(--accent);border-color:var(--accent)}
-.check:checked::after{content:"";width:9px;height:5px;border-left:2px solid var(--accent-ink);border-bottom:2px solid var(--accent-ink);transform:translate(0,-1px) rotate(-45deg)}
+.check:checked::after{content:"";width:8px;height:4.5px;border-left:2px solid var(--accent-ink);border-bottom:2px solid var(--accent-ink);transform:translate(0,-1px) rotate(-45deg)}
 
 /* Week */
-.overdue-strip{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;padding:9px 16px;border:0;border-bottom:1px solid var(--line);background:var(--danger-soft);color:var(--danger);font-weight:700;text-align:left;cursor:pointer}
+.overdue-strip{flex:none;display:flex;align-items:center;justify-content:space-between;gap:7px;width:100%;padding:8px 14px;border:0;border-bottom:1px solid var(--line);background:var(--danger-soft);color:var(--danger);font-weight:700;text-align:left;cursor:pointer}
 .overdue-strip:hover{filter:brightness(.98)}
 .overdue-strip.none{background:var(--panel);color:var(--faint);font-weight:600;cursor:default}
-.strip-go{font-size:12.5px;text-decoration:underline;text-underline-offset:2px}
-.day + .day{margin-top:20px}
-.day-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding-bottom:6px;margin-bottom:8px;border-bottom:2px solid var(--line)}
-.day-name{font-size:21px;font-weight:800;letter-spacing:-.025em;display:flex;align-items:center;gap:8px}
-.day-date{color:var(--muted);font-weight:600;font-size:13px}
+.strip-go{font-size:11.3px;text-decoration:underline;text-underline-offset:2px}
+.day + .day{margin-top:18px}
+.day-head{display:flex;align-items:baseline;justify-content:space-between;gap:7px;padding-bottom:5px;margin-bottom:7px;border-bottom:2px solid var(--line)}
+.day-name{font-size:18.9px;font-weight:800;letter-spacing:-.025em;display:flex;align-items:center;gap:7px}
+.day-date{color:var(--muted);font-weight:600;font-size:11.7px}
 .day.today .day-head{border-bottom-color:var(--accent)}
 .day.today .day-name{color:var(--accent)}
-.day-badge{font-size:11px;font-weight:700;letter-spacing:0;padding:2px 8px;border-radius:999px;background:var(--panel-2);color:var(--muted)}
+.day-badge{font-size:10px;font-weight:700;letter-spacing:0;padding:2px 7px;border-radius:999px;background:var(--panel-2);color:var(--muted)}
 .day.today .day-badge{background:var(--accent-soft);color:var(--accent)}
-.day-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.day-empty{grid-column:1/-1;padding:12px;color:var(--faint);font-size:13px;border:1px dashed var(--line);border-radius:var(--radius);text-align:center}
-.wk-card{display:flex;flex-direction:column;align-items:stretch;gap:3px;min-width:0;width:100%;padding:8px 10px;text-align:left;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--cat-color);border-radius:var(--radius);box-shadow:var(--shadow)}
+.day-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.day-empty{grid-column:1/-1;padding:11px;color:var(--faint);font-size:11.7px;border:1px dashed var(--line);border-radius:var(--radius);text-align:center}
+.wk-card{display:flex;flex-direction:column;align-items:stretch;gap:3px;min-width:0;width:100%;padding:7px 9px;text-align:left;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--cat-color);border-radius:var(--radius);box-shadow:var(--shadow)}
 .wk-card:hover{border-color:var(--line-strong);border-left-color:var(--cat-color)}
 .wk-card.selected{outline:2px solid var(--accent);outline-offset:1px}
 .wk-card.all-done{opacity:.6}
-.wk-title{font-weight:700;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wk-item{font-size:12.5px;color:var(--muted);line-height:1.35;overflow-wrap:anywhere}
+.wk-title{font-weight:700;font-size:12.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wk-item{font-size:11.3px;color:var(--muted);line-height:1.35;overflow-wrap:anywhere}
 .wk-item.done{text-decoration:line-through;color:var(--done)}
-.wk-more{font-size:12px;font-weight:700;color:var(--accent)}
+.wk-more{font-size:10.8px;font-weight:700;color:var(--accent)}
 
 /* Right column */
 .tabs{display:flex;gap:3px;padding:3px;background:var(--panel-2);border-radius:var(--radius)}
-.tab{display:flex;align-items:center;gap:6px;border:0;background:transparent;padding:5px 10px;border-radius:6px;font-weight:700;color:var(--muted);cursor:pointer}
+.tab{display:flex;align-items:center;gap:5px;border:0;background:transparent;padding:4px 9px;border-radius:5px;font-weight:700;color:var(--muted);cursor:pointer}
 .tab.active{background:var(--panel);color:var(--ink);box-shadow:var(--shadow)}
-.tab-count{font-size:11.5px;min-width:20px;padding:0 6px;border-radius:999px;background:var(--line);color:var(--muted);text-align:center}
+.tab-count{font-size:10.4px;min-width:18px;padding:0 5px;border-radius:999px;background:var(--line);color:var(--muted);text-align:center}
 .tab[data-tab=overdue] .tab-count.has{background:var(--danger);color:#fff}
-.filters{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:10px 16px;border-bottom:1px solid var(--line)}
-.chip-toggle{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 8px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--faint);font-size:12.5px;font-weight:600;cursor:pointer}
-.chip-toggle .dot{width:8px;height:8px;border-radius:50%;background:var(--cat-color);opacity:.45}
+.filters{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:5px;padding:9px 14px;border-bottom:1px solid var(--line)}
+.chip-toggle{display:inline-flex;align-items:center;gap:5px;padding:2px 9px 2px 7px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--faint);font-size:11.3px;font-weight:600;cursor:pointer}
+.chip-toggle .dot{width:7px;height:7px;border-radius:50%;background:var(--cat-color);opacity:.45}
 .chip-toggle.on{background:var(--panel-2);color:var(--ink);border-color:var(--line-strong)}
 .chip-toggle.on .dot{opacity:1}
 .cat-none{--cat-color:var(--cat-none)} .cat-client{--cat-color:var(--cat-client)} .cat-internal{--cat-color:var(--cat-internal)} .cat-large{--cat-color:var(--cat-large)}
 
-.task-card{display:block;margin-bottom:10px;padding:12px 12px 10px;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--cat-color);border-radius:var(--radius);box-shadow:var(--shadow);cursor:pointer}
+.task-card{display:block;margin-bottom:9px;padding:11px 11px 9px;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--cat-color);border-radius:var(--radius);box-shadow:var(--shadow);cursor:pointer}
 .task-card:hover{border-color:var(--line-strong);border-left-color:var(--cat-color)}
 .task-card.selected{outline:2px solid var(--accent);outline-offset:1px}
-.task-card.expanded{cursor:default}
+.task-card.expanded{cursor:default;padding:10px 12px 9px 22px}
 .task-card.flash{animation:flash 1.1s ease-out}
-@keyframes flash{0%{box-shadow:0 0 0 7px var(--accent-soft)}100%{box-shadow:var(--shadow)}}
+@keyframes flash{0%{box-shadow:0 0 0 6px var(--accent-soft)}100%{box-shadow:var(--shadow)}}
 @media (prefers-reduced-motion: reduce){.task-card.flash{animation:none}}
-.tc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.tc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:9px}
 .tc-head-text{min-width:0}
-.tc-title{font-weight:800;font-size:15px;letter-spacing:-.01em;overflow-wrap:anywhere}
-.tc-sub{color:var(--muted);font-size:13px;margin-top:2px}
-.tc-meta{flex:none;display:flex;align-items:center;gap:8px}
-.tc-progress{font-size:12px;font-weight:700;color:var(--faint)}
-.cat-tag{font-size:11.5px;font-weight:700;color:var(--cat-color);background:color-mix(in srgb, var(--cat-color) 15%, transparent);padding:2px 8px;border-radius:999px;white-space:nowrap}
-.tc-items{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
-.tc-item{display:flex;align-items:center;gap:8px;font-size:13.5px}
-.tc-item-title{flex:1;min-width:0;overflow-wrap:anywhere}
+.tc-title{font-weight:800;font-size:13.5px;letter-spacing:-.01em;overflow-wrap:anywhere}
+.tc-sub{color:var(--muted);font-size:11.7px;margin-top:2px}
+.tc-meta{flex:none;display:flex;align-items:center;gap:7px}
+.tc-progress{font-size:10.8px;font-weight:700;color:var(--faint)}
+.cat-tag{font-size:10.4px;font-weight:700;color:var(--cat-color);background:color-mix(in srgb, var(--cat-color) 15%, transparent);padding:2px 7px;border-radius:999px;white-space:nowrap}
+.tc-items{list-style:none;margin:9px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.tc-item{display:flex;align-items:flex-start;gap:7px;font-size:12.2px}
+.tc-item .check{margin-top:1px}
+.tc-item-title{flex:1;min-width:0;overflow-wrap:anywhere;white-space:pre-wrap}
 .tc-item.done .tc-item-title{text-decoration:line-through;color:var(--done)}
 .tc-item.done .pill,.tc-item.done .tc-link{opacity:.55}
-.pill{flex:none;font-size:11.5px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line);color:var(--muted);white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis}
+.pill{flex:none;font-size:10.4px;font-weight:700;padding:1px 6px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line);color:var(--muted);white-space:nowrap;max-width:117px;overflow:hidden;text-overflow:ellipsis}
 .pill.due-over{background:var(--danger-soft);border-color:transparent;color:var(--danger)}
 .pill.due-today{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
-.tc-link{flex:none;font-size:12px;font-weight:700;color:var(--accent);text-decoration:none}
+.tc-link{flex:none;font-size:10.8px;font-weight:700;color:var(--accent);text-decoration:none}
 .tc-link:hover{text-decoration:underline}
-.tc-edit-head{display:flex;align-items:center;justify-content:space-between;margin:-4px -4px 8px 0}
-.tc-edit-foot{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
-.list-empty{padding:28px 12px;text-align:center;color:var(--faint);border:1px dashed var(--line);border-radius:var(--radius)}
+.tc-collapsed{display:flex;align-items:center;gap:7px;font-size:11.3px;font-weight:700;color:var(--faint)}
+.tc-collapsed .ic{width:16px;height:12px}
+.tc-divider{border-top:1px dashed var(--line-strong);margin:1px 0}
+.tc-edit-head{display:flex;align-items:center;justify-content:space-between;margin:-3px -4px 6px 0}
+.tc-edit-foot{display:flex;align-items:center;gap:7px;margin-top:11px;padding-top:10px;border-top:1px solid var(--line)}
+.list-empty{padding:25px 11px;text-align:center;color:var(--faint);border:1px dashed var(--line);border-radius:var(--radius)}
 
 /* Auth / config */
-.center-screen{min-height:100vh;display:grid;place-items:center;padding:24px}
-.auth-card{width:380px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);padding:26px;box-shadow:var(--shadow)}
-.auth-card h1{margin:0 0 4px;font-size:22px;font-weight:800;letter-spacing:-.02em}
-.auth-card p{margin:0 0 18px}
-.form-error{color:var(--danger);font-weight:600;margin:0 0 12px!important}
-.auth-card code{background:var(--panel-2);padding:1px 5px;border-radius:4px;font-size:12.5px}
+.center-screen{min-height:100vh;display:grid;place-items:center;padding:22px}
+.auth-card{width:342px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);padding:23px;box-shadow:var(--shadow)}
+.auth-card h1{margin:0 0 4px;font-size:19.8px;font-weight:800;letter-spacing:-.02em}
+.auth-card p{margin:0 0 16px}
+.form-error{color:var(--danger);font-weight:600;margin:0 0 11px!important}
+.auth-card code{background:var(--panel-2);padding:1px 5px;border-radius:4px;font-size:11.3px}
 
 /* Toast */
-.toast{position:fixed;left:50%;bottom:24px;z-index:50;transform:translate(-50%,16px);padding:9px 14px;border-radius:8px;background:var(--ink);color:var(--panel);font-weight:700;opacity:0;pointer-events:none;transition:opacity .18s, transform .18s}
+.toast{position:fixed;left:50%;bottom:22px;z-index:50;transform:translate(-50%,14px);padding:8px 13px;border-radius:7px;background:var(--ink);color:var(--panel);font-weight:700;opacity:0;pointer-events:none;transition:opacity .18s, transform .18s}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .toast.error{background:var(--danger);color:#fff}
 </style>
@@ -413,7 +456,7 @@ function buildRich(html, placeholder) {
   const tb = document.createElement('div');
   tb.className = 'rich-toolbar';
   const ed = document.createElement('div');
-  ed.className = 'input rich fmt';
+  ed.className = 'rich fmt';
   ed.contentEditable = 'true';
   ed.setAttribute('role', 'textbox');
   ed.setAttribute('aria-multiline', 'true');
@@ -456,110 +499,318 @@ function applyFmt(cmd, ed) {
   ed.dispatchEvent(new Event('input', { bubbles: true }));
 }
 
-/* ---------- Task editor (used for the new-task form and for editing) ---------- */
-function buildItemEditor(it, mode, onRemove) {
+/* ---------- Task editor: "paper" style, used for the new-task form and for editing ---------- */
+const IS_MAC = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+const MOD = IS_MAC ? '⌘' : 'Ctrl';
+const ALT = IS_MAC ? 'Option' : 'Alt';
+const svg = (d, fill) => `<svg class="ic" viewBox="0 0 16 16" fill="${fill ? 'currentColor' : 'none'}" stroke="${fill ? 'none' : 'currentColor'}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const ICONS = {
+  person: svg('<circle cx="8" cy="5.4" r="2.6"/><path d="M3 13.6c.8-2.4 2.7-3.6 5-3.6s4.2 1.2 5 3.6"/>'),
+  calendar: svg('<rect x="2.5" y="3.5" width="11" height="10" rx="1.6"/><path d="M2.5 6.8h11M5.5 2v3M10.5 2v3"/>'),
+  text: svg('<path d="M3 4.5h10M3 8h10M3 11.5h6"/>'),
+  link: svg('<path d="M6.6 9.4l2.8-2.8"/><path d="M7.4 4.6l.9-.9a2.6 2.6 0 013.7 3.7l-.9.9"/><path d="M8.6 11.4l-.9.9A2.6 2.6 0 014 8.6l.9-.9"/>'),
+  x: svg('<path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/>'),
+  grip: svg('<circle cx="6" cy="3.5" r="1.2"/><circle cx="10" cy="3.5" r="1.2"/><circle cx="6" cy="8" r="1.2"/><circle cx="10" cy="8" r="1.2"/><circle cx="6" cy="12.5" r="1.2"/><circle cx="10" cy="12.5" r="1.2"/>', true),
+  done: svg('<path d="M2 8.5l2.5 2.5L9.5 5"/><path d="M7.5 10.5l.5.5L14 5"/>'),
+};
+
+// Typing shortcuts: "@James" sets the assignee, "!fri" / "!tomorrow" / "!23/10" / "!+3" sets the date.
+function parseDateToken(tok) {
+  tok = tok.toLowerCase();
+  const base = parseYmd(state.today);
+  if (['today', 'tod', 'tdy'].includes(tok)) return state.today;
+  if (['tomorrow', 'tom', 'tmr', 'tmrw'].includes(tok)) return ymd(addDays(base, 1));
+  if (tok.length >= 3) {
+    const i = WD_LONG.findIndex(w => w.toLowerCase().startsWith(tok));
+    if (i > -1) return ymd(addDays(base, (i - base.getDay() + 7) % 7));
+  }
+  let m = tok.match(/^\+(\d{1,3})d?$/);
+  if (m) return ymd(addDays(base, +m[1]));
+  m = tok.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2}|\d{4}))?$/);
+  if (m) {
+    const d = +m[1], mo = +m[2];
+    const y = m[3] ? (m[3].length === 2 ? 2000 + +m[3] : +m[3]) : base.getFullYear();
+    let dt = new Date(y, mo - 1, d);
+    if (dt.getMonth() !== mo - 1 || dt.getDate() !== d) return null;
+    if (!m[3] && dt < base) dt = new Date(y + 1, mo - 1, d);
+    return ymd(dt);
+  }
+  return null;
+}
+function matchKnownName(name) {
+  if (name.toLowerCase() === 'me') return 'Me';
+  const known = [...document.querySelectorAll('#assignee-list option')].map(o => o.value);
+  return known.find(k => k.toLowerCase() === name.toLowerCase()) || name.charAt(0).toUpperCase() + name.slice(1);
+}
+function parseShortcuts(text) {
+  let assignee = null, due = null, hit = false;
+  let out = text.replace(/(^|\s)@([A-Za-z][\w.'-]*)/g, (all, pre, name) => { assignee = matchKnownName(name); hit = true; return pre; });
+  out = out.replace(/(^|\s)!([\w/+-]+)/g, (all, pre, tok) => { const d = parseDateToken(tok); if (!d) return all; due = d; hit = true; return pre; });
+  if (hit) out = out.replace(/[ \t]{2,}/g, ' ').replace(/[ \t]+$/gm, '').replace(/^[ \t]+/gm, '').trim();
+  return { hit, text: out, assignee, due };
+}
+function nextMonday() { const b = parseYmd(state.today); return ymd(addDays(b, ((1 - b.getDay() + 7) % 7) || 7)); }
+
+function buildLine(it, mode, ctx) {
+  const s = { id: it.id || uid(), assignee: it.assignee || null, due: it.due || null, done: !!it.done };
   const el = document.createElement('div');
-  el.className = 'item-ed';
-  const id = it.id || uid();
+  el.className = 'line' + (s.done ? ' done' : '');
   el.innerHTML = `
-    <div class="item-ed-top">
-      ${mode === 'edit' ? '<input type="checkbox" class="check it-done" aria-label="Done">' : ''}
-      <input class="input it-title" placeholder="Checklist item" maxlength="300" aria-label="Item title">
-      <button type="button" class="icon-btn it-remove" title="Remove item" aria-label="Remove item">×</button>
-    </div>
-    <div class="item-ed-meta">
-      <select class="input it-atype" aria-label="Assignee">
-        <option value="">No assignee</option><option value="me">Me</option><option value="other">Someone else</option>
-      </select>
-      <input class="input it-aname" list="assignee-list" placeholder="Name" maxlength="80" aria-label="Assignee name">
-      <input type="date" class="input it-due" aria-label="Due date">
-    </div>
-    <div class="it-desc"></div>
-    <input class="input it-link" type="url" placeholder="Link (optional)" maxlength="2000" aria-label="Link">`;
-  const titleIn = el.querySelector('.it-title');
-  const atype = el.querySelector('.it-atype');
-  const aname = el.querySelector('.it-aname');
-  const dueIn = el.querySelector('.it-due');
-  const linkIn = el.querySelector('.it-link');
-  const doneCb = el.querySelector('.it-done');
-  const desc = buildRich(it.description, 'Description (optional)');
-  el.querySelector('.it-desc').appendChild(desc.el);
+    <button type="button" class="line-grip" tabindex="-1" title="Drag to reorder" aria-label="Drag to reorder">${ICONS.grip}</button>
+    ${mode === 'edit' ? '<input type="checkbox" class="check line-check" aria-label="Done">' : '<span class="line-bullet" aria-hidden="true"></span>'}
+    <div class="line-main">
+      <div class="line-row">
+        <textarea class="line-text" rows="1" maxlength="500" placeholder="Add an item" aria-label="Checklist item"></textarea>
+        <span class="line-tags"></span>
+        <span class="line-tools">
+          <button type="button" class="tool" data-tool="assignee" title="Assignee">${ICONS.person}</button>
+          <button type="button" class="tool" data-tool="due" title="Due date">${ICONS.calendar}</button>
+          <button type="button" class="tool" data-tool="desc" title="Description">${ICONS.text}</button>
+          <button type="button" class="tool" data-tool="link" title="Link">${ICONS.link}</button>
+          <button type="button" class="tool tool-remove" data-tool="remove" title="Remove item">${ICONS.x}</button>
+        </span>
+      </div>
+      <div class="det det-assignee" hidden>
+        <button type="button" class="det-chip" data-assign="me">Me</button>
+        <input class="det-input as-name" list="assignee-list" placeholder="Someone else" maxlength="80" aria-label="Assignee name">
+        <button type="button" class="det-clear" data-clear="assignee">Clear</button>
+      </div>
+      <div class="det det-due" hidden>
+        <input type="date" class="det-input due-in" aria-label="Due date">
+        <button type="button" class="det-chip" data-quick="today">Today</button>
+        <button type="button" class="det-chip" data-quick="tomorrow">Tomorrow</button>
+        <button type="button" class="det-chip" data-quick="monday">Next Monday</button>
+        <button type="button" class="det-clear" data-clear="due">Clear</button>
+      </div>
+      <div class="det det-desc" hidden></div>
+      <div class="det det-link" hidden>${ICONS.link}<input class="link-in" type="url" placeholder="Paste a link" maxlength="2000" aria-label="Link"><a class="det-open" target="_blank" rel="noopener noreferrer" hidden>Open</a></div>
+    </div>`;
+  const ta = el.querySelector('.line-text');
+  const tags = el.querySelector('.line-tags');
+  const P = { assignee: el.querySelector('.det-assignee'), due: el.querySelector('.det-due'), desc: el.querySelector('.det-desc'), link: el.querySelector('.det-link') };
+  const nameIn = el.querySelector('.as-name'), dueIn = el.querySelector('.due-in');
+  const linkIn = el.querySelector('.link-in'), openA = el.querySelector('.det-open');
+  const check = el.querySelector('.line-check');
+  const desc = buildRich(it.description, 'Add a description');
+  P.desc.appendChild(desc.el);
 
-  titleIn.value = it.title || '';
-  dueIn.value = it.due || '';
+  ta.value = it.title || '';
   linkIn.value = it.link || '';
-  if (it.assignee === 'Me') atype.value = 'me';
-  else if (it.assignee) { atype.value = 'other'; aname.value = it.assignee; }
-  aname.hidden = atype.value !== 'other';
-  if (doneCb) { doneCb.checked = !!it.done; el.classList.toggle('is-done', doneCb.checked); doneCb.addEventListener('change', () => el.classList.toggle('is-done', doneCb.checked)); }
+  const descHasText = () => !!textOf(desc.getHTML());
+  P.desc.hidden = !descHasText();
+  P.link.hidden = !linkIn.value.trim();
+  if (check) check.checked = s.done;
 
-  atype.addEventListener('change', () => { aname.hidden = atype.value !== 'other'; if (!aname.hidden) aname.focus(); });
-  el.querySelector('.it-remove').addEventListener('click', () => onRemove(api));
+  const fit = () => { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; };
+  const focusEnd = () => { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); };
+  const updateOpen = () => { const h = safeHref(normLink(linkIn.value)); openA.hidden = !h; if (h) openA.href = h; };
+  updateOpen();
+  const renderTags = () => {
+    let h = '';
+    if (s.assignee) h += `<button type="button" class="ltag" data-tool="assignee" title="Change assignee">${esc(s.assignee)}</button>`;
+    if (s.due) {
+      const cls = !s.done && s.due < state.today ? 'over' : (s.due === state.today && !s.done ? 'today' : '');
+      h += `<button type="button" class="ltag ${cls}" data-tool="due" title="Change due date">${esc(formatDue(s.due))}</button>`;
+    }
+    tags.innerHTML = h;
+    el.querySelector('.tool[data-tool=assignee]').classList.toggle('has', !!s.assignee);
+    el.querySelector('.tool[data-tool=due]').classList.toggle('has', !!s.due);
+    el.querySelector('.tool[data-tool=desc]').classList.toggle('has', descHasText());
+    el.querySelector('.tool[data-tool=link]').classList.toggle('has', !!linkIn.value.trim());
+  };
+  renderTags();
+
+  const close = (name, refocus) => { P[name].hidden = true; if (refocus) focusEnd(); };
+  const toggle = name => {
+    if (name === 'assignee' || name === 'due') {
+      const opening = P[name].hidden;
+      close('assignee'); close('due');
+      if (!opening) { focusEnd(); return; }
+      P[name].hidden = false;
+      if (name === 'assignee') { nameIn.value = s.assignee && s.assignee !== 'Me' ? s.assignee : ''; nameIn.focus(); }
+      else { dueIn.value = s.due || ''; dueIn.focus(); }
+    } else if (name === 'desc') {
+      if (P.desc.hidden) { P.desc.hidden = false; desc.editor.focus(); }
+      else if (!descHasText()) { P.desc.hidden = true; focusEnd(); }
+      else desc.editor.focus();
+    } else if (name === 'link') {
+      if (P.link.hidden) { P.link.hidden = false; linkIn.focus(); }
+      else if (!linkIn.value.trim()) { P.link.hidden = true; focusEnd(); }
+      else linkIn.focus();
+    } else if (name === 'remove') {
+      ctx.remove(api, false);
+    }
+  };
+  const setAssignee = v => { s.assignee = v; renderTags(); ctx.changed(); };
+  const setDue = v => { s.due = v; renderTags(); ctx.changed(); };
+  const applyShortcuts = () => {
+    const r = parseShortcuts(ta.value);
+    if (!r.hit) return;
+    ta.value = r.text;
+    if (r.assignee) s.assignee = r.assignee;
+    if (r.due) s.due = r.due;
+    renderTags(); fit(); ctx.changed();
+  };
+  const hasDetails = () => !!(s.assignee || s.due || descHasText() || linkIn.value.trim());
+
+  el.addEventListener('click', e => {
+    const t = e.target.closest('[data-tool]');
+    if (t) { toggle(t.dataset.tool); return; }
+    const a = e.target.closest('[data-assign]');
+    if (a) { setAssignee('Me'); close('assignee', true); return; }
+    const q = e.target.closest('[data-quick]');
+    if (q) { setDue(q.dataset.quick === 'today' ? state.today : q.dataset.quick === 'tomorrow' ? ymd(addDays(parseYmd(state.today), 1)) : nextMonday()); close('due', true); return; }
+    const c = e.target.closest('[data-clear]');
+    if (c) { if (c.dataset.clear === 'assignee') { nameIn.value = ''; setAssignee(null); } else { dueIn.value = ''; setDue(null); } close(c.dataset.clear, true); }
+  });
+  nameIn.addEventListener('change', () => { const v = nameIn.value.trim(); if (v) setAssignee(matchKnownName(v)); });
+  nameIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); const v = nameIn.value.trim(); if (v) setAssignee(matchKnownName(v)); close('assignee', true); } });
+  dueIn.addEventListener('change', () => setDue(dueIn.value || null));
+  dueIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); close('due', true); } });
+  linkIn.addEventListener('input', () => { updateOpen(); renderTags(); });
+  linkIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); focusEnd(); } });
+  desc.editor.addEventListener('input', () => renderTags());
+  if (check) check.addEventListener('change', () => { s.done = check.checked; el.classList.toggle('done', s.done); renderTags(); ctx.changed(); });
+
+  ta.addEventListener('input', () => { fit(); ctx.updateGhost(); });
+  ta.addEventListener('keydown', e => {
+    if (e.isComposing) return;
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { applyShortcuts(); return; } // bubbles up to submit
+    if (e.key === 'Enter' && (e.altKey || e.shiftKey)) {
+      e.preventDefault();
+      ta.setRangeText('\n', ta.selectionStart, ta.selectionEnd, 'end');
+      ta.dispatchEvent(new Event('input', { bubbles: true }));
+      return;
+    }
+    if (e.key === 'Enter') { e.preventDefault(); applyShortcuts(); ctx.newAfter(api); return; }
+    if (e.key === 'Backspace' && !ta.value && ta.selectionStart === 0 && !hasDetails()) { e.preventDefault(); ctx.remove(api, true); return; }
+    if (e.key === 'ArrowUp' && !e.shiftKey && !ta.value.slice(0, ta.selectionStart).includes('\n')) { e.preventDefault(); ctx.nav(api, -1); return; }
+    if (e.key === 'ArrowDown' && !e.shiftKey && !ta.value.slice(ta.selectionEnd).includes('\n')) { e.preventDefault(); ctx.nav(api, 1); }
+  });
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && (!P.assignee.hidden || !P.due.hidden)) { e.stopPropagation(); close('assignee'); close('due'); focusEnd(); }
+  });
+  el.addEventListener('focusout', e => {
+    if (el.contains(e.relatedTarget)) return;
+    close('assignee'); close('due');
+    applyShortcuts();
+    if (!descHasText()) P.desc.hidden = true;
+    if (!linkIn.value.trim()) P.link.hidden = true;
+    ctx.updateGhost();
+  });
+
+  // Drag to reorder (only from the grip, so text selection still works)
+  const grip = el.querySelector('.line-grip');
+  grip.addEventListener('mousedown', () => { el.draggable = true; });
+  document.addEventListener('mouseup', () => { el.draggable = false; });
+  el.addEventListener('dragstart', e => { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', ''); ctx.dragging = el; requestAnimationFrame(() => el.classList.add('dragging')); });
+  el.addEventListener('dragend', () => { el.draggable = false; el.classList.remove('dragging'); ctx.dragging = null; ctx.changed(); });
 
   const api = {
-    el, titleIn,
-    getData: () => ({
-      id,
-      title: titleIn.value,
-      description: desc.getHTML(),
-      link: linkIn.value,
-      assignee: atype.value === 'me' ? 'Me' : atype.value === 'other' ? (aname.value.trim() || null) : null,
-      due: dueIn.value || null,
-      done: doneCb ? doneCb.checked : false,
-    }),
+    el, ta, fit, focusEnd, applyShortcuts, hasDetails,
+    isBlank: () => !ta.value.trim() && !hasDetails(),
+    getData: () => ({ id: s.id, title: ta.value, description: desc.getHTML(), link: linkIn.value, assignee: s.assignee, due: s.due, done: s.done }),
   };
   return api;
 }
 
-function buildTaskEditor(data, mode) {
+function buildTaskEditor(data, mode, handlers = {}) {
   data = data || {};
   const root = document.createElement('div');
-  root.className = 'task-editor';
+  root.className = 'task-editor paper';
+  const hint = mode === 'draft'
+    ? `<span><kbd>Enter</kbd> next item</span><span><kbd>${ALT}+Enter</kbd> line break</span><span><code>@name</code> assign</span><span><code>!fri</code> due date</span><span><kbd>${MOD}+Enter</kbd> add to board</span>`
+    : `<span><kbd>Enter</kbd> next item</span><span><code>@name</code> assign</span><span><code>!fri</code> due date</span><span><kbd>${MOD}+Enter</kbd> save</span><span><kbd>Esc</kbd> close</span>`;
   root.innerHTML = `
-    <label class="field"><span class="field-label">Title</span><input class="input title-input ed-title" maxlength="200" placeholder="What needs doing?"></label>
-    <div class="field"><span class="field-label">Sub-title</span><div class="ed-sub"></div></div>
-    <label class="field"><span class="field-label">Category</span>
-      <select class="input ed-cat">${CATEGORIES.map(c => `<option value="${esc(c.id)}">${esc(c.id)}</option>`).join('')}</select></label>
-    <div class="items-label field-label">Checklist</div>
-    <div class="ed-items"></div>
-    <button type="button" class="btn small ed-add-item">+ Add item</button>`;
-  const titleIn = root.querySelector('.ed-title');
+    <input class="pe-title" maxlength="200" placeholder="Task title" aria-label="Task title">
+    <div class="pe-sub"></div>
+    <div class="pe-meta"><select class="pe-cat" aria-label="Category">${CATEGORIES.map(c => `<option value="${esc(c.id)}">${esc(c.id)}</option>`).join('')}</select></div>
+    <div class="pe-lines"></div>
+    <div class="line-ghost" role="button" tabindex="0">Add an item</div>
+    <div class="pe-hint">${hint}</div>`;
+  const titleIn = root.querySelector('.pe-title');
   titleIn.value = data.title || '';
-  const sub = buildRich(data.subtitle, 'Optional');
-  root.querySelector('.ed-sub').appendChild(sub.el);
-  const catSel = root.querySelector('.ed-cat');
-  catSel.value = CATEGORIES.some(c => c.id === data.category) ? data.category : 'None';
-  const box = root.querySelector('.ed-items');
-  const itemApis = [];
+  const sub = buildRich(data.subtitle, 'Add a sub-title');
+  root.querySelector('.pe-sub').appendChild(sub.el);
+  const catSel = root.querySelector('.pe-cat');
+  const setCat = v => { catSel.value = CATEGORIES.some(c => c.id === v) ? v : 'None'; catSel.className = 'pe-cat ' + catCls(catSel.value); };
+  setCat(data.category);
+  catSel.addEventListener('change', () => setCat(catSel.value));
+
+  const box = root.querySelector('.pe-lines');
+  const ghost = root.querySelector('.line-ghost');
+  const map = new Map();
+  const lines = () => [...box.children].map(el => map.get(el)).filter(Boolean);
   const changed = () => root.dispatchEvent(new Event('input', { bubbles: true }));
-  const removeItem = api => { const i = itemApis.indexOf(api); if (i > -1) itemApis.splice(i, 1); api.el.remove(); changed(); };
-  const addItem = (it, focus) => {
-    const api = buildItemEditor(it || {}, mode, removeItem);
-    itemApis.push(api); box.appendChild(api.el);
-    if (focus) api.titleIn.focus();
+  const ctx = {
+    dragging: null, changed,
+    updateGhost() { const ls = lines(); const last = ls[ls.length - 1]; ghost.hidden = !!last && last.isBlank(); },
+    newAfter(api) {
+      const n = make({});
+      if (api) api.el.after(n.el); else box.appendChild(n.el);
+      n.fit(); n.ta.focus(); ctx.updateGhost(); changed();
+    },
+    remove(api, focusPrev) {
+      const ls = lines(), i = ls.indexOf(api);
+      if (focusPrev && ls.length <= 1) return;
+      api.el.remove(); map.delete(api.el);
+      if (focusPrev) { const prev = ls[i - 1]; prev ? prev.focusEnd() : titleIn.focus(); }
+      ctx.updateGhost(); changed();
+    },
+    nav(api, dir) {
+      const ls = lines(), t = ls[ls.indexOf(api) + dir];
+      if (t) t.focusEnd(); else if (dir < 0) titleIn.focus();
+    },
   };
-  (data.items && data.items.length ? data.items : [{}]).forEach(it => addItem(it));
-  root.querySelector('.ed-add-item').addEventListener('click', () => { addItem({}, true); changed(); });
+  const make = it => { const api = buildLine(it, mode, ctx); map.set(api.el, api); return api; };
+  (data.items && data.items.length ? data.items : [{}]).forEach(it => box.appendChild(make(it).el));
+  ctx.updateGhost();
+
+  const toFirstLine = () => { const f = lines()[0]; f ? f.focusEnd() : ctx.newAfter(null); };
+  titleIn.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' && !e.ctrlKey && !e.metaKey) || e.key === 'ArrowDown') { e.preventDefault(); toFirstLine(); }
+  });
+  const addAtEnd = () => { const ls = lines(); ctx.newAfter(ls[ls.length - 1] || null); };
+  ghost.addEventListener('click', addAtEnd);
+  ghost.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); addAtEnd(); } });
+
+  box.addEventListener('dragover', e => {
+    const drag = ctx.dragging;
+    if (!drag || drag.parentNode !== box) return;
+    e.preventDefault();
+    const after = [...box.children].find(c => c !== drag && e.clientY < c.getBoundingClientRect().top + c.offsetHeight / 2);
+    if (after) { if (drag.nextSibling !== after) box.insertBefore(drag, after); }
+    else if (box.lastElementChild !== drag) box.appendChild(drag);
+  });
+  box.addEventListener('drop', e => e.preventDefault());
+
+  root.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); handlers.onSubmit && handlers.onSubmit(); }
+    else if (e.key === 'Escape') { handlers.onEscape && handlers.onEscape(); }
+  });
 
   return {
-    el: root, titleIn, itemApis,
-    getData: () => ({ title: titleIn.value, subtitle: sub.getHTML(), category: catSel.value, items: itemApis.map(a => a.getData()) }),
+    el: root, titleIn, lines,
+    fit: () => lines().forEach(l => l.fit()),
+    applyShortcuts: () => lines().forEach(l => l.applyShortcuts()),
+    getData: () => ({ title: titleIn.value, subtitle: sub.getHTML(), category: catSel.value, items: lines().map(l => l.getData()) }),
   };
 }
 
 // Validates an editor's contents and returns a clean task, or an error message.
 function normaliseFromEditor(api) {
+  api.applyShortcuts();
   api.el.querySelectorAll('.invalid').forEach(x => x.classList.remove('invalid'));
-  const d = api.getData();
+  const d = api.getData(), ls = api.lines();
   const title = d.title.trim();
   let error = null;
   if (!title) { api.titleIn.classList.add('invalid'); error = 'Add a title for the task.'; }
   const items = [];
   d.items.forEach((it, i) => {
-    const t = it.title.trim();
+    const t = it.title.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
     const hasOther = textOf(it.description) || it.link.trim() || it.assignee || it.due;
-    if (!t && !hasOther) return; // blank row: ignore
-    if (!t) { api.itemApis[i].titleIn.classList.add('invalid'); error = error || 'Each checklist item needs a title.'; return; }
+    if (!t && !hasOther) return; // blank line: ignore
+    if (!t) { ls[i].el.classList.add('invalid'); error = error || 'Each checklist item needs a title.'; return; }
     items.push({ ...it, title: t, link: normLink(it.link) });
   });
   if (error) return { error };
@@ -583,11 +834,15 @@ async function loadDraft() {
 /* ---------- Draft (left column) ---------- */
 function setDraftStatus(s) { $('#draft-status').textContent = s; }
 function mountDraft(data) {
-  const api = buildTaskEditor(data, 'draft');
+  const api = buildTaskEditor(data, 'draft', {
+    onSubmit: addTask,
+    onEscape: () => document.activeElement && document.activeElement.blur(),
+  });
   const box = $('#new-form');
   box.innerHTML = '';
   box.appendChild(api.el);
   state.draftEditor = api;
+  requestAnimationFrame(api.fit);
   api.el.addEventListener('input', scheduleDraftSave);
   api.el.addEventListener('change', scheduleDraftSave);
 }
@@ -634,6 +889,7 @@ async function addTask() {
   await saveDraft();
   setDraftStatus('');
   renderAll();
+  state.draftEditor.titleIn.focus();
   toast('Task added to board');
 }
 
@@ -643,11 +899,11 @@ function openEditor(id) {
   if (state.editor && state.editor.dirty && !confirm('Discard your unsaved changes to the open task?')) return false;
   const t = findTask(id);
   if (!t) return false;
-  const api = buildTaskEditor(t, 'edit');
+  const api = buildTaskEditor(t, 'edit', { onSubmit: () => saveEdit() });
   const card = document.createElement('article');
   card.className = `task-card expanded ${catCls(t.category)}`;
   card.dataset.id = id;
-  card.innerHTML = `<div class="tc-edit-head"><span class="field-label">Edit task</span><button type="button" class="icon-btn ed-close" aria-label="Close without saving" title="Close">×</button></div>`;
+  card.innerHTML = `<div class="tc-edit-head"><span class="field-label">Edit task</span><button type="button" class="icon-btn ed-close" aria-label="Close without saving" title="Close">${ICONS.x}</button></div>`;
   card.appendChild(api.el);
   const foot = document.createElement('div');
   foot.className = 'tc-edit-foot';
@@ -659,7 +915,7 @@ function openEditor(id) {
   const markDirty = () => { ed.dirty = true; };
   api.el.addEventListener('input', markDirty);
   api.el.addEventListener('change', markDirty);
-  api.el.querySelector('.ed-cat').addEventListener('change', e => {
+  api.el.querySelector('.pe-cat').addEventListener('change', e => {
     card.className = card.className.replace(/\bcat-[a-z]+\b/, catCls(e.target.value));
   });
   card.querySelector('.ed-close').addEventListener('click', () => closeEditor());
@@ -731,6 +987,7 @@ function selectTask(id) {
   state.filter.add(t.category);
   renderAll();
   requestAnimationFrame(() => {
+    if (state.editor) state.editor.api.fit();
     const card = document.querySelector(`#task-list .task-card[data-id="${CSS.escape(id)}"]`);
     if (!card) return;
     card.scrollIntoView({ block: 'nearest', behavior: reducedMotion() ? 'auto' : 'smooth' });
@@ -774,7 +1031,7 @@ function weekCardHTML(e) {
   const shown = e.due.slice(0, 2), more = e.due.length - shown.length;
   return `<button type="button" class="wk-card ${catCls(e.t.category)} ${e.allDone ? 'all-done' : ''} ${state.selectedId === e.t.id ? 'selected' : ''}" data-id="${esc(e.t.id)}">
     <span class="wk-title">${esc(e.t.title)}</span>
-    ${shown.map(it => `<span class="wk-item ${it.done ? 'done' : ''}">${esc(truncate(it.title, PREVIEW_CHARS))}</span>`).join('')}
+    ${shown.map(it => `<span class="wk-item ${it.done ? 'done' : ''}">${esc(truncate(it.title.replace(/\s*\n\s*/g, ' '), PREVIEW_CHARS))}</span>`).join('')}
     ${more > 0 ? `<span class="wk-more">+${more} more</span>` : ''}
   </button>`;
 }
@@ -823,28 +1080,39 @@ function renderRight() {
     }
   });
 }
+function itemRowHTML(it) {
+  const dueCls = !it.due ? '' : itemOverdue(it) ? 'due-over' : (it.due === state.today && !it.done ? 'due-today' : '');
+  const href = safeHref(it.link);
+  return `<li class="tc-item ${it.done ? 'done' : ''}" data-item="${esc(it.id)}">
+    <input type="checkbox" class="check tc-check" ${it.done ? 'checked' : ''} aria-label="Mark ${esc(it.title)} as done">
+    <span class="tc-item-title">${esc(it.title)}</span>
+    ${href ? `<a class="tc-link" href="${esc(href)}" target="_blank" rel="noopener noreferrer" title="${esc(href)}">Link</a>` : ''}
+    ${it.assignee ? `<span class="pill" title="${esc(it.assignee)}">${esc(it.assignee)}</span>` : ''}
+    ${it.due ? `<span class="pill ${dueCls}">${esc(formatDue(it.due))}</span>` : ''}
+  </li>`;
+}
+const collapsedHTML = n => `<li class="tc-collapsed">${ICONS.done}+${n} items complete</li>`;
 function taskCardHTML(t) {
-  const done = t.items.filter(i => i.done).length;
-  const items = t.items.map(it => {
-    const dueCls = !it.due ? '' : itemOverdue(it) ? 'due-over' : (it.due === state.today && !it.done ? 'due-today' : '');
-    const href = safeHref(it.link);
-    return `<li class="tc-item ${it.done ? 'done' : ''}" data-item="${esc(it.id)}">
-      <input type="checkbox" class="check tc-check" ${it.done ? 'checked' : ''} aria-label="Mark ${esc(it.title)} as done">
-      <span class="tc-item-title">${esc(it.title)}</span>
-      ${href ? `<a class="tc-link" href="${esc(href)}" target="_blank" rel="noopener noreferrer" title="${esc(href)}">Link</a>` : ''}
-      ${it.assignee ? `<span class="pill" title="${esc(it.assignee)}">${esc(it.assignee)}</span>` : ''}
-      ${it.due ? `<span class="pill ${dueCls}">${esc(formatDue(it.due))}</span>` : ''}
-    </li>`;
-  }).join('');
+  const items = t.items, n = items.length;
+  const done = items.filter(i => i.done).length;
+  const allDone = n > 0 && done === n;
+  // Runs of 2+ ticked items at the very start or end collapse (unless every item is ticked)
+  let lead = 0; while (lead < n && items[lead].done) lead++;
+  let trail = 0; while (trail < n - lead && items[n - 1 - trail].done) trail++;
+  const cLead = !allDone && lead >= 2, cTrail = !allDone && trail >= 2;
+  let rows = '';
+  if (cLead) rows += collapsedHTML(lead) + '<li class="tc-divider" aria-hidden="true"></li>';
+  items.slice(cLead ? lead : 0, cTrail ? n - trail : n).forEach(it => { rows += itemRowHTML(it); });
+  if (cTrail) rows += '<li class="tc-divider" aria-hidden="true"></li>' + collapsedHTML(trail);
   return `<article class="task-card ${catCls(t.category)} ${state.selectedId === t.id ? 'selected' : ''}" data-id="${esc(t.id)}" tabindex="0">
     <div class="tc-head">
       <div class="tc-head-text">
         <div class="tc-title">${esc(t.title)}</div>
         ${textOf(t.subtitle) ? `<div class="tc-sub fmt">${sanitizeHTML(t.subtitle)}</div>` : ''}
       </div>
-      <div class="tc-meta">${t.category !== 'None' ? `<span class="cat-tag">${esc(t.category)}</span>` : ''}<span class="tc-progress">${done}/${t.items.length}</span></div>
+      <div class="tc-meta">${t.category !== 'None' ? `<span class="cat-tag">${esc(t.category)}</span>` : ''}<span class="tc-progress">${done}/${n}</span></div>
     </div>
-    <ul class="tc-items">${items}</ul>
+    <ul class="tc-items">${rows}</ul>
   </article>`;
 }
 function updateAssigneeList() {
@@ -901,6 +1169,16 @@ function wireEvents() {
     checkDay();
     if (state.editor) return; // don't disturb an open edit
     if (await loadTasks()) renderAll();
+  });
+  // Esc closes the open task on the right (unless you're typing in the New task panel)
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape' || !state.editor) return;
+    if (state.draftEditor && state.draftEditor.el.contains(e.target)) return;
+    closeEditor();
+  });
+  window.addEventListener('resize', () => {
+    if (state.draftEditor) state.draftEditor.fit();
+    if (state.editor) state.editor.api.fit();
   });
   window.addEventListener('beforeunload', e => {
     if (state.draftTimer) saveDraft();
