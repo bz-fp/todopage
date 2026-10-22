@@ -8,6 +8,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  (function () {
+    var r = document.documentElement;
+    try {
+      var t = localStorage.getItem('todo-theme');
+      if (t === 'light' || t === 'dark') r.setAttribute('data-theme', t);
+      r.setAttribute('data-gradient', localStorage.getItem('todo-gradient') === 'off' ? 'off' : 'on');
+    } catch (e) { r.setAttribute('data-gradient', 'on'); }
+  })();
+</script>
+<!-- Your Supabase keys live in config.js (upload it once; it never needs replacing) -->
+<script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <style>
 :root{
@@ -22,7 +34,7 @@
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
-  :root{
+  :root:not([data-theme="light"]){
     --bg:#121617; --panel:#191e20; --panel-2:#20272a; --line:#2b3336; --line-strong:#3c464a; --rule:#252c2f;
     --ink:#e4e9e7; --muted:#9aa6a8; --faint:#6a7679;
     --accent:#5fb8ae; --accent-soft:#1d3532; --accent-ink:#0d1a19;
@@ -32,6 +44,22 @@
     --shadow:0 1px 0 rgba(0,0,0,.35);
     color-scheme:dark;
   }
+}
+:root[data-theme="dark"]{
+    --bg:#121617; --panel:#191e20; --panel-2:#20272a; --line:#2b3336; --line-strong:#3c464a; --rule:#252c2f;
+    --ink:#e4e9e7; --muted:#9aa6a8; --faint:#6a7679;
+    --accent:#5fb8ae; --accent-soft:#1d3532; --accent-ink:#0d1a19;
+    --danger:#ef7a70; --danger-soft:#3a2321;
+    --done:#5f6a6c; --red:#ff6b62;
+    --cat-none:#3c464a; --cat-client:#7aa2f2; --cat-internal:#b493ec; --cat-large:#e0a84f;
+    --shadow:0 1px 0 rgba(0,0,0,.35);
+    color-scheme:dark;
+}
+/* Warm accent while the gradient is on */
+:root[data-gradient="on"]{--accent:#c2541a;--accent-soft:#fbe4d2;--accent-ink:#ffffff;--title-warm:#de6a1f;--title-strong:#c2541a}
+:root[data-gradient="on"][data-theme="dark"]{--accent:#ff9d55;--accent-soft:#3b2416;--accent-ink:#2a1206;--title-warm:#ffa45c;--title-strong:#ffbb80}
+@media (prefers-color-scheme: dark){
+  :root[data-gradient="on"]:not([data-theme="light"]){--accent:#ff9d55;--accent-soft:#3b2416;--accent-ink:#2a1206;--title-warm:#ffa45c;--title-strong:#ffbb80}
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -75,13 +103,38 @@ svg.ic{width:13px;height:13px;display:block}
 .swatch{width:10px;height:10px;border-radius:3px;display:inline-block;border:1px solid rgba(0,0,0,.15)}
 .sw-ink{background:var(--ink)}
 .fmt{overflow-wrap:anywhere}
+.fmt ul{margin:2px 0;padding-left:17px}
+.fmt li{margin:1px 0}
 .fmt span[style*="color: rgb(0, 0, 0)"], .fmt font[color="#000000"]{color:var(--ink)!important}
 .fmt span[style*="color: rgb(211, 47, 47)"], .fmt font[color="#d32f2f"]{color:var(--red)!important}
 .fmt span[style*="background-color: rgb(255, 235, 59)"]{color:#1e282c;border-radius:2px}
 
 /* App frame */
 .main{height:100vh;display:flex;flex-direction:column}
-.topbar{height:47px;flex:none;display:flex;align-items:center;gap:14px;padding:0 18px;background:var(--panel);border-bottom:1px solid var(--line)}
+.topbar{position:relative;isolation:isolate;overflow:hidden;height:47px;flex:none;display:flex;align-items:center;gap:14px;padding:0 18px;background:var(--panel);border-bottom:1px solid var(--line)}
+.mesh{display:none;position:absolute;inset:0;z-index:-1;background:#ffa947;overflow:hidden}
+.mesh .blob{position:absolute;top:-62px;height:172px;border-radius:50%;filter:blur(26px);animation:drift var(--d) ease-in-out infinite alternate}
+.mesh .b1{left:-6%;width:30%;background:#ffc94d;--d:13s;--x1:45%;--y1:5%;--x2:18%;--y2:-6%}
+.mesh .b2{left:17%;width:27%;background:#ff8a3d;--d:15.5s;--x1:-38%;--y1:-5%;--x2:-12%;--y2:7%}
+.mesh .b3{left:34%;width:28%;background:#ffc94d;--d:17.5s;--x1:30%;--y1:6%;--x2:-22%;--y2:-5%}
+.mesh .b4{left:52%;width:22%;background:#e8533a;--d:11.5s;--x1:-35%;--y1:5%;--x2:30%;--y2:-4%}
+.mesh .b5{left:72%;width:32%;background:#ff8a3d;--d:14.5s;--x1:-40%;--y1:-6%;--x2:-10%;--y2:5%}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(var(--x1),var(--y1)) scale(1.12)}100%{transform:translate(var(--x2),var(--y2)) scale(.95)}}
+@media (prefers-reduced-motion: reduce){.mesh .blob{animation:none}}
+:root[data-gradient="on"] .mesh{display:block}
+:root[data-gradient="on"] .topbar{border-bottom-color:transparent}
+:root[data-gradient="on"] .topbar .brand{color:#6b2c0c;mix-blend-mode:multiply}
+:root[data-gradient="on"] .topbar #user-email{color:#5c2b0d}
+:root[data-gradient="on"] .topbar .btn.ghost,:root[data-gradient="on"] .topbar .tb-icon{color:#3d1a06;background:rgba(255,255,255,.26)}
+:root[data-gradient="on"] .topbar .btn.ghost:hover,:root[data-gradient="on"] .topbar .tb-icon:hover{background:rgba(255,255,255,.42)}
+:root[data-gradient="on"][data-theme="dark"] .mesh{filter:brightness(.84)}
+@media (prefers-color-scheme: dark){:root[data-gradient="on"]:not([data-theme="light"]) .mesh{filter:brightness(.84)}}
+.tb-icon{width:27px;height:27px}
+.tb-icon svg.ic{width:15px;height:15px}
+#gradient-btn[aria-pressed="false"]{opacity:.65}
+:root[data-gradient="on"] .col-head h2{color:var(--title-warm)}
+:root[data-gradient="on"] .tab{color:color-mix(in srgb, var(--title-warm) 72%, var(--muted))}
+:root[data-gradient="on"] .tab.active{color:var(--title-strong)}
 .brand{font-weight:800;font-size:15.3px;letter-spacing:-.01em}
 .topbar-slot{flex:1;display:flex;align-items:center;gap:7px}
 .topbar-user{display:flex;align-items:center;gap:7px}
@@ -173,7 +226,8 @@ svg.ic{width:13px;height:13px;display:block}
 .wk-card.selected{outline:2px solid var(--accent);outline-offset:1px}
 .wk-card.all-done{opacity:.6}
 .wk-title{font-weight:700;font-size:12.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wk-item{font-size:11.3px;color:var(--muted);line-height:1.35;overflow-wrap:anywhere}
+.wk-item{position:relative;padding-left:10px;font-size:11.3px;color:var(--muted);line-height:1.35;overflow-wrap:anywhere}
+.wk-item::before{content:"";position:absolute;left:1px;top:.6em;width:4px;height:4px;border-radius:50%;background:currentColor}
 .wk-item.done{text-decoration:line-through;color:var(--done)}
 .wk-more{font-size:10.8px;font-weight:700;color:var(--accent)}
 
@@ -238,11 +292,11 @@ svg.ic{width:13px;height:13px;display:block}
 </head>
 <body>
 
-<!-- Shown until SUPABASE_URL / SUPABASE_KEY are filled in below -->
+<!-- Shown if config.js is missing or still has placeholder values -->
 <div id="config-screen" class="center-screen" hidden>
   <div class="auth-card">
     <h1>Almost there</h1>
-    <p class="muted" id="config-msg">Open <code>index.html</code>, find <code>SUPABASE_URL</code> and <code>SUPABASE_KEY</code> near the top of the script, and paste in your Supabase project URL and publishable key.</p>
+    <p class="muted" id="config-msg">Add a <code>config.js</code> file next to <code>index.html</code> in your GitHub repository, with your Supabase project URL and publishable key in it.</p>
   </div>
 </div>
 
@@ -259,10 +313,13 @@ svg.ic{width:13px;height:13px;display:block}
 
 <div id="main" class="main" hidden>
   <header class="topbar">
+    <div class="mesh" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span><span class="blob b5"></span></div>
     <div class="brand">Todo List</div>
     <!-- Space reserved for future buttons -->
     <div class="topbar-slot" id="topbar-slot"></div>
     <div class="topbar-user">
+      <button class="icon-btn tb-icon" id="gradient-btn" type="button" aria-pressed="true" aria-label="Gradient" title="Turn gradient off"></button>
+      <button class="icon-btn tb-icon" id="theme-btn" type="button" aria-label="Switch colour mode" title="Switch to dark mode"></button>
       <span class="muted small" id="user-email"></span>
       <button class="btn ghost small" id="signout-btn" type="button">Sign out</button>
     </div>
@@ -306,12 +363,10 @@ svg.ic{width:13px;height:13px;display:block}
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-/* ============================================================
-   SETTINGS: paste your Supabase details here
-   (Supabase dashboard: Connect button, or Project Settings > API Keys)
-   ============================================================ */
-const SUPABASE_URL = 'https://jszsbjrqkacjgsyurvhj.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_R5LX1qeF8q8WT_1TapmwBQ_wExo_ncY';
+/* Supabase details come from config.js (see README) */
+const CONFIG = window.TODO_CONFIG || {};
+const SUPABASE_URL = String(CONFIG.SUPABASE_URL || '');
+const SUPABASE_KEY = String(CONFIG.SUPABASE_KEY || '');
 
 /* ============================================================ */
 const CATEGORIES = [
@@ -408,17 +463,25 @@ const HL_SPAN = '<span style="background-color: rgb(255, 235, 59);">';
 function sanitizeHTML(html) {
   if (!html) return '';
   const doc = new DOMParser().parseFromString(`<body>${html}</body>`, 'text/html');
-  return serialise(doc.body).replace(/^(<br>)+|(<br>)+$/g, '');
+  return serialise(doc.body, false).replace(/^(<br>)+|(<br>)+$/g, '');
 }
-function serialise(node) {
+function serialise(node, inItem) {
   let s = '';
   node.childNodes.forEach(ch => {
     if (ch.nodeType === 3) { s += esc(ch.nodeValue); return; }
     if (ch.nodeType !== 1) return;
     const tag = ch.tagName;
     if (tag === 'BR') { s += '<br>'; return; }
+    if (tag === 'UL' || tag === 'OL') {
+      const lis = [...ch.children].map(li => serialise(li, true).replace(/^(<br>)+|(<br>)+$/g, '')).filter(Boolean);
+      if (inItem) { s += (s ? '<br>' : '') + lis.join('<br>'); return; }   // one level only
+      if (!lis.length) return;
+      s = s.replace(/(<br>)+$/, '');
+      s += '<ul>' + lis.map(x => `<li>${x}</li>`).join('') + '</ul>';
+      return;
+    }
     if (['SCRIPT','STYLE','IFRAME','OBJECT','IMG','SVG','TEMPLATE'].includes(tag)) return;
-    let inner = serialise(ch);
+    let inner = serialise(ch, inItem);
     const st = ch.style || {};
     const fw = st.fontWeight, deco = (st.textDecoration || '') + ' ' + (st.textDecorationLine || '');
     const color = st.color || (tag === 'FONT' ? ch.getAttribute('color') : '');
@@ -431,7 +494,8 @@ function serialise(node) {
       if (tag === 'MARK' || isYellow(bg)) inner = `${HL_SPAN}${inner}</span>`;
     }
     if (['DIV','P','LI','H1','H2','H3','H4','H5','H6','BLOCKQUOTE'].includes(tag)) {
-      if (s && !s.endsWith('<br>')) s += '<br>';
+      if (inner.startsWith('<ul>')) s = s.replace(/(<br>)+$/, '');
+      else if (s && !s.endsWith('<br>') && !s.endsWith('</ul>')) s += '<br>';
     }
     s += inner;
   });
@@ -443,6 +507,7 @@ const TOOLBAR = [
   { cmd: 'bold', html: '<b>B</b>', title: 'Bold' },
   { cmd: 'italic', html: '<i>I</i>', title: 'Italic' },
   { cmd: 'underline', html: '<u>U</u>', title: 'Underline' },
+  { cmd: 'list', html: '&bull; List', title: 'Dotpoints (or type - and a space)' },
   { sep: true },
   { cmd: 'hl', html: '<span class="swatch" style="background:#ffeb3b"></span>Highlight', title: 'Highlight (click again to remove)' },
   { cmd: 'red', html: '<span class="swatch" style="background:#d32f2f"></span>Red', title: 'Red text' },
@@ -476,7 +541,22 @@ function buildRich(html, placeholder) {
     const text = (e.clipboardData || window.clipboardData).getData('text/plain');
     document.execCommand('insertText', false, text);
   });
-  ed.addEventListener('input', () => { if (!ed.textContent.trim() && ed.innerHTML !== '') ed.innerHTML = ''; });
+  ed.addEventListener('input', e => {
+    if (!ed.textContent.trim() && !ed.querySelector('li') && ed.innerHTML !== '') { ed.innerHTML = ''; return; }
+    // "- " or "* " at the start of a line becomes a dotpoint
+    if (e.inputType !== 'insertText' || e.data !== ' ') return;
+    const sel = window.getSelection(), n = sel.anchorNode;
+    if (!n || n.nodeType !== 3 || !ed.contains(n) || n.parentElement.closest('li')) return;
+    if (!/^[-*]\s$/.test(n.nodeValue.slice(0, sel.anchorOffset).replace(/\u00a0/g, ' '))) return;
+    if (n.previousSibling && n.previousSibling.nodeName !== 'BR') return;
+    document.execCommand('insertUnorderedList');
+    const s2 = window.getSelection(), t = s2.anchorNode;
+    if (t && t.nodeType === 3 && /^[-*][\s\u00a0]/.test(t.nodeValue)) {
+      t.deleteData(0, 2);
+      const r = document.createRange(); r.setStart(t, 0); r.collapse(true);
+      s2.removeAllRanges(); s2.addRange(r);
+    }
+  });
   wrap.append(tb, ed);
   return { el: wrap, editor: ed, getHTML: () => sanitizeHTML(ed.innerHTML) };
 }
@@ -486,6 +566,7 @@ function applyFmt(cmd, ed) {
   const exec = (c, v = null, css = false) => { document.execCommand('styleWithCSS', false, css); return document.execCommand(c, false, v); };
   switch (cmd) {
     case 'bold': case 'italic': case 'underline': exec(cmd); break;
+    case 'list': exec('insertUnorderedList'); break;
     case 'hl': {
       const on = isYellow(document.queryCommandValue('backColor')) || isYellow(document.queryCommandValue('hiliteColor'));
       const val = on ? 'transparent' : '#ffeb3b';
@@ -512,6 +593,9 @@ const ICONS = {
   x: svg('<path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/>'),
   grip: svg('<circle cx="6" cy="3.5" r="1.2"/><circle cx="10" cy="3.5" r="1.2"/><circle cx="6" cy="8" r="1.2"/><circle cx="10" cy="8" r="1.2"/><circle cx="6" cy="12.5" r="1.2"/><circle cx="10" cy="12.5" r="1.2"/>', true),
   done: svg('<path d="M2 8.5l2.5 2.5L9.5 5"/><path d="M7.5 10.5l.5.5L14 5"/>'),
+  sparkle: svg('<path d="M7 2.5l1.3 3.2 3.2 1.3-3.2 1.3L7 11.5 5.7 8.3 2.5 7l3.2-1.3z"/><path d="M12 10.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z"/>'),
+  sun: svg('<circle cx="8" cy="8" r="2.8"/><path d="M8 1.8v1.4M8 12.8v1.4M1.8 8h1.4M12.8 8h1.4M3.6 3.6l1 1M11.4 11.4l1 1M3.6 12.4l1-1M11.4 4.6l1-1"/>'),
+  moon: svg('<path d="M13.2 9.6A5.4 5.4 0 016.4 2.8a5.4 5.4 0 106.8 6.8z"/>'),
 };
 
 // Typing shortcuts: "@James" sets the assignee, "!fri" / "!tomorrow" / "!23/10" / "!+3" sets the date.
@@ -1190,6 +1274,33 @@ function checkDay() {
   if (t !== state.today) { state.today = t; renderAll(); }
 }
 
+/* ---------- Top bar toggles (saved in this browser) ---------- */
+const effectiveTheme = () => document.documentElement.dataset.theme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+function updateTopbarToggles() {
+  const on = document.documentElement.dataset.gradient === 'on';
+  const g = $('#gradient-btn'), t = $('#theme-btn');
+  g.innerHTML = ICONS.sparkle;
+  g.setAttribute('aria-pressed', on);
+  g.title = on ? 'Turn gradient off' : 'Turn gradient on';
+  const dark = effectiveTheme() === 'dark';
+  t.innerHTML = dark ? ICONS.sun : ICONS.moon;
+  t.title = dark ? 'Switch to light mode' : 'Switch to dark mode';
+}
+function wireTopbarToggles() {
+  const root = document.documentElement;
+  const save = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+  $('#gradient-btn').addEventListener('click', () => {
+    const next = root.dataset.gradient === 'on' ? 'off' : 'on';
+    root.dataset.gradient = next; save('todo-gradient', next); updateTopbarToggles();
+  });
+  $('#theme-btn').addEventListener('click', () => {
+    const next = effectiveTheme() === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next; save('todo-theme', next); updateTopbarToggles();
+  });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTopbarToggles);
+  updateTopbarToggles();
+}
+
 /* ---------- Screens & auth ---------- */
 function show(which) {
   $('#config-screen').hidden = which !== 'config';
@@ -1215,7 +1326,8 @@ function resetState() {
   $('#new-form').innerHTML = ''; setDraftStatus('');
 }
 async function init() {
-  if (SUPABASE_URL.includes('YOUR-') || SUPABASE_KEY.includes('YOUR-')) { show('config'); return; }
+  wireTopbarToggles();
+  if (!SUPABASE_URL || !SUPABASE_KEY || SUPABASE_URL.includes('YOUR-') || SUPABASE_KEY.includes('YOUR-')) { show('config'); return; }
   if (!window.supabase) {
     $('#config-msg').textContent = 'The Supabase library didn’t load. Check your internet connection and refresh the page.';
     show('config'); return;
