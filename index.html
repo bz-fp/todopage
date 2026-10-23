@@ -123,7 +123,10 @@ svg.ic{width:13px;height:13px;display:block}
 @media (prefers-reduced-motion: reduce){.mesh .blob{animation:none}}
 :root[data-gradient="on"] .mesh{display:block}
 :root[data-gradient="on"] .topbar{border-bottom-color:transparent}
-:root[data-gradient="on"] .topbar .brand{color:#6b2c0c;mix-blend-mode:multiply}
+:root[data-gradient="on"] .topbar .vs-opt{color:#6b2c0c;mix-blend-mode:multiply;opacity:.55}
+:root[data-gradient="on"] .topbar .vs-opt.active{opacity:1}
+:root[data-gradient="on"] .view-switch{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.3)}
+:root[data-gradient="on"] .vs-thumb{background:rgba(255,255,255,.42);box-shadow:none}
 :root[data-gradient="on"] .topbar #user-email{color:#5c2b0d}
 :root[data-gradient="on"] .topbar .btn.ghost,:root[data-gradient="on"] .topbar .tb-icon{color:#3d1a06;background:rgba(255,255,255,.26)}
 :root[data-gradient="on"] .topbar .btn.ghost:hover,:root[data-gradient="on"] .topbar .tb-icon:hover{background:rgba(255,255,255,.42)}
@@ -284,6 +287,89 @@ svg.ic{width:13px;height:13px;display:block}
 .form-error{color:var(--danger);font-weight:600;margin:0 0 11px!important}
 .auth-card code{background:var(--panel-2);padding:1px 5px;border-radius:4px;font-size:11.3px}
 
+/* View switch */
+.view-switch{position:relative;display:inline-flex;align-items:center;padding:3px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line)}
+.vs-opt{position:relative;z-index:1;border:0;background:transparent;padding:4px 13px;border-radius:999px;font-weight:800;font-size:14.4px;letter-spacing:-.01em;color:var(--faint);cursor:pointer;transition:color .2s}
+.vs-opt.active{color:var(--ink)}
+.vs-thumb{position:absolute;z-index:0;top:3px;bottom:3px;left:3px;width:0;border-radius:999px;background:var(--panel);box-shadow:var(--shadow);transition:left .28s cubic-bezier(.3,.7,.2,1),width .28s cubic-bezier(.3,.7,.2,1)}
+@media (prefers-reduced-motion: reduce){.vs-thumb{transition:none}}
+.db-banner{flex:none;padding:7px 18px;background:var(--danger-soft);color:var(--danger);font-weight:600;font-size:11.7px}
+.db-banner code{font-weight:800}
+.btn .ic{display:inline-block;vertical-align:-2px;margin-right:4px}
+
+/* Recurrence */
+.pe-meta{flex-wrap:wrap}
+.pe-repeat{display:inline-flex;align-items:center;gap:5px;max-width:270px;border:1px solid var(--line);border-radius:999px;background:var(--panel-2);padding:2px 9px;font-size:11.3px;font-weight:700;color:var(--muted);cursor:pointer}
+.pe-repeat span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pe-repeat .ic{width:11px;height:11px;flex:none}
+.pe-repeat.on{color:var(--accent);border-color:color-mix(in srgb, var(--accent) 40%, transparent);background:var(--accent-soft)}
+.pe-recur{display:flex;flex-direction:column;gap:6px;margin:0 0 8px;padding:9px 10px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel-2)}
+.rc-row{display:flex;flex-wrap:wrap;align-items:center;gap:5px}
+.rc-lbl{width:78px;font-size:11.3px;font-weight:700;color:var(--muted)}
+.rc-n{width:58px}
+.rc-day.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.rc-note{font-size:11.3px;color:var(--muted)}
+.rec-pill{display:inline-flex;align-items:center;gap:3px}
+.rec-pill .ic,.wk-title .ic,.chip-toggle .ic{width:11px;height:11px;display:inline-block;vertical-align:-1px}
+.wk-title .ic{margin-right:4px}
+.tc-meta{flex-wrap:wrap;justify-content:flex-end}
+.tc-defer{width:22px;height:22px}
+.f-sep{width:1px;height:16px;background:var(--line);margin:0 3px}
+.menu{position:fixed;z-index:60;min-width:150px;padding:4px;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line-strong);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.16)}
+.menu-item{border:0;background:transparent;text-align:left;padding:6px 10px;border-radius:5px;font-weight:600;cursor:pointer;color:var(--ink)}
+.menu-item:hover,.menu-item:focus{background:var(--panel-2);outline:none}
+.menu-item.danger{color:var(--danger)}
+.fmt ol{margin:2px 0;padding-left:19px}
+
+/* Notes */
+.columns.notes-cols{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}
+.board-col{position:relative}
+.notes-tools{display:flex;align-items:center;gap:7px}
+.note-search{width:220px;padding:5px 9px;font-size:12px}
+.note-section + .note-section{margin-top:16px}
+.ns-head{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.ns-name{font-weight:800;font-size:12.6px}
+.ns-count{font-size:10.4px;font-weight:700;color:var(--faint);background:var(--panel-2);border-radius:999px;padding:0 6px}
+.ns-line{flex:1;height:1px;background:var(--line)}
+.ns-menu{width:24px;height:24px}
+.ns-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px;min-height:44px;border-radius:var(--radius)}
+.ns-grid.drag-over{background:color-mix(in srgb, var(--accent-soft) 45%, transparent)}
+.ns-empty{grid-column:1/-1;align-self:center;border:1px dashed var(--line);border-radius:var(--radius);padding:12px;text-align:center;color:var(--faint);font-size:11.7px}
+.ns-grid .note-card ~ .ns-empty{display:none}
+.nc-none{--note-bg:var(--panel)}
+.nc-butter{--note-bg:#fff3bf} .nc-peach{--note-bg:#ffe1c7} .nc-coral{--note-bg:#ffd5cf} .nc-rose{--note-bg:#fbd6e6} .nc-lavender{--note-bg:#e4dcfa} .nc-sky{--note-bg:#d6e6fb} .nc-aqua{--note-bg:#cff0ef} .nc-mint{--note-bg:#d6f1da} .nc-sage{--note-bg:#e2e9d6} .nc-stone{--note-bg:#e6e1da}
+:root[data-theme="dark"] .nc-butter{--note-bg:#4a4122} :root[data-theme="dark"] .nc-peach{--note-bg:#4d3424} :root[data-theme="dark"] .nc-coral{--note-bg:#502c28} :root[data-theme="dark"] .nc-rose{--note-bg:#4a2839} :root[data-theme="dark"] .nc-lavender{--note-bg:#362e4f} :root[data-theme="dark"] .nc-sky{--note-bg:#233650} :root[data-theme="dark"] .nc-aqua{--note-bg:#1f4243} :root[data-theme="dark"] .nc-mint{--note-bg:#23422a} :root[data-theme="dark"] .nc-sage{--note-bg:#353e2c} :root[data-theme="dark"] .nc-stone{--note-bg:#3b3631}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .nc-butter{--note-bg:#4a4122} :root:not([data-theme="light"]) .nc-peach{--note-bg:#4d3424} :root:not([data-theme="light"]) .nc-coral{--note-bg:#502c28} :root:not([data-theme="light"]) .nc-rose{--note-bg:#4a2839} :root:not([data-theme="light"]) .nc-lavender{--note-bg:#362e4f} :root:not([data-theme="light"]) .nc-sky{--note-bg:#233650} :root:not([data-theme="light"]) .nc-aqua{--note-bg:#1f4243} :root:not([data-theme="light"]) .nc-mint{--note-bg:#23422a} :root:not([data-theme="light"]) .nc-sage{--note-bg:#353e2c} :root:not([data-theme="light"]) .nc-stone{--note-bg:#3b3631} }
+.note-card{position:relative;height:150px;display:flex;flex-direction:column;gap:5px;padding:11px 12px;overflow:hidden;color:var(--ink);background:var(--note-bg);border:1px solid color-mix(in srgb, var(--note-bg) 82%, var(--ink) 18%);border-radius:var(--radius);box-shadow:var(--shadow);cursor:pointer}
+.note-card.nc-none{border-color:var(--line)}
+.note-card:hover{box-shadow:0 3px 12px rgba(0,0,0,.1)}
+.note-card.dragging{opacity:.35}
+.note-title{padding-right:20px;font-weight:800;font-size:13px;line-height:1.3;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.note-title.untitled{color:var(--faint)}
+.note-preview{flex:1;min-height:0;overflow:hidden;font-size:11.7px;color:color-mix(in srgb, var(--ink) 78%, transparent);-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}
+.nc-pin{position:absolute;top:7px;right:7px;width:22px;height:22px;padding:0;border:0;border-radius:5px;background:transparent;color:var(--faint);display:grid;place-items:center;cursor:pointer;opacity:0}
+.nc-pin:hover{background:color-mix(in srgb, var(--ink) 8%, transparent);color:var(--ink)}
+.note-card:hover .nc-pin,.note-card:focus-within .nc-pin,.note-card.pinned .nc-pin{opacity:1}
+.note-card.pinned .nc-pin{color:var(--accent)}
+.ne-meta{margin:6px 0 4px}
+.ne-swatches{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+.nsw{width:19px;height:19px;padding:0;border-radius:50%;cursor:pointer;background:var(--note-bg);border:1px solid color-mix(in srgb, var(--note-bg) 70%, var(--ink) 30%)}
+.nsw.nc-none{background:linear-gradient(135deg,transparent 45%,var(--line-strong) 45% 55%,transparent 55%),var(--panel)}
+.nsw.on{box-shadow:0 0 0 2px var(--panel),0 0 0 3.5px var(--accent)}
+.ne-body .rich{min-height:170px;max-height:none}
+.note-editor.tinted{background:var(--note-bg);border-radius:10px;padding:12px 12px 14px;margin:-4px -4px 0}
+.ne-pin.on{color:var(--accent);background:var(--accent-soft)}
+.note-modal{position:absolute;inset:0;z-index:20;display:grid;place-items:center}
+.nm-backdrop{position:absolute;inset:0;background:color-mix(in srgb, var(--bg) 45%, transparent);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.nm-card{position:relative;width:min(720px,88%);height:86%;display:flex;flex-direction:column;overflow:hidden;color:var(--ink);background:var(--note-bg);border:1px solid color-mix(in srgb, var(--note-bg) 82%, var(--ink) 18%);border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.24);animation:pop .16s ease-out}
+.nm-card.nc-none{border-color:var(--line)}
+@keyframes pop{from{transform:scale(.97);opacity:0}}
+@media (prefers-reduced-motion: reduce){.nm-card{animation:none}}
+.nm-head{flex:none;display:flex;align-items:center;gap:6px;padding:9px 10px 0 22px}
+.nm-scroll{flex:1;min-height:0;overflow-y:auto;padding:2px 22px 22px}
+.nm-card .pe-title{font-size:19.8px}
+.nm-card .nsw.on{box-shadow:0 0 0 2px var(--note-bg),0 0 0 3.5px var(--accent)}
+
 /* Toast */
 .toast{position:fixed;left:50%;bottom:22px;z-index:50;transform:translate(-50%,14px);padding:8px 13px;border-radius:7px;background:var(--ink);color:var(--panel);font-weight:700;opacity:0;pointer-events:none;transition:opacity .18s, transform .18s}
 .toast.show{opacity:1;transform:translate(-50%,0)}
@@ -314,7 +400,11 @@ svg.ic{width:13px;height:13px;display:block}
 <div id="main" class="main" hidden>
   <header class="topbar">
     <div class="mesh" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span><span class="blob b5"></span></div>
-    <div class="brand">Todo List</div>
+    <div class="view-switch" role="tablist" aria-label="Switch between todo list and notes">
+      <span class="vs-thumb" aria-hidden="true"></span>
+      <button type="button" class="vs-opt active" data-view="todo" role="tab" aria-selected="true">Todo List</button>
+      <button type="button" class="vs-opt" data-view="notes" role="tab" aria-selected="false">Notes</button>
+    </div>
     <!-- Space reserved for future buttons -->
     <div class="topbar-slot" id="topbar-slot"></div>
     <div class="topbar-user">
@@ -324,8 +414,9 @@ svg.ic{width:13px;height:13px;display:block}
       <button class="btn ghost small" id="signout-btn" type="button">Sign out</button>
     </div>
   </header>
+  <div class="db-banner" id="db-banner" hidden>One-time database update needed for recurring tasks and notes: run <code>update-recurring-notes.sql</code> in Supabase’s SQL Editor, then refresh this page.</div>
 
-  <div class="columns">
+  <div class="columns" id="todo-view">
     <!-- Left: new task -->
     <section class="col" aria-label="New task">
       <div class="col-head"><h2>New task</h2><span class="muted small" id="draft-status"></span></div>
@@ -349,12 +440,50 @@ svg.ic{width:13px;height:13px;display:block}
       <div class="col-head">
         <div class="tabs" role="tablist" id="tabs">
           <button class="tab active" data-tab="current" role="tab" type="button">Current <span class="tab-count">0</span></button>
+          <button class="tab" data-tab="upcoming" role="tab" type="button">Upcoming <span class="tab-count">0</span></button>
           <button class="tab" data-tab="overdue" role="tab" type="button">Overdue <span class="tab-count">0</span></button>
           <button class="tab" data-tab="completed" role="tab" type="button">Completed <span class="tab-count">0</span></button>
         </div>
       </div>
       <div class="filters" id="filters"></div>
       <div class="col-scroll" id="task-list"></div>
+    </section>
+  </div>
+
+  <div class="columns notes-cols" id="notes-view" hidden>
+    <!-- Left: new note -->
+    <section class="col" aria-label="New note">
+      <div class="col-head"><h2>New note</h2><span class="muted small" id="note-draft-status"></span></div>
+      <div class="col-scroll" id="note-form"></div>
+      <div class="col-foot">
+        <button class="btn ghost" id="clear-note" type="button">Clear</button>
+        <span class="spacer"></span>
+        <button class="btn primary" id="add-note-btn" type="button">Add note</button>
+      </div>
+    </section>
+
+    <!-- Notes board -->
+    <section class="col board-col" aria-label="Notes board">
+      <div class="col-head">
+        <h2>Notes</h2>
+        <div class="notes-tools">
+          <input class="input note-search" id="note-search" type="search" placeholder="Search notes" aria-label="Search notes">
+          <button class="btn small" id="add-cat-btn" type="button">+ Category</button>
+        </div>
+      </div>
+      <div class="filters" id="note-filters"></div>
+      <div class="col-scroll" id="notes-board"></div>
+      <div class="note-modal" id="note-modal" hidden>
+        <div class="nm-backdrop" id="nm-backdrop"></div>
+        <div class="nm-card nc-none" role="dialog" aria-modal="true" aria-label="Note">
+          <div class="nm-head">
+            <span class="muted small" id="nm-status"></span><span class="spacer"></span>
+            <button class="btn ghost danger small" id="nm-delete" type="button">Delete note</button>
+            <button class="icon-btn" id="nm-close" type="button" aria-label="Close" title="Close (Esc)"></button>
+          </div>
+          <div class="nm-scroll" id="nm-body"></div>
+        </div>
+      </div>
     </section>
   </div>
 </div>
@@ -375,7 +504,8 @@ const CATEGORIES = [
   { id: 'Internal-Request', cls: 'cat-internal' },
   { id: 'Large Project', cls: 'cat-large' },
 ];
-const TAB_LABEL = { current: 'Current', overdue: 'Overdue', completed: 'Completed' };
+const TAB_LABEL = { current: 'Current', upcoming: 'Upcoming', overdue: 'Overdue', completed: 'Completed' };
+const DEFER_OPTS = [[1, '1 day'], [2, '2 days'], [7, '1 week']];
 const PREVIEW_CHARS = 60;
 const WD_LONG = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const WD_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -384,7 +514,8 @@ const MON_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','
 
 const state = {
   user: null, started: false, tasks: [],
-  tab: 'current', filter: new Set(CATEGORIES.map(c => c.id)),
+  tab: 'current', filter: new Set(CATEGORIES.map(c => c.id)), showRecurring: true, view: 'todo', needsMigration: false,
+  notes: [], noteCats: [], notesReady: false, noteHidden: new Set(), noteSearch: '', noteDraft: null, noteDraftTimer: null, noteModal: null, noteChain: Promise.resolve(), dragNoteEl: null,
   selectedId: null, editor: null,
   today: null, draftEditor: null, draftTimer: null, draftChain: Promise.resolve(),
 };
@@ -433,14 +564,74 @@ function toast(msg, isError = false) {
 }
 
 /* ---------- Task status ---------- */
-const itemOverdue = it => !it.done && !!it.due && it.due < state.today;
+const isRecurring = t => !!(t && t.recur && t.recur.rule);
+// Items without their own date use a recurring task's due date
+const effDue = (it, t) => it.due || (isRecurring(t) ? t.recur.due : null);
+const itemOverdue = (it, t) => { const d = effDue(it, t); return !it.done && !!d && d < state.today; };
 function taskStatus(t) {
   const items = t.items || [];
   if (items.length && items.every(i => i.done)) return 'completed';
-  if (items.some(itemOverdue)) return 'overdue';
+  if (items.some(i => itemOverdue(i, t))) return 'overdue';
+  if (isRecurring(t)) { const nd = nextDue(t); if (nd && nd > ymd(addDays(parseYmd(state.today), 6))) return 'upcoming'; }
   return 'current';
 }
-function nextDue(t) { return (t.items || []).filter(i => !i.done && i.due).map(i => i.due).sort()[0] || null; }
+function nextDue(t) { return (t.items || []).filter(i => !i.done).map(i => effDue(i, t)).filter(Boolean).sort()[0] || null; }
+
+/* ---------- Recurrence (business days = Monday to Friday) ---------- */
+const isWeekday = d => d.getDay() !== 0 && d.getDay() !== 6;
+const lastOfMonth = (y, m) => new Date(y, m + 1, 0);
+const dayDiff = (a, b) => Math.round((parseYmd(b) - parseYmd(a)) / 86400000);
+function periodBounds(rule, y, idx) {
+  if (rule.freq === 'quarterly') return [new Date(y, idx * 3, 1), lastOfMonth(y, idx * 3 + 2)];
+  return [new Date(y, idx, 1), lastOfMonth(y, idx)];
+}
+function pickInPeriod(rule, start, end) {
+  const n = Math.max(1, parseInt(rule.n, 10) || 1);
+  if (rule.mode === 'last_cal') return end;
+  if (rule.mode === 'last_bus') { let d = new Date(end); while (!isWeekday(d)) d = addDays(d, -1); return d; }
+  if (rule.mode === 'nth_bus') {
+    let d = new Date(start), c = 0, last = null;
+    while (d <= end) { if (isWeekday(d)) { c++; last = d; if (c === n) return d; } d = addDays(d, 1); }
+    return last;
+  }
+  const d = addDays(start, n - 1);
+  return d > end ? end : d;
+}
+// First scheduled date strictly after the given date
+function nextOccurrence(rule, afterStr) {
+  const after = parseYmd(afterStr);
+  if (rule.freq === 'daily') return ymd(addDays(after, 1));
+  if (rule.freq === 'weekly') { let d = addDays(after, 1); while (d.getDay() !== +rule.weekday) d = addDays(d, 1); return ymd(d); }
+  let y = after.getFullYear();
+  let idx = rule.freq === 'monthly' ? after.getMonth() : rule.freq === 'quarterly' ? Math.floor(after.getMonth() / 3) : (+rule.month || 1) - 1;
+  for (let i = 0; i < 40; i++) {
+    const [st, en] = periodBounds(rule, y, idx);
+    const d = pickInPeriod(rule, st, en);
+    if (d > after) return ymd(d);
+    if (rule.freq === 'monthly') { if (++idx > 11) { idx = 0; y++; } }
+    else if (rule.freq === 'quarterly') { if (++idx > 3) { idx = 0; y++; } }
+    else y++;
+  }
+  return null;
+}
+const firstOccurrence = rule => nextOccurrence(rule, ymd(addDays(parseYmd(state.today), -1)));
+function defaultRule(freq) {
+  const t = parseYmd(state.today);
+  if (freq === 'daily') return { freq };
+  if (freq === 'weekly') return { freq, weekday: t.getDay() };
+  if (freq === 'monthly') return { freq, mode: 'nth_cal', n: t.getDate() };
+  if (freq === 'quarterly') return { freq, mode: 'nth_cal', n: dayDiff(ymd(new Date(t.getFullYear(), Math.floor(t.getMonth() / 3) * 3, 1)), state.today) + 1 };
+  return { freq: 'annually', month: t.getMonth() + 1, mode: 'nth_cal', n: t.getDate() };
+}
+function describeRule(r) {
+  if (!r) return 'Repeat';
+  if (r.freq === 'daily') return 'Daily';
+  if (r.freq === 'weekly') return `Weekly on ${WD_LONG[+r.weekday]}`;
+  const what = r.mode === 'last_cal' ? 'last day' : r.mode === 'last_bus' ? 'last business day' : `${ordinal(+r.n || 1)} ${r.mode === 'nth_bus' ? 'business day' : 'day'}`;
+  if (r.freq === 'monthly') return `Monthly: ${what} of the month`;
+  if (r.freq === 'quarterly') return `Quarterly: ${what} of the quarter`;
+  return `Annually: ${what} of ${MON_LONG[(+r.month || 1) - 1]}`;
+}
 
 /* ---------- Rich text: sanitising ---------- */
 function parseColor(str) {
@@ -477,7 +668,8 @@ function serialise(node, inItem) {
       if (inItem) { s += (s ? '<br>' : '') + lis.join('<br>'); return; }   // one level only
       if (!lis.length) return;
       s = s.replace(/(<br>)+$/, '');
-      s += '<ul>' + lis.map(x => `<li>${x}</li>`).join('') + '</ul>';
+      const lt = tag.toLowerCase();
+      s += `<${lt}>` + lis.map(x => `<li>${x}</li>`).join('') + `</${lt}>`;
       return;
     }
     if (['SCRIPT','STYLE','IFRAME','OBJECT','IMG','SVG','TEMPLATE'].includes(tag)) return;
@@ -494,8 +686,8 @@ function serialise(node, inItem) {
       if (tag === 'MARK' || isYellow(bg)) inner = `${HL_SPAN}${inner}</span>`;
     }
     if (['DIV','P','LI','H1','H2','H3','H4','H5','H6','BLOCKQUOTE'].includes(tag)) {
-      if (inner.startsWith('<ul>')) s = s.replace(/(<br>)+$/, '');
-      else if (s && !s.endsWith('<br>') && !s.endsWith('</ul>')) s += '<br>';
+      if (/^<(ul|ol)>/.test(inner)) s = s.replace(/(<br>)+$/, '');
+      else if (s && !s.endsWith('<br>') && !/<\/(ul|ol)>$/.test(s)) s += '<br>';
     }
     s += inner;
   });
@@ -508,6 +700,7 @@ const TOOLBAR = [
   { cmd: 'italic', html: '<i>I</i>', title: 'Italic' },
   { cmd: 'underline', html: '<u>U</u>', title: 'Underline' },
   { cmd: 'list', html: '&bull; List', title: 'Dotpoints (or type - and a space)' },
+  { cmd: 'olist', html: '1. List', title: 'Numbered list (or type 1. and a space)' },
   { sep: true },
   { cmd: 'hl', html: '<span class="swatch" style="background:#ffeb3b"></span>Highlight', title: 'Highlight (click again to remove)' },
   { cmd: 'red', html: '<span class="swatch" style="background:#d32f2f"></span>Red', title: 'Red text' },
@@ -547,12 +740,14 @@ function buildRich(html, placeholder) {
     if (e.inputType !== 'insertText' || e.data !== ' ') return;
     const sel = window.getSelection(), n = sel.anchorNode;
     if (!n || n.nodeType !== 3 || !ed.contains(n) || n.parentElement.closest('li')) return;
-    if (!/^[-*]\s$/.test(n.nodeValue.slice(0, sel.anchorOffset).replace(/\u00a0/g, ' '))) return;
+    const typed = n.nodeValue.slice(0, sel.anchorOffset).replace(/\u00a0/g, ' ');
+    if (!/^([-*]|1[.)])\s$/.test(typed)) return;
     if (n.previousSibling && n.previousSibling.nodeName !== 'BR') return;
-    document.execCommand('insertUnorderedList');
+    document.execCommand(typed[0] === '1' ? 'insertOrderedList' : 'insertUnorderedList');
     const s2 = window.getSelection(), t = s2.anchorNode;
-    if (t && t.nodeType === 3 && /^[-*][\s\u00a0]/.test(t.nodeValue)) {
-      t.deleteData(0, 2);
+    const m = t && t.nodeType === 3 && t.nodeValue.match(/^([-*]|1[.)])[\s\u00a0]/);
+    if (m) {
+      t.deleteData(0, m[0].length);
       const r = document.createRange(); r.setStart(t, 0); r.collapse(true);
       s2.removeAllRanges(); s2.addRange(r);
     }
@@ -567,6 +762,7 @@ function applyFmt(cmd, ed) {
   switch (cmd) {
     case 'bold': case 'italic': case 'underline': exec(cmd); break;
     case 'list': exec('insertUnorderedList'); break;
+    case 'olist': exec('insertOrderedList'); break;
     case 'hl': {
       const on = isYellow(document.queryCommandValue('backColor')) || isYellow(document.queryCommandValue('hiliteColor'));
       const val = on ? 'transparent' : '#ffeb3b';
@@ -596,6 +792,10 @@ const ICONS = {
   sparkle: svg('<path d="M7 2.5l1.3 3.2 3.2 1.3-3.2 1.3L7 11.5 5.7 8.3 2.5 7l3.2-1.3z"/><path d="M12 10.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z"/>'),
   sun: svg('<circle cx="8" cy="8" r="2.8"/><path d="M8 1.8v1.4M8 12.8v1.4M1.8 8h1.4M12.8 8h1.4M3.6 3.6l1 1M11.4 11.4l1 1M3.6 12.4l1-1M11.4 4.6l1-1"/>'),
   moon: svg('<path d="M13.2 9.6A5.4 5.4 0 016.4 2.8a5.4 5.4 0 106.8 6.8z"/>'),
+  repeat: svg('<path d="M3 7.5a5 5 0 018.6-3.4L13 5.5"/><path d="M13 2.5v3h-3"/><path d="M13 8.5a5 5 0 01-8.6 3.4L3 10.5"/><path d="M3 13.5v-3h3"/>'),
+  clock: svg('<circle cx="8" cy="8" r="5.6"/><path d="M8 5v3.2l2.1 1.3"/>'),
+  pin: svg('<path d="M10 2.2l3.8 3.8-2 .8-2.4 2.4-.3 3-1.3 1.3-5.3-5.3 1.3-1.3 3-.3 2.4-2.4z"/><path d="M5 11l-2.8 2.8"/>'),
+  dots: svg('<circle cx="3.5" cy="8" r="1.3"/><circle cx="8" cy="8" r="1.3"/><circle cx="12.5" cy="8" r="1.3"/>', true),
 };
 
 // Typing shortcuts: "@James" sets the assignee, "!fri" / "!tomorrow" / "!23/10" / "!+3" sets the date.
@@ -792,6 +992,7 @@ function buildLine(it, mode, ctx) {
 
   const api = {
     el, ta, fit, focusEnd, applyShortcuts, hasDetails,
+    shift: days => { if (!s.due) return false; s.due = ymd(addDays(parseYmd(s.due), days)); renderTags(); return true; },
     isBlank: () => !ta.value.trim() && !hasDetails(),
     getData: () => ({ id: s.id, title: ta.value, description: desc.getHTML(), link: linkIn.value, assignee: s.assignee, due: s.due, done: s.done }),
   };
@@ -808,7 +1009,9 @@ function buildTaskEditor(data, mode, handlers = {}) {
   root.innerHTML = `
     <input class="pe-title" maxlength="200" placeholder="Task title" aria-label="Task title">
     <div class="pe-sub"></div>
-    <div class="pe-meta"><select class="pe-cat" aria-label="Category">${CATEGORIES.map(c => `<option value="${esc(c.id)}">${esc(c.id)}</option>`).join('')}</select></div>
+    <div class="pe-meta"><select class="pe-cat" aria-label="Category">${CATEGORIES.map(c => `<option value="${esc(c.id)}">${esc(c.id)}</option>`).join('')}</select>
+      <button type="button" class="pe-repeat" aria-label="Repeat settings">${ICONS.repeat}<span>Repeat</span></button></div>
+    <div class="pe-recur" hidden></div>
     <div class="pe-lines"></div>
     <div class="line-ghost" role="button" tabindex="0">Add an item</div>
     <div class="pe-hint">${hint}</div>`;
@@ -820,6 +1023,57 @@ function buildTaskEditor(data, mode, handlers = {}) {
   const setCat = v => { catSel.value = CATEGORIES.some(c => c.id === v) ? v : 'None'; catSel.className = 'pe-cat ' + catCls(catSel.value); };
   setCat(data.category);
   catSel.addEventListener('change', () => setCat(catSel.value));
+
+  // Recurrence
+  const rec = {
+    rule: data.recurRule !== undefined ? data.recurRule : (data.recur && data.recur.rule) || null,
+    due: data.recurDue !== undefined ? data.recurDue : (data.recur && data.recur.due) || null,
+    scheduled: (data.recur && data.recur.scheduled) || null,
+  };
+  if (mode === 'draft') rec.due = null;
+  const recBox = root.querySelector('.pe-recur'), repBtn = root.querySelector('.pe-repeat');
+  const recLabel = () => { repBtn.querySelector('span').textContent = describeRule(rec.rule); repBtn.classList.toggle('on', !!rec.rule); };
+  const renderRecur = () => {
+    recLabel();
+    const r = rec.rule || {}, f = r.freq || '';
+    let h = `<div class="rc-row"><span class="rc-lbl">Repeats</span><select class="det-input rc-freq" aria-label="How often">${[['', 'Does not repeat'], ['daily', 'Daily'], ['weekly', 'Weekly'], ['monthly', 'Monthly'], ['quarterly', 'Quarterly'], ['annually', 'Annually']].map(([v, l]) => `<option value="${v}" ${v === f ? 'selected' : ''}>${l}</option>`).join('')}</select></div>`;
+    if (f === 'weekly') h += `<div class="rc-row"><span class="rc-lbl">Due on</span>${[1, 2, 3, 4, 5, 6, 0].map(d => `<button type="button" class="det-chip rc-day ${+r.weekday === d ? 'on' : ''}" data-wd="${d}">${WD_SHORT[d]}</button>`).join('')}</div>`;
+    if (f === 'annually') h += `<div class="rc-row"><span class="rc-lbl">Month</span><select class="det-input rc-month" aria-label="Month">${MON_LONG.map((m, i) => `<option value="${i + 1}" ${+r.month === i + 1 ? 'selected' : ''}>${m}</option>`).join('')}</select></div>`;
+    if (['monthly', 'quarterly', 'annually'].includes(f)) {
+      const nth = r.mode === 'nth_cal' || r.mode === 'nth_bus';
+      const max = f === 'quarterly' ? (r.mode === 'nth_bus' ? 66 : 92) : (r.mode === 'nth_bus' ? 23 : 31);
+      h += `<div class="rc-row"><span class="rc-lbl">Due on</span><select class="det-input rc-mode" aria-label="Which day">${[['nth_cal', 'Calendar day'], ['nth_bus', 'Business day'], ['last_cal', 'Last calendar day'], ['last_bus', 'Last business day']].map(([v, l]) => `<option value="${v}" ${v === r.mode ? 'selected' : ''}>${l}</option>`).join('')}</select>${nth ? `<input type="number" class="det-input rc-n" min="1" max="${max}" value="${esc(r.n)}" aria-label="Day number">` : ''}<span class="rc-note">of the ${f === 'quarterly' ? 'quarter' : 'month'}</span></div>`;
+    }
+    if (rec.rule) {
+      if (mode === 'edit' && rec.due) h += `<div class="rc-row"><span class="rc-lbl">This one due</span><input type="date" class="det-input rc-due" value="${esc(rec.due)}" aria-label="This occurrence is due"></div>`;
+      const valid = !['nth_cal', 'nth_bus'].includes(r.mode) || +r.n >= 1;
+      if (valid) {
+        if (!rec.due) { const first = firstOccurrence(rec.rule); h += `<div class="rc-note">First one due ${esc(formatDue(first))}.</div>`; }
+        else { const nx = nextOccurrence(rec.rule, rec.scheduled || rec.due); h += `<div class="rc-note">The one after is due ${esc(formatDue(nx))}.</div>`; }
+      }
+      h += '<div class="rc-note">Items without their own date use this due date.</div>';
+    }
+    recBox.innerHTML = h;
+  };
+  renderRecur();
+  repBtn.addEventListener('click', () => { recBox.hidden = !recBox.hidden; if (!recBox.hidden) { const f = recBox.querySelector('.rc-freq'); f && f.focus(); } });
+  recBox.addEventListener('change', e => {
+    const t = e.target;
+    if (t.matches('.rc-freq')) rec.rule = t.value ? defaultRule(t.value) : null;
+    else if (t.matches('.rc-month')) rec.rule.month = +t.value;
+    else if (t.matches('.rc-mode')) { rec.rule.mode = t.value; if (/^nth/.test(t.value) && !(+rec.rule.n >= 1)) rec.rule.n = 1; }
+    else if (t.matches('.rc-n')) rec.rule.n = parseInt(t.value, 10) || '';
+    else if (t.matches('.rc-due')) { if (t.value) rec.due = t.value; }
+    renderRecur(); changed();
+    const again = recBox.querySelector('.' + [...t.classList].find(c => c.startsWith('rc-')));
+    if (again) again.focus();
+  });
+  recBox.addEventListener('input', e => { if (e.target.matches('.rc-n')) { rec.rule.n = parseInt(e.target.value, 10) || ''; recLabel(); } });
+  recBox.addEventListener('click', e => {
+    const d = e.target.closest('.rc-day');
+    if (!d) return;
+    rec.rule.weekday = +d.dataset.wd; renderRecur(); changed();
+  });
 
   const box = root.querySelector('.pe-lines');
   const ghost = root.querySelector('.line-ghost');
@@ -877,7 +1131,14 @@ function buildTaskEditor(data, mode, handlers = {}) {
     el: root, titleIn, lines,
     fit: () => lines().forEach(l => l.fit()),
     applyShortcuts: () => lines().forEach(l => l.applyShortcuts()),
-    getData: () => ({ title: titleIn.value, subtitle: sub.getHTML(), category: catSel.value, items: lines().map(l => l.getData()) }),
+    getData: () => ({ title: titleIn.value, subtitle: sub.getHTML(), category: catSel.value, items: lines().map(l => l.getData()), recurRule: rec.rule ? { ...rec.rule } : null, recurDue: rec.due }),
+    shiftDates: days => {
+      let any = false;
+      lines().forEach(l => { if (l.shift(days)) any = true; });
+      if (rec.rule && rec.due) { rec.due = ymd(addDays(parseYmd(rec.due), days)); any = true; renderRecur(); }
+      if (any) changed();
+      return any;
+    },
   };
 }
 
@@ -897,9 +1158,15 @@ function normaliseFromEditor(api) {
     if (!t) { ls[i].el.classList.add('invalid'); error = error || 'Each checklist item needs a title.'; return; }
     items.push({ ...it, title: t, link: normLink(it.link) });
   });
+  let recurRule = d.recurRule;
+  if (recurRule && /^nth/.test(recurRule.mode || '')) {
+    const n = parseInt(recurRule.n, 10);
+    if (!(n >= 1)) error = error || 'Choose a day number for the repeat.';
+    else recurRule = { ...recurRule, n };
+  }
   if (error) return { error };
   if (!items.length) items.push({ id: uid(), title: 'Clarify steps', description: '', link: null, assignee: null, due: null, done: false });
-  return { task: { title, subtitle: d.subtitle, category: d.category, items } };
+  return { task: { title, subtitle: d.subtitle, category: d.category, items, recurRule, recurDue: d.recurDue } };
 }
 
 /* ---------- Data ---------- */
@@ -910,9 +1177,10 @@ async function loadTasks() {
   return true;
 }
 async function loadDraft() {
-  const { data, error } = await sb.from('task_drafts').select('data').eq('user_id', state.user.id).maybeSingle();
-  if (error) { console.error(error); return null; }
-  return data ? data.data : null;
+  let r = await sb.from('task_drafts').select('data, note_data').eq('user_id', state.user.id).maybeSingle();
+  if (r.error) r = await sb.from('task_drafts').select('data').eq('user_id', state.user.id).maybeSingle();
+  if (r.error) { console.error(r.error); return {}; }
+  return r.data || {};
 }
 
 /* ---------- Draft (left column) ---------- */
@@ -961,7 +1229,12 @@ async function clearDraft() {
 async function addTask() {
   const res = normaliseFromEditor(state.draftEditor);
   if (res.error) { toast(res.error, true); return; }
-  const task = res.task;
+  const { recurRule, recurDue, ...task } = res.task;
+  if (recurRule) {
+    if (state.needsMigration) { toast(MIGRATION_MSG, true); return; }
+    const first = firstOccurrence(recurRule);
+    task.recur = { rule: recurRule, due: first, scheduled: first, series: uid() };
+  }
   task.completed_at = taskStatus(task) === 'completed' ? new Date().toISOString() : null;
   const btn = $('#add-task-btn');
   btn.disabled = true;
@@ -974,7 +1247,8 @@ async function addTask() {
   setDraftStatus('');
   renderAll();
   state.draftEditor.titleIn.focus();
-  toast('Task added to board');
+  const st = taskStatus(state.tasks[state.tasks.length - 1]);
+  toast(st === 'upcoming' ? 'Task added. It’s in Upcoming until it’s due within a week.' : 'Task added to board');
 }
 
 /* ---------- Editing (right column) ---------- */
@@ -991,7 +1265,7 @@ function openEditor(id) {
   card.appendChild(api.el);
   const foot = document.createElement('div');
   foot.className = 'tc-edit-foot';
-  foot.innerHTML = `<button type="button" class="btn ghost danger ed-delete">Delete task</button><span class="spacer"></span>
+  foot.innerHTML = `<button type="button" class="btn ghost danger ed-delete">Delete task</button><button type="button" class="btn ghost ed-defer">${ICONS.clock}Defer</button><span class="spacer"></span>
     <button type="button" class="btn ed-cancel">Cancel</button><button type="button" class="btn primary ed-save">Save changes</button>`;
   card.appendChild(foot);
 
@@ -1006,6 +1280,11 @@ function openEditor(id) {
   foot.querySelector('.ed-cancel').addEventListener('click', () => closeEditor());
   foot.querySelector('.ed-save').addEventListener('click', saveEdit);
   foot.querySelector('.ed-delete').addEventListener('click', () => deleteTask(id));
+  const deferBtn = foot.querySelector('.ed-defer');
+  deferBtn.addEventListener('click', () => openMenu(deferBtn, DEFER_OPTS.map(([d, l]) => ({
+    label: `Defer ${l}`,
+    onClick: () => { if (api.shiftDates(d)) toast(`Dates moved by ${l}. Save to keep the change.`); else toast('This task has no dates to defer.', true); },
+  }))));
   state.editor = ed;
   return true;
 }
@@ -1022,7 +1301,17 @@ async function saveEdit() {
   const res = normaliseFromEditor(ed.api);
   if (res.error) { toast(res.error, true); return; }
   const t = findTask(ed.taskId);
-  const upd = res.task;
+  const { recurRule, recurDue, ...upd } = res.task;
+  const prev = t.recur || null;
+  if (recurRule) {
+    if (state.needsMigration) { toast(MIGRATION_MSG, true); return; }
+    if (prev && prev.rule) upd.recur = { ...prev, rule: recurRule, due: recurDue || prev.due };
+    else { const first = firstOccurrence(recurRule); upd.recur = { rule: recurRule, due: first, scheduled: first, series: uid() }; }
+  } else if (prev && prev.rule) {
+    // Recurrence turned off: items keep the date they were using
+    upd.items = upd.items.map(it => (it.due ? it : { ...it, due: prev.due }));
+    upd.recur = null;
+  }
   upd.completed_at = taskStatus(upd) === 'completed' ? (t.completed_at || new Date().toISOString()) : null;
   const btn = ed.card.querySelector('.ed-save');
   btn.disabled = true;
@@ -1035,6 +1324,7 @@ async function saveEdit() {
   const st = taskStatus(t);
   renderAll();
   toast(st !== state.tab ? `Changes saved. Task moved to ${TAB_LABEL[st]}.` : 'Changes saved');
+  if (st === 'completed' && isRecurring(t) && !t.recur.spawned) spawnNext(t);
 }
 async function deleteTask(id) {
   const t = findTask(id);
@@ -1059,7 +1349,63 @@ async function toggleItem(taskId, itemId, done) {
   renderAll();
   if (st !== prev) toast(st === 'completed' ? 'Task complete. Moved to Completed.' : `Task moved to ${TAB_LABEL[st]}`);
   const { error } = await sb.from('tasks').update({ items: t.items, completed_at: t.completed_at }).eq('id', t.id);
-  if (error) { console.error(error); Object.assign(t, before); renderAll(); toast('Couldn’t save that change. Try again.', true); }
+  if (error) { console.error(error); Object.assign(t, before); renderAll(); toast('Couldn’t save that change. Try again.', true); return; }
+  if (st === 'completed' && isRecurring(t) && !t.recur.spawned) spawnNext(t);
+}
+
+// Creates the next occurrence of a recurring task once the current one is complete
+async function spawnNext(t) {
+  const r = t.recur;
+  let next = nextOccurrence(r.rule, r.scheduled || r.due);
+  if (!next) return;
+  if (next < state.today) next = firstOccurrence(r.rule);
+  const shift = dayDiff(r.due, next);
+  const items = t.items.map(it => ({ ...it, id: uid(), done: false, due: it.due ? ymd(addDays(parseYmd(it.due), shift)) : null }));
+  const row = { title: t.title, subtitle: t.subtitle, category: t.category, items, completed_at: null, recur: { rule: r.rule, due: next, scheduled: next, series: r.series || uid() } };
+  const { data, error } = await sb.from('tasks').insert(row).select().single();
+  if (error) { console.error(error); toast('Couldn’t create the next occurrence. Untick and re-tick an item to try again.', true); return; }
+  state.tasks.push({ ...data, items: data.items || [] });
+  t.recur = { ...r, spawned: true };
+  await sb.from('tasks').update({ recur: t.recur }).eq('id', t.id);
+  renderAll();
+  toast(`Done. The next one is due ${formatDue(next)}.`);
+}
+
+async function deferTask(id, days) {
+  const t = findTask(id);
+  if (!t) return;
+  const before = { items: JSON.parse(JSON.stringify(t.items)), recur: t.recur ? { ...t.recur } : t.recur };
+  t.items = t.items.map(it => (it.due ? { ...it, due: ymd(addDays(parseYmd(it.due), days)) } : it));
+  const upd = { items: t.items };
+  if (isRecurring(t)) { t.recur = { ...t.recur, due: ymd(addDays(parseYmd(t.recur.due), days)) }; upd.recur = t.recur; }
+  renderAll();
+  const { error } = await sb.from('tasks').update(upd).eq('id', id);
+  if (error) { console.error(error); Object.assign(t, before); renderAll(); toast('Couldn’t defer the task. Try again.', true); return; }
+  const nd = nextDue(t);
+  toast(nd ? `Deferred. Now due ${formatDue(nd)}.` : 'Deferred');
+}
+
+/* ---------- Small pop-up menu ---------- */
+let menuEl = null;
+function closeMenu() { if (menuEl) { menuEl.remove(); menuEl = null; document.removeEventListener('mousedown', menuOutside, true); } }
+function menuOutside(e) { if (menuEl && !menuEl.contains(e.target)) closeMenu(); }
+function openMenu(anchor, items) {
+  closeMenu();
+  const m = document.createElement('div');
+  m.className = 'menu'; m.setAttribute('role', 'menu');
+  items.forEach(it => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'menu-item' + (it.danger ? ' danger' : ''); b.textContent = it.label; b.setAttribute('role', 'menuitem');
+    b.addEventListener('click', e => { e.stopPropagation(); closeMenu(); it.onClick(); });
+    m.appendChild(b);
+  });
+  document.body.appendChild(m);
+  const r = anchor.getBoundingClientRect();
+  m.style.left = Math.max(8, Math.min(r.left, window.innerWidth - m.offsetWidth - 8)) + 'px';
+  m.style.top = (r.bottom + m.offsetHeight + 8 > window.innerHeight ? r.top - m.offsetHeight - 4 : r.bottom + 4) + 'px';
+  menuEl = m;
+  setTimeout(() => document.addEventListener('mousedown', menuOutside, true));
+  m.querySelector('button').focus();
 }
 
 // Highlight a task, open it on the right (switching tab / filter if needed) and scroll to it.
@@ -1069,6 +1415,7 @@ function selectTask(id) {
   state.selectedId = id;
   state.tab = taskStatus(t);
   state.filter.add(t.category);
+  if (isRecurring(t)) state.showRecurring = true;
   renderAll();
   requestAnimationFrame(() => {
     if (state.editor) state.editor.api.fit();
@@ -1083,7 +1430,7 @@ function selectTask(id) {
 function renderAll() { renderWeek(); renderRight(); updateAssigneeList(); }
 
 function renderWeek() {
-  const overdue = state.tasks.reduce((n, t) => n + t.items.filter(itemOverdue).length, 0);
+  const overdue = state.tasks.reduce((n, t) => n + t.items.filter(it => itemOverdue(it, t)).length, 0);
   const strip = $('#overdue-strip');
   strip.classList.toggle('none', !overdue);
   strip.disabled = !overdue;
@@ -1096,7 +1443,7 @@ function renderWeek() {
   for (let i = 0; i < 7; i++) {
     const d = addDays(base, i), ds = ymd(d);
     const entries = state.tasks
-      .map(t => ({ t, due: t.items.filter(it => it.due === ds) }))
+      .map(t => ({ t, due: t.items.filter(it => effDue(it, t) === ds) }))
       .filter(e => e.due.length)
       .map(e => ({ ...e, allDone: e.due.every(x => x.done) }))
       .sort((a, b) => (a.allDone - b.allDone) || String(a.t.created_at).localeCompare(String(b.t.created_at)));
@@ -1114,7 +1461,7 @@ function renderWeek() {
 function weekCardHTML(e) {
   const shown = e.due.slice(0, 2), more = e.due.length - shown.length;
   return `<button type="button" class="wk-card ${catCls(e.t.category)} ${e.allDone ? 'all-done' : ''} ${state.selectedId === e.t.id ? 'selected' : ''}" data-id="${esc(e.t.id)}">
-    <span class="wk-title">${esc(e.t.title)}</span>
+    <span class="wk-title">${isRecurring(e.t) ? ICONS.repeat : ''}${esc(e.t.title)}</span>
     ${shown.map(it => `<span class="wk-item ${it.done ? 'done' : ''}">${esc(truncate(it.title.replace(/\s*\n\s*/g, ' '), PREVIEW_CHARS))}</span>`).join('')}
     ${more > 0 ? `<span class="wk-more">+${more} more</span>` : ''}
   </button>`;
@@ -1131,8 +1478,8 @@ function sortTasks(list, tab) {
   });
 }
 function renderRight() {
-  const visible = state.tasks.filter(t => state.filter.has(t.category));
-  const counts = { current: 0, overdue: 0, completed: 0 };
+  const visible = state.tasks.filter(t => state.filter.has(t.category) && (state.showRecurring || !isRecurring(t)));
+  const counts = { current: 0, upcoming: 0, overdue: 0, completed: 0 };
   visible.forEach(t => counts[taskStatus(t)]++);
   document.querySelectorAll('#tabs .tab').forEach(b => {
     const tab = b.dataset.tab;
@@ -1144,14 +1491,15 @@ function renderRight() {
   });
 
   $('#filters').innerHTML = '<span class="field-label">Show</span>' + CATEGORIES.map(c =>
-    `<button type="button" class="chip-toggle ${c.cls} ${state.filter.has(c.id) ? 'on' : ''}" data-cat="${esc(c.id)}" aria-pressed="${state.filter.has(c.id)}"><span class="dot"></span>${esc(c.id)}</button>`).join('');
+    `<button type="button" class="chip-toggle ${c.cls} ${state.filter.has(c.id) ? 'on' : ''}" data-cat="${esc(c.id)}" aria-pressed="${state.filter.has(c.id)}"><span class="dot"></span>${esc(c.id)}</button>`).join('')
+    + `<span class="f-sep" aria-hidden="true"></span><button type="button" class="chip-toggle rec-chip ${state.showRecurring ? 'on' : ''}" data-rec="1" aria-pressed="${state.showRecurring}">${ICONS.repeat}Recurring</button>`;
 
   const list = $('#task-list');
   const tasks = sortTasks(visible.filter(t => taskStatus(t) === state.tab), state.tab);
   list.innerHTML = '';
   if (!tasks.length) {
     const msg = !state.filter.size ? 'Choose at least one category above to see tasks.'
-      : { current: 'No current tasks. Add one from the New task panel.', overdue: 'Nothing overdue.', completed: 'Completed tasks will appear here.' }[state.tab];
+      : { current: 'No current tasks. Add one from the New task panel.', upcoming: 'Recurring tasks due more than a week from now appear here.', overdue: 'Nothing overdue.', completed: 'Completed tasks will appear here.' }[state.tab];
     list.innerHTML = `<div class="list-empty">${msg}</div>`;
     return;
   }
@@ -1165,7 +1513,7 @@ function renderRight() {
   });
 }
 function itemRowHTML(it) {
-  const dueCls = !it.due ? '' : itemOverdue(it) ? 'due-over' : (it.due === state.today && !it.done ? 'due-today' : '');
+  const dueCls = !it.due ? '' : (!it.done && it.due < state.today) ? 'due-over' : (it.due === state.today && !it.done ? 'due-today' : '');
   const href = safeHref(it.link);
   return `<li class="tc-item ${it.done ? 'done' : ''}" data-item="${esc(it.id)}">
     <input type="checkbox" class="check tc-check" ${it.done ? 'checked' : ''} aria-label="Mark ${esc(it.title)} as done">
@@ -1174,6 +1522,12 @@ function itemRowHTML(it) {
     ${it.assignee ? `<span class="pill" title="${esc(it.assignee)}">${esc(it.assignee)}</span>` : ''}
     ${it.due ? `<span class="pill ${dueCls}">${esc(formatDue(it.due))}</span>` : ''}
   </li>`;
+}
+function recPillHTML(t, allDone) {
+  if (!isRecurring(t)) return '';
+  const d = t.recur.due;
+  const cls = allDone ? '' : d < state.today ? 'due-over' : d === state.today ? 'due-today' : '';
+  return `<span class="pill rec-pill ${cls}" title="${esc(describeRule(t.recur.rule))}">${ICONS.repeat}${esc(formatDue(d))}</span>`;
 }
 const collapsedHTML = n => `<li class="tc-collapsed">${ICONS.done}+${n} items complete</li>`;
 function taskCardHTML(t) {
@@ -1194,7 +1548,7 @@ function taskCardHTML(t) {
         <div class="tc-title">${esc(t.title)}</div>
         ${textOf(t.subtitle) ? `<div class="tc-sub fmt">${sanitizeHTML(t.subtitle)}</div>` : ''}
       </div>
-      <div class="tc-meta">${t.category !== 'None' ? `<span class="cat-tag">${esc(t.category)}</span>` : ''}<span class="tc-progress">${done}/${n}</span></div>
+      <div class="tc-meta">${recPillHTML(t, allDone)}${t.category !== 'None' ? `<span class="cat-tag">${esc(t.category)}</span>` : ''}<span class="tc-progress">${done}/${n}</span>${!allDone && nextDue(t) ? `<button type="button" class="icon-btn tc-defer" data-defer="${esc(t.id)}" title="Defer" aria-label="Defer">${ICONS.clock}</button>` : ''}</div>
     </div>
     <ul class="tc-items">${rows}</ul>
   </article>`;
@@ -1221,6 +1575,7 @@ function wireEvents() {
   $('#filters').addEventListener('click', e => {
     const b = e.target.closest('.chip-toggle');
     if (!b) return;
+    if (b.dataset.rec) { state.showRecurring = !state.showRecurring; renderRight(); return; }
     const c = b.dataset.cat;
     state.filter.has(c) ? state.filter.delete(c) : state.filter.add(c);
     renderRight();
@@ -1232,6 +1587,11 @@ function wireEvents() {
     toggleItem(card.dataset.id, li.dataset.item, e.target.checked);
   });
   list.addEventListener('click', e => {
+    const dfr = e.target.closest('.tc-defer');
+    if (dfr) {
+      openMenu(dfr, DEFER_OPTS.map(([d, l]) => ({ label: `Defer ${l}`, onClick: () => deferTask(dfr.dataset.defer, d) })));
+      return;
+    }
     if (e.target.closest('.tc-check, .tc-link')) return;
     const card = e.target.closest('.task-card:not(.expanded)');
     if (card) selectTask(card.dataset.id);
@@ -1244,27 +1604,51 @@ function wireEvents() {
   $('#signout-btn').addEventListener('click', async () => {
     if (state.editor && state.editor.dirty && !confirm('Discard your unsaved changes and sign out?')) return;
     if (state.draftTimer) await saveDraft();
+    if (state.noteDraftTimer) await saveNoteDraft();
+    if (state.noteModal) closeNote();
+    await state.noteChain;
     await state.draftChain;
     await sb.auth.signOut();
   });
   document.addEventListener('visibilitychange', async () => {
     if (!state.started) return;
-    if (document.visibilityState === 'hidden') { if (state.draftTimer) saveDraft(); return; }
+    if (document.visibilityState === 'hidden') {
+      if (state.draftTimer) saveDraft();
+      if (state.noteDraftTimer) saveNoteDraft();
+      if (state.noteModal && state.noteModal.timer) saveModal(state.noteModal);
+      return;
+    }
     checkDay();
+    if (!state.noteModal && !state.dragNoteEl && !state.needsMigration && await loadNotes()) renderNotes();
     if (state.editor) return; // don't disturb an open edit
     if (await loadTasks()) renderAll();
   });
-  // Esc closes the open task on the right (unless you're typing in the New task panel)
+  // Esc: close a menu, then an open note, then the open task (unless typing in the New task panel)
   document.addEventListener('keydown', e => {
-    if (e.key !== 'Escape' || !state.editor) return;
+    if (e.key === 'Escape' && menuEl) { closeMenu(); e.stopPropagation(); }
+  }, true);
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (state.noteModal) { closeNote(); return; }
+    if (!state.editor || state.view !== 'todo') return;
     if (state.draftEditor && state.draftEditor.el.contains(e.target)) return;
     closeEditor();
   });
   window.addEventListener('resize', () => {
+    closeMenu(); positionThumb();
+    if (state.view !== 'todo') return;
     if (state.draftEditor) state.draftEditor.fit();
     if (state.editor) state.editor.api.fit();
   });
+  document.querySelector('.view-switch').addEventListener('click', e => {
+    const b = e.target.closest('.vs-opt');
+    if (b) setView(b.dataset.view);
+  });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(positionThumb);
+  wireNotes();
   window.addEventListener('beforeunload', e => {
+    if (state.noteDraftTimer) saveNoteDraft();
+    if (state.noteModal && state.noteModal.timer) saveModal(state.noteModal);
     if (state.draftTimer) saveDraft();
     if (state.editor && state.editor.dirty) { e.preventDefault(); e.returnValue = ''; }
   });
@@ -1272,6 +1656,368 @@ function wireEvents() {
 function checkDay() {
   const t = todayStr();
   if (t !== state.today) { state.today = t; renderAll(); }
+}
+
+/* ---------- Notes ---------- */
+const NOTE_COLOURS = ['none', 'butter', 'peach', 'coral', 'rose', 'lavender', 'sky', 'aqua', 'mint', 'sage', 'stone'];
+const NOTE_COLOUR_NAMES = { none: 'No colour', butter: 'Butter', peach: 'Peach', coral: 'Coral', rose: 'Rose', lavender: 'Lavender', sky: 'Sky', aqua: 'Aqua', mint: 'Mint', sage: 'Sage', stone: 'Stone' };
+const MIGRATION_MSG = 'Run update-recurring-notes.sql in Supabase first (see the banner at the top).';
+const noteCls = c => 'nc-' + (NOTE_COLOURS.includes(c) ? c : 'none');
+const findNote = id => state.notes.find(n => n.id === id);
+const byPos = (a, b) => (a.position - b.position) || String(a.created_at).localeCompare(String(b.created_at));
+const noteSort = (a, b) => (b.pinned - a.pinned) || byPos(a, b);
+const topPosition = (catId, exceptId) => {
+  const same = state.notes.filter(n => n.id !== exceptId && (n.category_id || null) === catId);
+  return same.length ? Math.min(...same.map(n => n.position)) - 1 : 0;
+};
+
+async function checkMigration() {
+  const [a, b] = await Promise.all([sb.from('tasks').select('recur').limit(1), sb.from('notes').select('id').limit(1)]);
+  state.needsMigration = !!(a.error || b.error);
+  $('#db-banner').hidden = !state.needsMigration;
+}
+async function loadNotes() {
+  const [n, c] = await Promise.all([sb.from('notes').select('*'), sb.from('note_categories').select('*')]);
+  if (n.error || c.error) { console.error(n.error || c.error); return false; }
+  state.notes = n.data; state.noteCats = c.data; state.notesReady = true;
+  return true;
+}
+
+function buildNoteEditor(data, mode, handlers = {}) {
+  data = data || {};
+  const root = document.createElement('div');
+  root.className = 'note-editor paper';
+  root.innerHTML = `
+    <input class="pe-title ne-title" maxlength="200" placeholder="Note title" aria-label="Note title">
+    <div class="pe-meta ne-meta">
+      <select class="pe-cat cat-none ne-cat" aria-label="Category"></select>
+      ${mode === 'modal' ? '<button type="button" class="pe-repeat ne-pin"></button>' : ''}
+    </div>
+    <div class="ne-swatches" role="radiogroup" aria-label="Note colour"></div>
+    <div class="ne-body"></div>
+    ${mode === 'draft' ? `<div class="pe-hint"><span><kbd>${MOD}+Enter</kbd> add note</span><span><code>- </code> or <code>1. </code> starts a list</span></div>` : ''}`;
+  const titleIn = root.querySelector('.ne-title');
+  titleIn.value = data.title || '';
+  const body = buildRich(data.body, 'Write your note…');
+  root.querySelector('.ne-body').appendChild(body.el);
+  let color = NOTE_COLOURS.includes(data.color) ? data.color : 'none';
+  let cat = data.category_id || '';
+  let pinned = !!data.pinned;
+  const catSel = root.querySelector('.ne-cat'), sw = root.querySelector('.ne-swatches'), pinBtn = root.querySelector('.ne-pin');
+  const changed = () => root.dispatchEvent(new Event('input', { bubbles: true }));
+  const renderCats = () => {
+    if (cat && !state.noteCats.some(c => c.id === cat)) cat = '';
+    catSel.innerHTML = '<option value="">Uncategorised</option>'
+      + [...state.noteCats].sort(byPos).map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('')
+      + '<option value="__new">+ New category…</option>';
+    catSel.value = cat;
+  };
+  const renderSw = () => {
+    sw.innerHTML = NOTE_COLOURS.map(c => `<button type="button" class="nsw ${noteCls(c)} ${c === color ? 'on' : ''}" data-color="${c}" role="radio" aria-checked="${c === color}" title="${NOTE_COLOUR_NAMES[c]}" aria-label="${NOTE_COLOUR_NAMES[c]}"></button>`).join('');
+    if (mode === 'draft') root.className = `note-editor paper ${noteCls(color)} ${color !== 'none' ? 'tinted' : ''}`;
+    if (handlers.onColor) handlers.onColor(color);
+  };
+  const renderPin = () => { if (pinBtn) { pinBtn.innerHTML = `${ICONS.pin}<span>${pinned ? 'Pinned' : 'Pin to top'}</span>`; pinBtn.classList.toggle('on', pinned); } };
+  renderCats(); renderSw(); renderPin();
+  catSel.addEventListener('change', async () => {
+    if (catSel.value !== '__new') { cat = catSel.value; changed(); return; }
+    catSel.value = cat;
+    const id = await promptNewCategory();
+    if (id) { cat = id; renderCats(); changed(); }
+  });
+  sw.addEventListener('click', e => { const b = e.target.closest('.nsw'); if (!b) return; color = b.dataset.color; renderSw(); changed(); });
+  if (pinBtn) pinBtn.addEventListener('click', () => { pinned = !pinned; renderPin(); changed(); });
+  titleIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); body.editor.focus(); } });
+  root.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); handlers.onSubmit && handlers.onSubmit(); } });
+  return {
+    el: root, titleIn, refreshCats: renderCats,
+    getData: () => ({ title: titleIn.value, body: body.getHTML(), color, category_id: cat || null, pinned }),
+  };
+}
+function refreshCatEditors() {
+  if (state.noteDraft) state.noteDraft.refreshCats();
+  if (state.noteModal) state.noteModal.api.refreshCats();
+}
+async function promptNewCategory() {
+  if (state.needsMigration) { toast(MIGRATION_MSG, true); return null; }
+  const name = (prompt('Name for the new category') || '').trim().slice(0, 60);
+  if (!name) return null;
+  const position = state.noteCats.reduce((m, c) => Math.max(m, c.position), 0) + 1;
+  const { data, error } = await sb.from('note_categories').insert({ name, position }).select().single();
+  if (error) { console.error(error); toast('Couldn’t create the category. Try again.', true); return null; }
+  state.noteCats.push(data);
+  refreshCatEditors(); renderNotes();
+  return data.id;
+}
+async function renameNoteCategory(id) {
+  const c = state.noteCats.find(x => x.id === id);
+  if (!c) return;
+  const name = (prompt('Rename category', c.name) || '').trim().slice(0, 60);
+  if (!name || name === c.name) return;
+  const { error } = await sb.from('note_categories').update({ name }).eq('id', id);
+  if (error) { console.error(error); toast('Couldn’t rename the category. Try again.', true); return; }
+  c.name = name; refreshCatEditors(); renderNotes();
+}
+async function deleteNoteCategory(id) {
+  const c = state.noteCats.find(x => x.id === id);
+  if (!c || !confirm(`Delete the category “${c.name}”? Its notes will move to Uncategorised.`)) return;
+  const { error } = await sb.from('note_categories').delete().eq('id', id);
+  if (error) { console.error(error); toast('Couldn’t delete the category. Try again.', true); return; }
+  state.noteCats = state.noteCats.filter(x => x.id !== id);
+  state.notes.forEach(n => { if (n.category_id === id) n.category_id = null; });
+  refreshCatEditors(); renderNotes();
+  toast('Category deleted');
+}
+
+// New-note draft (left column)
+function setNoteDraftStatus(t) { $('#note-draft-status').textContent = t; }
+function mountNoteDraft(data) {
+  const api = buildNoteEditor(data, 'draft', { onSubmit: addNote });
+  const box = $('#note-form');
+  box.innerHTML = '';
+  box.appendChild(api.el);
+  state.noteDraft = api;
+  api.el.addEventListener('input', scheduleNoteDraftSave);
+  api.el.addEventListener('change', scheduleNoteDraftSave);
+}
+function scheduleNoteDraftSave() {
+  setNoteDraftStatus('Editing…');
+  clearTimeout(state.noteDraftTimer);
+  state.noteDraftTimer = setTimeout(saveNoteDraft, 700);
+}
+function saveNoteDraft() {
+  clearTimeout(state.noteDraftTimer);
+  state.noteDraftTimer = null;
+  if (!state.noteDraft || !state.user || state.needsMigration) { setNoteDraftStatus(''); return Promise.resolve(); }
+  const note_data = state.noteDraft.getData();
+  setNoteDraftStatus('Saving draft…');
+  state.draftChain = state.draftChain.then(async () => {
+    const { error } = await sb.from('task_drafts').upsert({ user_id: state.user.id, note_data, updated_at: new Date().toISOString() });
+    if (error) { console.error(error); setNoteDraftStatus('Draft not saved'); }
+    else if (!state.noteDraftTimer) setNoteDraftStatus('Draft saved');
+  });
+  return state.draftChain;
+}
+async function clearNoteDraft() {
+  const d = state.noteDraft.getData();
+  if ((d.title.trim() || textOf(d.body)) && !confirm('Clear this note draft?')) return;
+  mountNoteDraft(null);
+  await saveNoteDraft();
+  setNoteDraftStatus('');
+}
+async function addNote() {
+  if (state.needsMigration) { toast(MIGRATION_MSG, true); return; }
+  const d = state.noteDraft.getData();
+  if (!d.title.trim() && !textOf(d.body)) { toast('Add a title or some text for the note.', true); state.noteDraft.titleIn.focus(); return; }
+  const row = { title: d.title.trim(), body: d.body, color: d.color, category_id: d.category_id, pinned: false, position: topPosition(d.category_id) };
+  const btn = $('#add-note-btn');
+  btn.disabled = true;
+  const { data, error } = await sb.from('notes').insert(row).select().single();
+  btn.disabled = false;
+  if (error) { console.error(error); toast('Couldn’t add the note. Check your connection and try again.', true); return; }
+  state.notes.push(data);
+  state.noteHidden.delete(d.category_id || '__none');
+  mountNoteDraft(null);
+  await saveNoteDraft();
+  setNoteDraftStatus('');
+  renderNotes();
+  state.noteDraft.titleIn.focus();
+  toast('Note added');
+}
+
+// Board
+function renderNotes() {
+  const board = $('#notes-board'), filters = $('#note-filters');
+  if (!state.notesReady) {
+    filters.innerHTML = '';
+    board.innerHTML = `<div class="list-empty">${state.needsMigration ? 'Notes need a one-time database update. Run <b>update-recurring-notes.sql</b> in Supabase, then refresh.' : 'Loading notes…'}</div>`;
+    return;
+  }
+  const cats = [...state.noteCats].sort(byPos).map(c => ({ id: c.id, key: c.id, name: c.name })).concat([{ id: '', key: '__none', name: 'Uncategorised' }]);
+  filters.innerHTML = '<span class="field-label">Show</span>' + cats.map(c =>
+    `<button type="button" class="chip-toggle ${state.noteHidden.has(c.key) ? '' : 'on'}" data-nkey="${esc(c.key)}" aria-pressed="${!state.noteHidden.has(c.key)}">${esc(c.name)}</button>`).join('');
+  const words = state.noteSearch.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const match = n => !words.length || words.every(w => `${n.title} ${textOf(n.body)}`.toLowerCase().includes(w));
+  let html = '';
+  cats.forEach(c => {
+    if (state.noteHidden.has(c.key)) return;
+    const list = state.notes.filter(n => (n.category_id || '') === c.id && match(n)).sort(noteSort);
+    if (words.length && !list.length) return;
+    html += `<section class="note-section">
+      <header class="ns-head"><span class="ns-name">${esc(c.name)}</span><span class="ns-count">${list.length}</span><span class="ns-line"></span>${c.id ? `<button type="button" class="icon-btn ns-menu" data-cat="${esc(c.id)}" aria-label="Options for ${esc(c.name)}" title="Category options">${ICONS.dots}</button>` : ''}</header>
+      <div class="ns-grid" data-cat="${esc(c.id)}">${list.map(noteCardHTML).join('')}<div class="ns-empty">${state.notes.length ? 'Drop notes here' : 'No notes yet. Write one in the New note panel.'}</div></div>
+    </section>`;
+  });
+  board.innerHTML = html || `<div class="list-empty">${words.length ? 'No notes match your search.' : 'Choose a category above to see notes.'}</div>`;
+}
+function noteCardHTML(n) {
+  const title = n.title && n.title.trim();
+  return `<article class="note-card ${noteCls(n.color)} ${n.pinned ? 'pinned' : ''}" data-id="${esc(n.id)}" draggable="true" tabindex="0" aria-label="${esc(title || 'Untitled note')}">
+    <button type="button" class="nc-pin" data-pin="${esc(n.id)}" title="${n.pinned ? 'Unpin' : 'Pin to top'}" aria-label="${n.pinned ? 'Unpin' : 'Pin to top'}">${ICONS.pin}</button>
+    <div class="note-title ${title ? '' : 'untitled'}">${esc(title || 'Untitled')}</div>
+    <div class="note-preview fmt">${sanitizeHTML(n.body)}</div>
+  </article>`;
+}
+async function patchNote(id, patch) {
+  const n = findNote(id);
+  if (!n) return;
+  const before = { ...n };
+  Object.assign(n, patch);
+  renderNotes();
+  state.noteChain = state.noteChain.then(async () => {
+    const { error } = await sb.from('notes').update(patch).eq('id', id);
+    if (error) { console.error(error); Object.assign(n, before); renderNotes(); toast('Couldn’t save that change. Try again.', true); }
+  });
+  return state.noteChain;
+}
+async function finishNoteDrag() {
+  const el = state.dragNoteEl;
+  state.dragNoteEl = null;
+  document.querySelectorAll('.ns-grid.drag-over').forEach(g => g.classList.remove('drag-over'));
+  if (!el) return;
+  el.classList.remove('dragging');
+  const grid = el.closest('.ns-grid'), n = findNote(el.dataset.id);
+  if (!grid || !n) { renderNotes(); return; }
+  const ids = [...grid.querySelectorAll('.note-card')].map(c => c.dataset.id);
+  const i = ids.indexOf(n.id), prev = findNote(ids[i - 1]), next = findNote(ids[i + 1]);
+  const patch = {
+    category_id: grid.dataset.cat || null,
+    position: prev && next ? (prev.position + next.position) / 2 : prev ? prev.position + 1 : next ? next.position - 1 : 0,
+  };
+  // Keep the note where it was dropped: dropping among pinned notes pins it, among unpinned unpins it
+  if (prev && !prev.pinned) patch.pinned = false;
+  else if (next && next.pinned) patch.pinned = true;
+  patchNote(n.id, patch);
+}
+
+// Note pop-up
+function openNote(id) {
+  const n = findNote(id);
+  if (!n) return;
+  if (state.noteModal) closeNote();
+  const card = $('#note-modal .nm-card');
+  const api = buildNoteEditor(n, 'modal', { onColor: c => { card.className = 'nm-card ' + noteCls(c); } });
+  $('#nm-body').innerHTML = '';
+  $('#nm-body').appendChild(api.el);
+  const m = { id, api, timer: null };
+  state.noteModal = m;
+  api.el.addEventListener('input', () => scheduleModalSave(m));
+  api.el.addEventListener('change', () => scheduleModalSave(m));
+  $('#nm-status').textContent = '';
+  $('#note-modal').hidden = false;
+  requestAnimationFrame(() => api.titleIn.focus());
+}
+function scheduleModalSave(m) {
+  if (state.noteModal !== m) return;
+  $('#nm-status').textContent = 'Editing…';
+  clearTimeout(m.timer);
+  m.timer = setTimeout(() => saveModal(m), 600);
+}
+function saveModal(m) {
+  clearTimeout(m.timer); m.timer = null;
+  const n = findNote(m.id);
+  if (!n) return;
+  const d = m.api.getData();
+  const patch = { title: d.title.trim(), body: d.body, color: d.color, category_id: d.category_id, pinned: d.pinned };
+  if (patch.category_id !== (n.category_id || null)) patch.position = topPosition(patch.category_id, n.id);
+  if (state.noteModal === m) $('#nm-status').textContent = 'Saving…';
+  patchNote(n.id, patch).then(() => { if (state.noteModal === m && !m.timer) $('#nm-status').textContent = 'Saved'; });
+}
+function closeNote() {
+  const m = state.noteModal;
+  if (!m) return;
+  if (m.timer) saveModal(m);
+  state.noteModal = null;
+  $('#note-modal').hidden = true;
+  $('#nm-body').innerHTML = '';
+  renderNotes();
+  const card = document.querySelector(`#notes-board .note-card[data-id="${CSS.escape(m.id)}"]`);
+  if (card) card.focus({ preventScroll: true });
+}
+async function deleteNote(id) {
+  const n = findNote(id);
+  if (!n || !confirm(`Delete “${n.title || 'Untitled'}”? This can’t be undone.`)) return;
+  if (state.noteModal && state.noteModal.id === id) { clearTimeout(state.noteModal.timer); state.noteModal.timer = null; }
+  await state.noteChain;
+  const { error } = await sb.from('notes').delete().eq('id', id);
+  if (error) { console.error(error); toast('Couldn’t delete the note. Try again.', true); return; }
+  state.notes = state.notes.filter(x => x.id !== id);
+  if (state.noteModal && state.noteModal.id === id) closeNote(); else renderNotes();
+  toast('Note deleted');
+}
+
+function wireNotes() {
+  $('#add-note-btn').addEventListener('click', addNote);
+  $('#clear-note').addEventListener('click', clearNoteDraft);
+  $('#add-cat-btn').addEventListener('click', promptNewCategory);
+  $('#note-search').addEventListener('input', e => { state.noteSearch = e.target.value; renderNotes(); });
+  $('#note-filters').addEventListener('click', e => {
+    const b = e.target.closest('.chip-toggle');
+    if (!b) return;
+    const k = b.dataset.nkey;
+    state.noteHidden.has(k) ? state.noteHidden.delete(k) : state.noteHidden.add(k);
+    renderNotes();
+  });
+  const board = $('#notes-board');
+  board.addEventListener('click', e => {
+    const pin = e.target.closest('.nc-pin');
+    if (pin) { const n = findNote(pin.dataset.pin); if (n) patchNote(n.id, { pinned: !n.pinned }); return; }
+    const menu = e.target.closest('.ns-menu');
+    if (menu) {
+      const id = menu.dataset.cat;
+      openMenu(menu, [{ label: 'Rename category', onClick: () => renameNoteCategory(id) }, { label: 'Delete category', danger: true, onClick: () => deleteNoteCategory(id) }]);
+      return;
+    }
+    const card = e.target.closest('.note-card');
+    if (card) openNote(card.dataset.id);
+  });
+  board.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.matches('.note-card')) { e.preventDefault(); openNote(e.target.dataset.id); }
+  });
+  board.addEventListener('dragstart', e => {
+    const card = e.target.closest('.note-card');
+    if (!card) return;
+    state.dragNoteEl = card;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', card.dataset.id);
+    requestAnimationFrame(() => card.classList.add('dragging'));
+  });
+  board.addEventListener('dragover', e => {
+    const el = state.dragNoteEl;
+    const grid = e.target.closest('.ns-grid');
+    if (!el || !grid) return;
+    e.preventDefault();
+    board.querySelectorAll('.ns-grid.drag-over').forEach(g => { if (g !== grid) g.classList.remove('drag-over'); });
+    grid.classList.add('drag-over');
+    const cards = [...grid.querySelectorAll('.note-card')].filter(c => c !== el);
+    const before = cards.find(c => { const r = c.getBoundingClientRect(); return e.clientY < r.top || (e.clientY <= r.bottom && e.clientX < r.left + r.width / 2); });
+    const target = before || grid.querySelector('.ns-empty');
+    if (el.nextElementSibling !== target) grid.insertBefore(el, target);
+  });
+  board.addEventListener('drop', e => e.preventDefault());
+  board.addEventListener('dragend', finishNoteDrag);
+  $('#nm-close').innerHTML = ICONS.x;
+  $('#nm-close').addEventListener('click', closeNote);
+  $('#nm-backdrop').addEventListener('click', closeNote);
+  $('#nm-delete').addEventListener('click', () => { if (state.noteModal) deleteNote(state.noteModal.id); });
+}
+
+/* ---------- Todo List / Notes switch ---------- */
+function positionThumb() {
+  const a = document.querySelector('.vs-opt.active'), t = document.querySelector('.vs-thumb');
+  if (!a || !t || !a.offsetWidth) return;
+  t.style.left = a.offsetLeft + 'px';
+  t.style.width = a.offsetWidth + 'px';
+}
+function setView(v) {
+  state.view = v === 'notes' ? 'notes' : 'todo';
+  $('#todo-view').hidden = state.view !== 'todo';
+  $('#notes-view').hidden = state.view !== 'notes';
+  document.querySelectorAll('.vs-opt').forEach(b => { const on = b.dataset.view === state.view; b.classList.toggle('active', on); b.setAttribute('aria-selected', on); });
+  positionThumb();
+  try { localStorage.setItem('todo-view', state.view); } catch (e) {}
+  if (state.view === 'notes') { closeMenu(); renderNotes(); }
+  else requestAnimationFrame(() => { if (state.draftEditor) state.draftEditor.fit(); if (state.editor) state.editor.api.fit(); });
 }
 
 /* ---------- Top bar toggles (saved in this browser) ---------- */
@@ -1314,16 +2060,31 @@ async function start(user) {
   state.today = todayStr();
   $('#user-email').textContent = user.email || '';
   show('main');
+  let v = 'todo';
+  try { v = localStorage.getItem('todo-view') || 'todo'; } catch (e) {}
+  setView(v);
   $('#week-days').innerHTML = $('#task-list').innerHTML = '<div class="loading">Loading your tasks…</div>';
-  const [, draft] = await Promise.all([loadTasks(), loadDraft()]);
-  mountDraft(draft);
+  renderNotes();
+  const [, drafts] = await Promise.all([loadTasks(), loadDraft(), checkMigration()]);
+  if (!state.needsMigration) await loadNotes();
+  mountDraft(drafts.data && Object.keys(drafts.data).length ? drafts.data : null);
+  mountNoteDraft(drafts.note_data || null);
   renderAll();
+  renderNotes();
+  setView(state.view);
 }
 function resetState() {
-  Object.assign(state, { user: null, started: false, tasks: [], tab: 'current', selectedId: null, editor: null, draftEditor: null });
+  if (state.noteModal) { clearTimeout(state.noteModal.timer); state.noteModal = null; $('#note-modal').hidden = true; $('#nm-body').innerHTML = ''; }
+  closeMenu();
+  Object.assign(state, { user: null, started: false, tasks: [], tab: 'current', selectedId: null, editor: null, draftEditor: null, showRecurring: true,
+    notes: [], noteCats: [], notesReady: false, noteSearch: '', noteDraft: null, dragNoteEl: null });
   state.filter = new Set(CATEGORIES.map(c => c.id));
+  state.noteHidden = new Set();
   clearTimeout(state.draftTimer); state.draftTimer = null;
+  clearTimeout(state.noteDraftTimer); state.noteDraftTimer = null;
   $('#new-form').innerHTML = ''; setDraftStatus('');
+  $('#note-form').innerHTML = ''; setNoteDraftStatus('');
+  $('#note-search').value = '';
 }
 async function init() {
   wireTopbarToggles();
