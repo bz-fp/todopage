@@ -224,8 +224,8 @@ svg.ic{width:13px;height:13px;display:block}
 .day.today .day-badge{background:var(--accent-soft);color:var(--accent)}
 .day-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
 .day-empty{grid-column:1/-1;padding:11px;color:var(--faint);font-size:11.7px;border:1px dashed var(--line);border-radius:var(--radius);text-align:center}
-.wk-card{display:flex;flex-direction:column;align-items:stretch;gap:3px;min-width:0;width:100%;padding:7px 9px;text-align:left;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--cat-color);border-radius:var(--radius);box-shadow:var(--shadow)}
-.wk-card:hover{border-color:var(--line-strong);border-left-color:var(--cat-color)}
+.wk-card{display:flex;flex-direction:column;align-items:stretch;gap:3px;min-width:0;width:100%;padding:7px 9px;text-align:left;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-left:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.wk-card:hover{border-color:var(--line-strong)}
 .wk-card.selected{outline:2px solid var(--accent);outline-offset:1px}
 .wk-card.all-done{opacity:.6}
 .wk-title{font-weight:700;font-size:12.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -247,8 +247,8 @@ svg.ic{width:13px;height:13px;display:block}
 .chip-toggle.on .dot{opacity:1}
 .cat-none{--cat-color:var(--cat-none)} .cat-client{--cat-color:var(--cat-client)} .cat-internal{--cat-color:var(--cat-internal)} .cat-large{--cat-color:var(--cat-large)}
 
-.task-card{display:block;margin-bottom:9px;padding:11px 11px 9px;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--cat-color);border-radius:var(--radius);box-shadow:var(--shadow);cursor:pointer}
-.task-card:hover{border-color:var(--line-strong);border-left-color:var(--cat-color)}
+.task-card{display:block;margin-bottom:9px;padding:11px 11px 9px;background:var(--panel);border:1px solid var(--line);border-left:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);cursor:pointer}
+.task-card:hover{border-color:var(--line-strong)}
 .task-card.selected{outline:2px solid var(--accent);outline-offset:1px}
 .task-card.expanded{cursor:default;padding:10px 12px 9px 22px}
 .task-card.flash{animation:flash 1.1s ease-out}
@@ -307,7 +307,7 @@ svg.ic{width:13px;height:13px;display:block}
 .rc-row{display:flex;flex-wrap:wrap;align-items:center;gap:5px}
 .rc-lbl{width:78px;font-size:11.3px;font-weight:700;color:var(--muted)}
 .rc-n{width:58px}
-.rc-day.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.rc-day.on,.rc-wkdays.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .rc-note{font-size:11.3px;color:var(--muted)}
 .rec-pill{display:inline-flex;align-items:center;gap:3px}
 .rec-pill .ic,.wk-title .ic,.chip-toggle .ic{width:11px;height:11px;display:inline-block;vertical-align:-1px}
@@ -320,6 +320,11 @@ svg.ic{width:13px;height:13px;display:block}
 .menu-item:hover,.menu-item:focus{background:var(--panel-2);outline:none}
 .menu-item.danger{color:var(--danger)}
 .fmt ol{margin:2px 0;padding-left:19px}
+.fmt ul ul,.fmt ol ul{list-style:circle}
+.fmt ul ul ul,.fmt ol ul ul,.fmt ul ol ul,.fmt ol ol ul{list-style:square}
+.fmt ol ol,.fmt ul ol{list-style:lower-alpha}
+.fmt ol ol ol,.fmt ul ol ol,.fmt ol ul ol,.fmt ul ul ol{list-style:lower-roman}
+.fmt li > ul,.fmt li > ol,.fmt ul > ul,.fmt ol > ol,.fmt ul > ol,.fmt ol > ul{margin:1px 0}
 
 /* Notes */
 .columns.notes-cols{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}
@@ -370,6 +375,65 @@ svg.ic{width:13px;height:13px;display:block}
 .nm-card .pe-title{font-size:19.8px}
 .nm-card .nsw.on{box-shadow:0 0 0 2px var(--note-bg),0 0 0 3.5px var(--accent)}
 
+/* Task categories */
+:root{--tc-blue:#2f62c9;--tc-purple:#7a4cc2;--tc-amber:#b7791f;--tc-green:#2f8a4c;--tc-teal:#1f8585;--tc-red:#c8453a;--tc-pink:#c2427e;--tc-slate:#66737a}
+:root[data-theme="dark"]{--tc-blue:#7aa2f2;--tc-purple:#b493ec;--tc-amber:#e0a84f;--tc-green:#6cc48a;--tc-teal:#5fc4c4;--tc-red:#f08070;--tc-pink:#ec86b4;--tc-slate:#9aa6a8}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--tc-blue:#7aa2f2;--tc-purple:#b493ec;--tc-amber:#e0a84f;--tc-green:#6cc48a;--tc-teal:#5fc4c4;--tc-red:#f08070;--tc-pink:#ec86b4;--tc-slate:#9aa6a8}}
+.task-card,.wk-card{position:relative}
+.task-card::before,.wk-card::before{content:"";position:absolute;left:-1px;top:-1px;bottom:-1px;width:4px;border-radius:var(--radius) 0 0 var(--radius);background:var(--stripe,var(--cat-none))}
+.task-card{padding-left:14px}
+.wk-card{padding-left:12px}
+.pe-cats{display:contents}
+.pe-cattag{border:0;cursor:pointer;font-family:inherit}
+.pe-catbtn.compact{padding:2px 7px}
+.pe-catbtn.compact span{display:none}
+.chip-edit{border:0;background:transparent;color:var(--accent);font-weight:700;font-size:11.3px;cursor:pointer;padding:2px 4px}
+.chip-edit:hover{text-decoration:underline}
+.picker{min-width:210px;max-height:340px;overflow-y:auto}
+.menu-item.pick{display:flex;align-items:center;gap:8px}
+.pick-box{width:14px;height:14px;flex:none;display:grid;place-items:center;border:1.5px solid var(--line-strong);border-radius:4px}
+.pick.on .pick-box{background:var(--accent);border-color:var(--accent)}
+.pick.on .pick-box::after{content:"";width:7px;height:4px;border-left:2px solid var(--accent-ink);border-bottom:2px solid var(--accent-ink);transform:translateY(-1px) rotate(-45deg)}
+.menu .dot{width:8px;height:8px;flex:none;border-radius:50%;background:var(--cat-color)}
+.menu-sep{height:1px;background:var(--line);margin:4px 2px}
+.menu-empty{padding:6px 10px;color:var(--faint);font-size:11.7px}
+.input.invalid{border-color:var(--danger);box-shadow:0 0 0 3px var(--danger-soft)}
+
+/* App-wide pop-up (templates, categories) */
+.app-modal{position:fixed;inset:0;z-index:45;display:grid;place-items:center}
+.am-backdrop{position:absolute;inset:0;background:color-mix(in srgb, var(--bg) 50%, transparent);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.am-card{position:relative;display:flex;flex-direction:column;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.24);animation:pop .16s ease-out}
+@media (prefers-reduced-motion: reduce){.am-card{animation:none}}
+.am-card.large{width:min(1000px,92vw);height:min(760px,88vh)}
+.am-card.small{width:min(580px,92vw);max-height:80vh}
+.am-head{flex:none;display:flex;align-items:center;justify-content:space-between;padding:11px 12px 10px 20px;border-bottom:1px solid var(--line)}
+.am-head h2{margin:0;font-size:15px;font-weight:800}
+.am-body{flex:1;min-height:0;overflow:auto}
+.am-card.large .am-body{overflow:hidden}
+.tm-wrap{display:grid;grid-template-columns:230px minmax(0,1fr);height:100%}
+.tm-side{display:flex;flex-direction:column;gap:8px;padding:12px;overflow-y:auto;border-right:1px solid var(--line);background:var(--panel-2)}
+.tm-list{display:flex;flex-direction:column;gap:2px}
+.tm-item{border:0;background:transparent;text-align:left;padding:7px 9px;border-radius:6px;font-weight:600;cursor:pointer;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tm-item:hover{background:var(--panel)}
+.tm-item.on{background:var(--panel);box-shadow:var(--shadow);color:var(--accent)}
+.tm-empty{padding:4px 9px}
+.tm-main{display:flex;flex-direction:column;min-width:0;min-height:0}
+.tm-head{flex:none;padding:14px 24px 4px 30px}
+.tm-head .field-label{display:block;margin-bottom:4px}
+.tm-name{font-weight:700}
+.tm-scroll{flex:1;min-height:0;overflow-y:auto;padding:8px 24px 16px 30px}
+.tm-foot{flex:none;display:flex;align-items:center;gap:7px;padding:11px 16px;border-top:1px solid var(--line)}
+.tm-placeholder{margin:auto;padding:30px;max-width:400px;text-align:center;color:var(--faint);line-height:1.6}
+.cm-wrap{padding:14px 20px 18px}
+.cm-intro{margin:0 0 8px}
+.cm-row{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--rule)}
+.cm-name{flex:1}
+.cm-sw{display:flex;gap:5px}
+.csw{width:17px;height:17px;padding:0;border:0;border-radius:50%;background:var(--cat-color);cursor:pointer}
+.csw.on{box-shadow:0 0 0 2px var(--panel),0 0 0 3.5px var(--ink)}
+.cm-add{display:flex;gap:8px;margin-top:12px}
+.tpl-pick{max-width:150px}
+
 /* Toast */
 .toast{position:fixed;left:50%;bottom:22px;z-index:50;transform:translate(-50%,14px);padding:8px 13px;border-radius:7px;background:var(--ink);color:var(--panel);font-weight:700;opacity:0;pointer-events:none;transition:opacity .18s, transform .18s}
 .toast.show{opacity:1;transform:translate(-50%,0)}
@@ -406,7 +470,7 @@ svg.ic{width:13px;height:13px;display:block}
       <button type="button" class="vs-opt" data-view="notes" role="tab" aria-selected="false">Notes</button>
     </div>
     <!-- Space reserved for future buttons -->
-    <div class="topbar-slot" id="topbar-slot"></div>
+    <div class="topbar-slot" id="topbar-slot"><button class="btn ghost small" id="templates-btn" type="button">Templates</button></div>
     <div class="topbar-user">
       <button class="icon-btn tb-icon" id="gradient-btn" type="button" aria-pressed="true" aria-label="Gradient" title="Turn gradient off"></button>
       <button class="icon-btn tb-icon" id="theme-btn" type="button" aria-label="Switch colour mode" title="Switch to dark mode"></button>
@@ -419,7 +483,7 @@ svg.ic{width:13px;height:13px;display:block}
   <div class="columns" id="todo-view">
     <!-- Left: new task -->
     <section class="col" aria-label="New task">
-      <div class="col-head"><h2>New task</h2><span class="muted small" id="draft-status"></span></div>
+      <div class="col-head"><h2>New task</h2><span class="spacer"></span><span class="muted small" id="draft-status"></span><select class="pe-cat cat-none tpl-pick" id="tpl-pick" aria-label="Start from a template"></select></div>
       <div class="col-scroll" id="new-form"></div>
       <div class="col-foot">
         <button class="btn ghost" id="clear-draft" type="button">Clear</button>
@@ -488,6 +552,14 @@ svg.ic{width:13px;height:13px;display:block}
   </div>
 </div>
 
+<div class="app-modal" id="app-modal" hidden>
+  <div class="am-backdrop" id="am-backdrop"></div>
+  <div class="am-card" role="dialog" aria-modal="true" aria-labelledby="am-title">
+    <div class="am-head"><h2 id="am-title"></h2><button class="icon-btn" id="am-close" type="button" aria-label="Close" title="Close (Esc)"></button></div>
+    <div class="am-body" id="am-body"></div>
+  </div>
+</div>
+
 <datalist id="assignee-list"></datalist>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -498,12 +570,8 @@ const SUPABASE_URL = String(CONFIG.SUPABASE_URL || '');
 const SUPABASE_KEY = String(CONFIG.SUPABASE_KEY || '');
 
 /* ============================================================ */
-const CATEGORIES = [
-  { id: 'None', cls: 'cat-none' },
-  { id: 'Client-Request', cls: 'cat-client' },
-  { id: 'Internal-Request', cls: 'cat-internal' },
-  { id: 'Large Project', cls: 'cat-large' },
-];
+const TASK_COLOURS = ['blue', 'purple', 'amber', 'green', 'teal', 'red', 'pink', 'slate'];
+const TASK_COLOUR_NAMES = { blue: 'Blue', purple: 'Purple', amber: 'Amber', green: 'Green', teal: 'Teal', red: 'Red', pink: 'Pink', slate: 'Slate' };
 const TAB_LABEL = { current: 'Current', upcoming: 'Upcoming', overdue: 'Overdue', completed: 'Completed' };
 const DEFER_OPTS = [[1, '1 day'], [2, '2 days'], [7, '1 week']];
 const PREVIEW_CHARS = 60;
@@ -514,7 +582,7 @@ const MON_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','
 
 const state = {
   user: null, started: false, tasks: [],
-  tab: 'current', filter: new Set(CATEGORIES.map(c => c.id)), showRecurring: true, view: 'todo', needsMigration: false,
+  tab: 'current', catHidden: new Set(), taskCats: [], templates: [], needsCatMigration: false, tplManager: null, showRecurring: true, view: 'todo', needsMigration: false,
   notes: [], noteCats: [], notesReady: false, noteHidden: new Set(), noteSearch: '', noteDraft: null, noteDraftTimer: null, noteModal: null, noteChain: Promise.resolve(), dragNoteEl: null,
   selectedId: null, editor: null,
   today: null, draftEditor: null, draftTimer: null, draftChain: Promise.resolve(),
@@ -525,7 +593,21 @@ let sb = null;
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
-const catCls = id => (CATEGORIES.find(c => c.id === id) || CATEGORIES[0]).cls;
+const findCat = id => state.taskCats.find(c => c.id === id);
+const sortedCats = () => [...state.taskCats].sort((a, b) => (a.position - b.position) || String(a.created_at).localeCompare(String(b.created_at)));
+const taskCatIds = t => (Array.isArray(t.category_ids) ? t.category_ids : []).filter(id => findCat(id));
+const catVar = c => `var(--tc-${TASK_COLOURS.includes(c.color) ? c.color : 'slate'})`;
+// Coloured left edge: one stripe per category
+function stripeStyle(ids) {
+  const cs = ids.map(findCat).filter(Boolean);
+  if (!cs.length) return '';
+  if (cs.length === 1) return `--stripe:${catVar(cs[0])}`;
+  const step = 100 / cs.length;
+  return `--stripe:linear-gradient(to bottom, ${cs.map((c, i) => `${catVar(c)} ${(i * step).toFixed(2)}% ${((i + 1) * step).toFixed(2)}%`).join(', ')})`;
+}
+const catTagsHTML = ids => ids.map(findCat).filter(Boolean).map(c => `<span class="cat-tag" style="--cat-color:${catVar(c)}">${esc(c.name)}</span>`).join('');
+// Leave out category_ids until the database update has been run
+const forDb = o => { if (state.needsCatMigration) delete o.category_ids; return o; };
 const truncate = (s, n) => (s.length > n ? s.slice(0, n).trimEnd() + '…' : s);
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const findTask = id => state.tasks.find(t => t.id === id);
@@ -597,16 +679,23 @@ function pickInPeriod(rule, start, end) {
   const d = addDays(start, n - 1);
   return d > end ? end : d;
 }
+// Calendar-day rules can move off a weekend: 'before' = Friday before, 'after' = Monday after
+function shiftWeekend(d, how) {
+  if (how === 'before') while (!isWeekday(d)) d = addDays(d, -1);
+  else if (how === 'after') while (!isWeekday(d)) d = addDays(d, 1);
+  return d;
+}
 // First scheduled date strictly after the given date
 function nextOccurrence(rule, afterStr) {
   const after = parseYmd(afterStr);
-  if (rule.freq === 'daily') return ymd(addDays(after, 1));
+  if (rule.freq === 'daily') { let d = addDays(after, 1); if (rule.weekdays) while (!isWeekday(d)) d = addDays(d, 1); return ymd(d); }
   if (rule.freq === 'weekly') { let d = addDays(after, 1); while (d.getDay() !== +rule.weekday) d = addDays(d, 1); return ymd(d); }
   let y = after.getFullYear();
   let idx = rule.freq === 'monthly' ? after.getMonth() : rule.freq === 'quarterly' ? Math.floor(after.getMonth() / 3) : (+rule.month || 1) - 1;
   for (let i = 0; i < 40; i++) {
     const [st, en] = periodBounds(rule, y, idx);
-    const d = pickInPeriod(rule, st, en);
+    let d = pickInPeriod(rule, st, en);
+    if (rule.mode === 'nth_cal' || rule.mode === 'last_cal') d = shiftWeekend(d, rule.weekend);
     if (d > after) return ymd(d);
     if (rule.freq === 'monthly') { if (++idx > 11) { idx = 0; y++; } }
     else if (rule.freq === 'quarterly') { if (++idx > 3) { idx = 0; y++; } }
@@ -617,20 +706,21 @@ function nextOccurrence(rule, afterStr) {
 const firstOccurrence = rule => nextOccurrence(rule, ymd(addDays(parseYmd(state.today), -1)));
 function defaultRule(freq) {
   const t = parseYmd(state.today);
-  if (freq === 'daily') return { freq };
+  if (freq === 'daily') return { freq, weekdays: true };
   if (freq === 'weekly') return { freq, weekday: t.getDay() };
-  if (freq === 'monthly') return { freq, mode: 'nth_cal', n: t.getDate() };
-  if (freq === 'quarterly') return { freq, mode: 'nth_cal', n: dayDiff(ymd(new Date(t.getFullYear(), Math.floor(t.getMonth() / 3) * 3, 1)), state.today) + 1 };
-  return { freq: 'annually', month: t.getMonth() + 1, mode: 'nth_cal', n: t.getDate() };
+  if (freq === 'monthly') return { freq, mode: 'nth_cal', n: t.getDate(), weekend: 'before' };
+  if (freq === 'quarterly') return { freq, mode: 'nth_cal', n: dayDiff(ymd(new Date(t.getFullYear(), Math.floor(t.getMonth() / 3) * 3, 1)), state.today) + 1, weekend: 'before' };
+  return { freq: 'annually', month: t.getMonth() + 1, mode: 'nth_cal', n: t.getDate(), weekend: 'before' };
 }
 function describeRule(r) {
   if (!r) return 'Repeat';
-  if (r.freq === 'daily') return 'Daily';
+  if (r.freq === 'daily') return r.weekdays ? 'Every weekday' : 'Daily';
   if (r.freq === 'weekly') return `Weekly on ${WD_LONG[+r.weekday]}`;
   const what = r.mode === 'last_cal' ? 'last day' : r.mode === 'last_bus' ? 'last business day' : `${ordinal(+r.n || 1)} ${r.mode === 'nth_bus' ? 'business day' : 'day'}`;
-  if (r.freq === 'monthly') return `Monthly: ${what} of the month`;
-  if (r.freq === 'quarterly') return `Quarterly: ${what} of the quarter`;
-  return `Annually: ${what} of ${MON_LONG[(+r.month || 1) - 1]}`;
+  const wk = /_cal$/.test(r.mode || '') ? (r.weekend === 'before' ? ' (Fri if a weekend)' : r.weekend === 'after' ? ' (Mon if a weekend)' : '') : '';
+  if (r.freq === 'monthly') return `Monthly: ${what} of the month${wk}`;
+  if (r.freq === 'quarterly') return `Quarterly: ${what} of the quarter${wk}`;
+  return `Annually: ${what} of ${MON_LONG[(+r.month || 1) - 1]}${wk}`;
 }
 
 /* ---------- Rich text: sanitising ---------- */
@@ -654,26 +744,50 @@ const HL_SPAN = '<span style="background-color: rgb(255, 235, 59);">';
 function sanitizeHTML(html) {
   if (!html) return '';
   const doc = new DOMParser().parseFromString(`<body>${html}</body>`, 'text/html');
-  return serialise(doc.body, false).replace(/^(<br>)+|(<br>)+$/g, '');
+  return serialise(doc.body, 0).replace(/^(<br>)+|(<br>)+$/g, '');
 }
-function serialise(node, inItem) {
+const MAX_LIST_DEPTH = 3;
+const isList = n => n && n.nodeType === 1 && (n.tagName === 'UL' || n.tagName === 'OL');
+// Lists keep up to 3 levels (any mix of numbered and dotpoints); anything deeper is flattened
+function serialiseList(listEl, depth) {
+  const lt = listEl.tagName.toLowerCase();
+  const items = [];
+  listEl.childNodes.forEach(ch => {
+    if (isList(ch)) {
+      const nested = depth < MAX_LIST_DEPTH ? serialiseList(ch, depth + 1) : flatList(ch, depth);
+      if (!nested) return;
+      if (items.length) items[items.length - 1] += nested; else items.push(nested);
+      return;
+    }
+    if (ch.nodeType === 1 && ch.tagName === 'LI') { items.push(serialise(ch, depth).replace(/^(<br>)+|(<br>)+$/g, '')); return; }
+    const tmp = document.createElement('div');
+    tmp.appendChild(ch.cloneNode(true));
+    const x = serialise(tmp, depth).replace(/^(<br>)+|(<br>)+$/g, '').trim();
+    if (x) items.push(x);
+  });
+  const lis = items.filter(x => x !== '');
+  return lis.length ? `<${lt}>` + lis.map(x => `<li>${x}</li>`).join('') + `</${lt}>` : '';
+}
+function flatList(listEl, depth) {
+  return [...listEl.children].map(li => serialise(li, depth).replace(/^(<br>)+|(<br>)+$/g, '')).filter(Boolean).join('<br>');
+}
+function serialise(node, depth) {
   let s = '';
   node.childNodes.forEach(ch => {
     if (ch.nodeType === 3) { s += esc(ch.nodeValue); return; }
     if (ch.nodeType !== 1) return;
     const tag = ch.tagName;
     if (tag === 'BR') { s += '<br>'; return; }
-    if (tag === 'UL' || tag === 'OL') {
-      const lis = [...ch.children].map(li => serialise(li, true).replace(/^(<br>)+|(<br>)+$/g, '')).filter(Boolean);
-      if (inItem) { s += (s ? '<br>' : '') + lis.join('<br>'); return; }   // one level only
-      if (!lis.length) return;
-      s = s.replace(/(<br>)+$/, '');
-      const lt = tag.toLowerCase();
-      s += `<${lt}>` + lis.map(x => `<li>${x}</li>`).join('') + `</${lt}>`;
+    if (isList(ch)) {
+      const html = depth < MAX_LIST_DEPTH ? serialiseList(ch, depth + 1) : flatList(ch, depth);
+      if (!html) return;
+      if (html.startsWith('<')) s = s.replace(/(<br>)+$/, '');
+      else if (s && !s.endsWith('<br>')) s += '<br>';
+      s += html;
       return;
     }
     if (['SCRIPT','STYLE','IFRAME','OBJECT','IMG','SVG','TEMPLATE'].includes(tag)) return;
-    let inner = serialise(ch, inItem);
+    let inner = serialise(ch, depth);
     const st = ch.style || {};
     const fw = st.fontWeight, deco = (st.textDecoration || '') + ' ' + (st.textDecorationLine || '');
     const color = st.color || (tag === 'FONT' ? ch.getAttribute('color') : '');
@@ -694,13 +808,37 @@ function serialise(node, inItem) {
   return s;
 }
 
+// Copying from the app: put clean formatting on the clipboard (no panel backgrounds or borders)
+function onCopy(e) {
+  const a = document.activeElement;
+  if (a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA')) return;
+  const sel = window.getSelection();
+  if (!sel.rangeCount || sel.isCollapsed) return;
+  const range = sel.getRangeAt(0);
+  const c = range.commonAncestorContainer;
+  const host = c.nodeType === 1 ? c : c.parentElement;
+  if (!host || !host.closest('#main')) return;
+  const div = document.createElement('div');
+  div.appendChild(range.cloneContents());
+  let html = div.innerHTML;
+  const list = host.closest('ul, ol');
+  // Selection inside one list: put back the list it came from so dotpoints/numbers survive
+  if (list && [...div.children].some(c => c.tagName === 'LI')) { const lt = list.tagName.toLowerCase(); html = `<${lt}>${html}</${lt}>`; }
+  e.clipboardData.setData('text/html', sanitizeHTML(html));
+  e.clipboardData.setData('text/plain', sel.toString());
+  e.preventDefault();
+  if (e.type === 'cut' && host.closest('[contenteditable="true"]')) document.execCommand('delete');
+}
+document.addEventListener('copy', onCopy);
+document.addEventListener('cut', onCopy);
+
 /* ---------- Rich text: editor ---------- */
 const TOOLBAR = [
   { cmd: 'bold', html: '<b>B</b>', title: 'Bold' },
   { cmd: 'italic', html: '<i>I</i>', title: 'Italic' },
   { cmd: 'underline', html: '<u>U</u>', title: 'Underline' },
-  { cmd: 'list', html: '&bull; List', title: 'Dotpoints (or type - and a space)' },
-  { cmd: 'olist', html: '1. List', title: 'Numbered list (or type 1. and a space)' },
+  { cmd: 'list', html: '&bull; List', title: 'Dotpoints (or type - and a space). Tab indents, Shift+Tab outdents' },
+  { cmd: 'olist', html: '1. List', title: 'Numbered list (or type 1. and a space). Tab indents, Shift+Tab outdents' },
   { sep: true },
   { cmd: 'hl', html: '<span class="swatch" style="background:#ffeb3b"></span>Highlight', title: 'Highlight (click again to remove)' },
   { cmd: 'red', html: '<span class="swatch" style="background:#d32f2f"></span>Red', title: 'Red text' },
@@ -728,6 +866,19 @@ function buildRich(html, placeholder) {
     btn.addEventListener('mousedown', e => e.preventDefault()); // keep the text selection
     btn.addEventListener('click', () => applyFmt(b.cmd, ed));
     tb.appendChild(btn);
+  });
+  ed.addEventListener('keydown', e => {
+    if (e.key !== 'Tab') return;
+    const n = window.getSelection().anchorNode;
+    const li = n && (n.nodeType === 3 ? n.parentElement : n).closest('li');
+    if (!li || !ed.contains(li)) return; // outside a list, Tab moves focus as normal
+    e.preventDefault();
+    let depth = 0;
+    for (let x = li; x && x !== ed; x = x.parentNode) if (isList(x)) depth++;
+    document.execCommand('styleWithCSS', false, false);
+    if (e.shiftKey) document.execCommand('outdent');
+    else if (depth < MAX_LIST_DEPTH) document.execCommand('indent');
+    ed.dispatchEvent(new Event('input', { bubbles: true }));
   });
   ed.addEventListener('paste', e => {
     e.preventDefault();
@@ -795,6 +946,7 @@ const ICONS = {
   repeat: svg('<path d="M3 7.5a5 5 0 018.6-3.4L13 5.5"/><path d="M13 2.5v3h-3"/><path d="M13 8.5a5 5 0 01-8.6 3.4L3 10.5"/><path d="M3 13.5v-3h3"/>'),
   clock: svg('<circle cx="8" cy="8" r="5.6"/><path d="M8 5v3.2l2.1 1.3"/>'),
   pin: svg('<path d="M10 2.2l3.8 3.8-2 .8-2.4 2.4-.3 3-1.3 1.3-5.3-5.3 1.3-1.3 3-.3 2.4-2.4z"/><path d="M5 11l-2.8 2.8"/>'),
+  tag: svg('<path d="M2.5 8.6V3.3a.8.8 0 01.8-.8h5.3l5 5a.9.9 0 010 1.3l-4.4 4.4a.9.9 0 01-1.3 0z"/><circle cx="5.6" cy="5.6" r=".9"/>'),
   dots: svg('<circle cx="3.5" cy="8" r="1.3"/><circle cx="8" cy="8" r="1.3"/><circle cx="12.5" cy="8" r="1.3"/>', true),
 };
 
@@ -836,7 +988,9 @@ function parseShortcuts(text) {
 function nextMonday() { const b = parseYmd(state.today); return ymd(addDays(b, ((1 - b.getDay() + 7) % 7) || 7)); }
 
 function buildLine(it, mode, ctx) {
-  const s = { id: it.id || uid(), assignee: it.assignee || null, due: it.due || null, done: !!it.done };
+  const T = mode === 'template';
+  const s = { id: it.id || uid(), assignee: it.assignee || null, due: T ? null : it.due || null, done: !T && !!it.done, offset: T && Number.isFinite(+it.offset) && it.offset !== null && it.offset !== '' ? +it.offset : null };
+  const offLabel = o => (o === 0 ? 'Start day' : `${o > 0 ? '+' : '−'}${Math.abs(o)} day${Math.abs(o) === 1 ? '' : 's'}`);
   const el = document.createElement('div');
   el.className = 'line' + (s.done ? ' done' : '');
   el.innerHTML = `
@@ -859,20 +1013,27 @@ function buildLine(it, mode, ctx) {
         <input class="det-input as-name" list="assignee-list" placeholder="Someone else" maxlength="80" aria-label="Assignee name">
         <button type="button" class="det-clear" data-clear="assignee">Clear</button>
       </div>
-      <div class="det det-due" hidden>
+      ${T ? `<div class="det det-due" hidden>
+        <input type="number" class="det-input off-in" min="-365" max="365" step="1" aria-label="Days from the start" style="width:70px">
+        <span class="rc-note">days from the start</span>
+        <button type="button" class="det-chip" data-off="0">Start day</button>
+        <button type="button" class="det-chip" data-off="1">+1</button>
+        <button type="button" class="det-chip" data-off="7">+7</button>
+        <button type="button" class="det-clear" data-clear="due">Clear</button>
+      </div>` : `<div class="det det-due" hidden>
         <input type="date" class="det-input due-in" aria-label="Due date">
         <button type="button" class="det-chip" data-quick="today">Today</button>
         <button type="button" class="det-chip" data-quick="tomorrow">Tomorrow</button>
         <button type="button" class="det-chip" data-quick="monday">Next Monday</button>
         <button type="button" class="det-clear" data-clear="due">Clear</button>
-      </div>
+      </div>`}
       <div class="det det-desc" hidden></div>
       <div class="det det-link" hidden>${ICONS.link}<input class="link-in" type="url" placeholder="Paste a link" maxlength="2000" aria-label="Link"><a class="det-open" target="_blank" rel="noopener noreferrer" hidden>Open</a></div>
     </div>`;
   const ta = el.querySelector('.line-text');
   const tags = el.querySelector('.line-tags');
   const P = { assignee: el.querySelector('.det-assignee'), due: el.querySelector('.det-due'), desc: el.querySelector('.det-desc'), link: el.querySelector('.det-link') };
-  const nameIn = el.querySelector('.as-name'), dueIn = el.querySelector('.due-in');
+  const nameIn = el.querySelector('.as-name'), dueIn = el.querySelector('.due-in'), offIn = el.querySelector('.off-in');
   const linkIn = el.querySelector('.link-in'), openA = el.querySelector('.det-open');
   const check = el.querySelector('.line-check');
   const desc = buildRich(it.description, 'Add a description');
@@ -896,9 +1057,10 @@ function buildLine(it, mode, ctx) {
       const cls = !s.done && s.due < state.today ? 'over' : (s.due === state.today && !s.done ? 'today' : '');
       h += `<button type="button" class="ltag ${cls}" data-tool="due" title="Change due date">${esc(formatDue(s.due))}</button>`;
     }
+    if (s.offset !== null) h += `<button type="button" class="ltag" data-tool="due" title="Days from the start (or the due date, if the task repeats)">${esc(offLabel(s.offset))}</button>`;
     tags.innerHTML = h;
     el.querySelector('.tool[data-tool=assignee]').classList.toggle('has', !!s.assignee);
-    el.querySelector('.tool[data-tool=due]').classList.toggle('has', !!s.due);
+    el.querySelector('.tool[data-tool=due]').classList.toggle('has', !!s.due || s.offset !== null);
     el.querySelector('.tool[data-tool=desc]').classList.toggle('has', descHasText());
     el.querySelector('.tool[data-tool=link]').classList.toggle('has', !!linkIn.value.trim());
   };
@@ -912,6 +1074,7 @@ function buildLine(it, mode, ctx) {
       if (!opening) { focusEnd(); return; }
       P[name].hidden = false;
       if (name === 'assignee') { nameIn.value = s.assignee && s.assignee !== 'Me' ? s.assignee : ''; nameIn.focus(); }
+      else if (T) { offIn.value = s.offset === null ? '' : s.offset; offIn.focus(); }
       else { dueIn.value = s.due || ''; dueIn.focus(); }
     } else if (name === 'desc') {
       if (P.desc.hidden) { P.desc.hidden = false; desc.editor.focus(); }
@@ -927,15 +1090,16 @@ function buildLine(it, mode, ctx) {
   };
   const setAssignee = v => { s.assignee = v; renderTags(); ctx.changed(); };
   const setDue = v => { s.due = v; renderTags(); ctx.changed(); };
+  const setOffset = v => { s.offset = v; renderTags(); ctx.changed(); };
   const applyShortcuts = () => {
     const r = parseShortcuts(ta.value);
     if (!r.hit) return;
     ta.value = r.text;
     if (r.assignee) s.assignee = r.assignee;
-    if (r.due) s.due = r.due;
+    if (r.due) { if (T) s.offset = dayDiff(state.today, r.due); else s.due = r.due; }
     renderTags(); fit(); ctx.changed();
   };
-  const hasDetails = () => !!(s.assignee || s.due || descHasText() || linkIn.value.trim());
+  const hasDetails = () => !!(s.assignee || s.due || s.offset !== null || descHasText() || linkIn.value.trim());
 
   el.addEventListener('click', e => {
     const t = e.target.closest('[data-tool]');
@@ -944,13 +1108,26 @@ function buildLine(it, mode, ctx) {
     if (a) { setAssignee('Me'); close('assignee', true); return; }
     const q = e.target.closest('[data-quick]');
     if (q) { setDue(q.dataset.quick === 'today' ? state.today : q.dataset.quick === 'tomorrow' ? ymd(addDays(parseYmd(state.today), 1)) : nextMonday()); close('due', true); return; }
+    const o = e.target.closest('[data-off]');
+    if (o) { setOffset(+o.dataset.off); close('due', true); return; }
     const c = e.target.closest('[data-clear]');
-    if (c) { if (c.dataset.clear === 'assignee') { nameIn.value = ''; setAssignee(null); } else { dueIn.value = ''; setDue(null); } close(c.dataset.clear, true); }
+    if (c) {
+      if (c.dataset.clear === 'assignee') { nameIn.value = ''; setAssignee(null); }
+      else if (T) { offIn.value = ''; setOffset(null); }
+      else { dueIn.value = ''; setDue(null); }
+      close(c.dataset.clear, true);
+    }
   });
+  if (offIn) {
+    offIn.addEventListener('change', () => { const v = parseInt(offIn.value, 10); setOffset(Number.isFinite(v) ? Math.max(-365, Math.min(365, v)) : null); });
+    offIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); offIn.dispatchEvent(new Event('change')); close('due', true); } });
+  }
   nameIn.addEventListener('change', () => { const v = nameIn.value.trim(); if (v) setAssignee(matchKnownName(v)); });
   nameIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); const v = nameIn.value.trim(); if (v) setAssignee(matchKnownName(v)); close('assignee', true); } });
-  dueIn.addEventListener('change', () => setDue(dueIn.value || null));
-  dueIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); close('due', true); } });
+  if (dueIn) {
+    dueIn.addEventListener('change', () => setDue(dueIn.value || null));
+    dueIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); close('due', true); } });
+  }
   linkIn.addEventListener('input', () => { updateOpen(); renderTags(); });
   linkIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); focusEnd(); } });
   desc.editor.addEventListener('input', () => renderTags());
@@ -994,7 +1171,7 @@ function buildLine(it, mode, ctx) {
     el, ta, fit, focusEnd, applyShortcuts, hasDetails,
     shift: days => { if (!s.due) return false; s.due = ymd(addDays(parseYmd(s.due), days)); renderTags(); return true; },
     isBlank: () => !ta.value.trim() && !hasDetails(),
-    getData: () => ({ id: s.id, title: ta.value, description: desc.getHTML(), link: linkIn.value, assignee: s.assignee, due: s.due, done: s.done }),
+    getData: () => ({ id: s.id, title: ta.value, description: desc.getHTML(), link: linkIn.value, assignee: s.assignee, due: s.due, done: s.done, ...(T ? { offset: s.offset } : {}) }),
   };
   return api;
 }
@@ -1005,12 +1182,14 @@ function buildTaskEditor(data, mode, handlers = {}) {
   root.className = 'task-editor paper';
   const hint = mode === 'draft'
     ? `<span><kbd>Enter</kbd> next item</span><span><kbd>${ALT}+Enter</kbd> line break</span><span><code>@name</code> assign</span><span><code>!fri</code> due date</span><span><kbd>${MOD}+Enter</kbd> add to board</span>`
-    : `<span><kbd>Enter</kbd> next item</span><span><code>@name</code> assign</span><span><code>!fri</code> due date</span><span><kbd>${MOD}+Enter</kbd> save</span><span><kbd>Esc</kbd> close</span>`;
+    : mode === 'template'
+      ? `<span><kbd>Enter</kbd> next item</span><span><code>@name</code> assign</span><span><code>!+3</code> due 3 days after the start</span><span><kbd>${MOD}+Enter</kbd> save</span>`
+      : `<span><kbd>Enter</kbd> next item</span><span><code>@name</code> assign</span><span><code>!fri</code> due date</span><span><kbd>${MOD}+Enter</kbd> save</span><span><kbd>Esc</kbd> close</span>`;
   root.innerHTML = `
     <input class="pe-title" maxlength="200" placeholder="Task title" aria-label="Task title">
     <div class="pe-sub"></div>
-    <div class="pe-meta"><select class="pe-cat" aria-label="Category">${CATEGORIES.map(c => `<option value="${esc(c.id)}">${esc(c.id)}</option>`).join('')}</select>
-      <button type="button" class="pe-repeat" aria-label="Repeat settings">${ICONS.repeat}<span>Repeat</span></button></div>
+    <div class="pe-meta"><span class="pe-cats"></span><button type="button" class="pe-repeat pe-catbtn" aria-label="Choose categories" title="Categories">${ICONS.tag}<span>Category</span></button>
+      <button type="button" class="pe-repeat pe-rep" aria-label="Repeat settings">${ICONS.repeat}<span>Repeat</span></button></div>
     <div class="pe-recur" hidden></div>
     <div class="pe-lines"></div>
     <div class="line-ghost" role="button" tabindex="0">Add an item</div>
@@ -1019,10 +1198,18 @@ function buildTaskEditor(data, mode, handlers = {}) {
   titleIn.value = data.title || '';
   const sub = buildRich(data.subtitle, 'Add a sub-title');
   root.querySelector('.pe-sub').appendChild(sub.el);
-  const catSel = root.querySelector('.pe-cat');
-  const setCat = v => { catSel.value = CATEGORIES.some(c => c.id === v) ? v : 'None'; catSel.className = 'pe-cat ' + catCls(catSel.value); };
-  setCat(data.category);
-  catSel.addEventListener('change', () => setCat(catSel.value));
+  const cats = new Set((Array.isArray(data.category_ids) ? data.category_ids : []).filter(id => findCat(id)));
+  const catsBox = root.querySelector('.pe-cats'), catBtn = root.querySelector('.pe-catbtn');
+  const renderCats = () => {
+    [...cats].forEach(id => { if (!findCat(id)) cats.delete(id); });
+    catsBox.innerHTML = sortedCats().filter(c => cats.has(c.id)).map(c => `<button type="button" class="cat-tag pe-cattag" style="--cat-color:${catVar(c)}" title="Change categories">${esc(c.name)}</button>`).join('');
+    catBtn.classList.toggle('compact', cats.size > 0);
+    if (handlers.onCats) handlers.onCats([...cats]);
+  };
+  renderCats();
+  const pickCats = () => openCatPicker(catBtn, cats, () => { renderCats(); root.dispatchEvent(new Event('input', { bubbles: true })); });
+  catBtn.addEventListener('click', pickCats);
+  catsBox.addEventListener('click', e => { if (e.target.closest('.pe-cattag')) pickCats(); });
 
   // Recurrence
   const rec = {
@@ -1031,27 +1218,31 @@ function buildTaskEditor(data, mode, handlers = {}) {
     scheduled: (data.recur && data.recur.scheduled) || null,
   };
   if (mode === 'draft') rec.due = null;
-  const recBox = root.querySelector('.pe-recur'), repBtn = root.querySelector('.pe-repeat');
+  const recBox = root.querySelector('.pe-recur'), repBtn = root.querySelector('.pe-rep');
   const recLabel = () => { repBtn.querySelector('span').textContent = describeRule(rec.rule); repBtn.classList.toggle('on', !!rec.rule); };
   const renderRecur = () => {
     recLabel();
     const r = rec.rule || {}, f = r.freq || '';
     let h = `<div class="rc-row"><span class="rc-lbl">Repeats</span><select class="det-input rc-freq" aria-label="How often">${[['', 'Does not repeat'], ['daily', 'Daily'], ['weekly', 'Weekly'], ['monthly', 'Monthly'], ['quarterly', 'Quarterly'], ['annually', 'Annually']].map(([v, l]) => `<option value="${v}" ${v === f ? 'selected' : ''}>${l}</option>`).join('')}</select></div>`;
+    if (f === 'daily') h += `<div class="rc-row"><span class="rc-lbl">Days</span><button type="button" class="det-chip rc-wkdays ${r.weekdays ? 'on' : ''}" aria-pressed="${!!r.weekdays}">Weekdays only (Mon–Fri)</button></div>`;
     if (f === 'weekly') h += `<div class="rc-row"><span class="rc-lbl">Due on</span>${[1, 2, 3, 4, 5, 6, 0].map(d => `<button type="button" class="det-chip rc-day ${+r.weekday === d ? 'on' : ''}" data-wd="${d}">${WD_SHORT[d]}</button>`).join('')}</div>`;
     if (f === 'annually') h += `<div class="rc-row"><span class="rc-lbl">Month</span><select class="det-input rc-month" aria-label="Month">${MON_LONG.map((m, i) => `<option value="${i + 1}" ${+r.month === i + 1 ? 'selected' : ''}>${m}</option>`).join('')}</select></div>`;
     if (['monthly', 'quarterly', 'annually'].includes(f)) {
       const nth = r.mode === 'nth_cal' || r.mode === 'nth_bus';
       const max = f === 'quarterly' ? (r.mode === 'nth_bus' ? 66 : 92) : (r.mode === 'nth_bus' ? 23 : 31);
       h += `<div class="rc-row"><span class="rc-lbl">Due on</span><select class="det-input rc-mode" aria-label="Which day">${[['nth_cal', 'Calendar day'], ['nth_bus', 'Business day'], ['last_cal', 'Last calendar day'], ['last_bus', 'Last business day']].map(([v, l]) => `<option value="${v}" ${v === r.mode ? 'selected' : ''}>${l}</option>`).join('')}</select>${nth ? `<input type="number" class="det-input rc-n" min="1" max="${max}" value="${esc(r.n)}" aria-label="Day number">` : ''}<span class="rc-note">of the ${f === 'quarterly' ? 'quarter' : 'month'}</span></div>`;
+      if (r.mode === 'nth_cal' || r.mode === 'last_cal') h += `<div class="rc-row"><span class="rc-lbl">If a weekend</span><select class="det-input rc-weekend" aria-label="If it lands on a weekend">${[['keep', 'Keep it on the weekend'], ['before', 'Move to the Friday before'], ['after', 'Move to the Monday after']].map(([v, l]) => `<option value="${v}" ${(r.weekend || 'keep') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>`;
     }
     if (rec.rule) {
       if (mode === 'edit' && rec.due) h += `<div class="rc-row"><span class="rc-lbl">This one due</span><input type="date" class="det-input rc-due" value="${esc(rec.due)}" aria-label="This occurrence is due"></div>`;
       const valid = !['nth_cal', 'nth_bus'].includes(r.mode) || +r.n >= 1;
-      if (valid) {
+      if (valid && mode !== 'template') {
         if (!rec.due) { const first = firstOccurrence(rec.rule); h += `<div class="rc-note">First one due ${esc(formatDue(first))}.</div>`; }
         else { const nx = nextOccurrence(rec.rule, rec.scheduled || rec.due); h += `<div class="rc-note">The one after is due ${esc(formatDue(nx))}.</div>`; }
       }
-      h += '<div class="rc-note">Items without their own date use this due date.</div>';
+      h += mode === 'template'
+        ? '<div class="rc-note">Item dates in this template count from the task’s due date.</div>'
+        : '<div class="rc-note">Items without their own date use this due date.</div>';
     }
     recBox.innerHTML = h;
   };
@@ -1063,6 +1254,7 @@ function buildTaskEditor(data, mode, handlers = {}) {
     else if (t.matches('.rc-month')) rec.rule.month = +t.value;
     else if (t.matches('.rc-mode')) { rec.rule.mode = t.value; if (/^nth/.test(t.value) && !(+rec.rule.n >= 1)) rec.rule.n = 1; }
     else if (t.matches('.rc-n')) rec.rule.n = parseInt(t.value, 10) || '';
+    else if (t.matches('.rc-weekend')) rec.rule.weekend = t.value;
     else if (t.matches('.rc-due')) { if (t.value) rec.due = t.value; }
     renderRecur(); changed();
     const again = recBox.querySelector('.' + [...t.classList].find(c => c.startsWith('rc-')));
@@ -1070,6 +1262,7 @@ function buildTaskEditor(data, mode, handlers = {}) {
   });
   recBox.addEventListener('input', e => { if (e.target.matches('.rc-n')) { rec.rule.n = parseInt(e.target.value, 10) || ''; recLabel(); } });
   recBox.addEventListener('click', e => {
+    if (e.target.closest('.rc-wkdays')) { rec.rule.weekdays = !rec.rule.weekdays; renderRecur(); changed(); return; }
     const d = e.target.closest('.rc-day');
     if (!d) return;
     rec.rule.weekday = +d.dataset.wd; renderRecur(); changed();
@@ -1131,7 +1324,8 @@ function buildTaskEditor(data, mode, handlers = {}) {
     el: root, titleIn, lines,
     fit: () => lines().forEach(l => l.fit()),
     applyShortcuts: () => lines().forEach(l => l.applyShortcuts()),
-    getData: () => ({ title: titleIn.value, subtitle: sub.getHTML(), category: catSel.value, items: lines().map(l => l.getData()), recurRule: rec.rule ? { ...rec.rule } : null, recurDue: rec.due }),
+    refreshCats: renderCats,
+    getData: () => ({ title: titleIn.value, subtitle: sub.getHTML(), category_ids: [...cats].filter(id => findCat(id)), items: lines().map(l => l.getData()), recurRule: rec.rule ? { ...rec.rule } : null, recurDue: rec.due }),
     shiftDates: days => {
       let any = false;
       lines().forEach(l => { if (l.shift(days)) any = true; });
@@ -1143,17 +1337,17 @@ function buildTaskEditor(data, mode, handlers = {}) {
 }
 
 // Validates an editor's contents and returns a clean task, or an error message.
-function normaliseFromEditor(api) {
+function normaliseFromEditor(api, opts = {}) {
   api.applyShortcuts();
   api.el.querySelectorAll('.invalid').forEach(x => x.classList.remove('invalid'));
   const d = api.getData(), ls = api.lines();
   const title = d.title.trim();
   let error = null;
-  if (!title) { api.titleIn.classList.add('invalid'); error = 'Add a title for the task.'; }
+  if (!title && !opts.template) { api.titleIn.classList.add('invalid'); error = 'Add a title for the task.'; }
   const items = [];
   d.items.forEach((it, i) => {
     const t = it.title.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
-    const hasOther = textOf(it.description) || it.link.trim() || it.assignee || it.due;
+    const hasOther = textOf(it.description) || it.link.trim() || it.assignee || it.due || (it.offset !== undefined && it.offset !== null);
     if (!t && !hasOther) return; // blank line: ignore
     if (!t) { ls[i].el.classList.add('invalid'); error = error || 'Each checklist item needs a title.'; return; }
     items.push({ ...it, title: t, link: normLink(it.link) });
@@ -1165,8 +1359,8 @@ function normaliseFromEditor(api) {
     else recurRule = { ...recurRule, n };
   }
   if (error) return { error };
-  if (!items.length) items.push({ id: uid(), title: 'Clarify steps', description: '', link: null, assignee: null, due: null, done: false });
-  return { task: { title, subtitle: d.subtitle, category: d.category, items, recurRule, recurDue: d.recurDue } };
+  if (!items.length && !opts.template) items.push({ id: uid(), title: 'Clarify steps', description: '', link: null, assignee: null, due: null, done: false });
+  return { task: { title, subtitle: d.subtitle, category_ids: d.category_ids, items, recurRule, recurDue: d.recurDue } };
 }
 
 /* ---------- Data ---------- */
@@ -1238,7 +1432,7 @@ async function addTask() {
   task.completed_at = taskStatus(task) === 'completed' ? new Date().toISOString() : null;
   const btn = $('#add-task-btn');
   btn.disabled = true;
-  const { data, error } = await sb.from('tasks').insert(task).select().single();
+  const { data, error } = await sb.from('tasks').insert(forDb(task)).select().single();
   btn.disabled = false;
   if (error) { console.error(error); toast('Couldn’t add the task. Check your connection and try again.', true); return; }
   state.tasks.push({ ...data, items: data.items || [] });
@@ -1257,15 +1451,15 @@ function openEditor(id) {
   if (state.editor && state.editor.dirty && !confirm('Discard your unsaved changes to the open task?')) return false;
   const t = findTask(id);
   if (!t) return false;
-  const api = buildTaskEditor(t, 'edit', { onSubmit: () => saveEdit() });
   const card = document.createElement('article');
-  card.className = `task-card expanded ${catCls(t.category)}`;
+  card.className = 'task-card expanded';
   card.dataset.id = id;
+  const api = buildTaskEditor(t, 'edit', { onSubmit: () => saveEdit(), onCats: ids => card.setAttribute('style', stripeStyle(ids)) });
   card.innerHTML = `<div class="tc-edit-head"><span class="field-label">Edit task</span><button type="button" class="icon-btn ed-close" aria-label="Close without saving" title="Close">${ICONS.x}</button></div>`;
   card.appendChild(api.el);
   const foot = document.createElement('div');
   foot.className = 'tc-edit-foot';
-  foot.innerHTML = `<button type="button" class="btn ghost danger ed-delete">Delete task</button><button type="button" class="btn ghost ed-defer">${ICONS.clock}Defer</button><span class="spacer"></span>
+  foot.innerHTML = `<button type="button" class="btn ghost danger ed-delete">Delete task</button><button type="button" class="btn ghost ed-more" aria-label="More options" title="Defer or save as template">${ICONS.dots}More</button><span class="spacer"></span>
     <button type="button" class="btn ed-cancel">Cancel</button><button type="button" class="btn primary ed-save">Save changes</button>`;
   card.appendChild(foot);
 
@@ -1273,18 +1467,15 @@ function openEditor(id) {
   const markDirty = () => { ed.dirty = true; };
   api.el.addEventListener('input', markDirty);
   api.el.addEventListener('change', markDirty);
-  api.el.querySelector('.pe-cat').addEventListener('change', e => {
-    card.className = card.className.replace(/\bcat-[a-z]+\b/, catCls(e.target.value));
-  });
   card.querySelector('.ed-close').addEventListener('click', () => closeEditor());
   foot.querySelector('.ed-cancel').addEventListener('click', () => closeEditor());
   foot.querySelector('.ed-save').addEventListener('click', saveEdit);
   foot.querySelector('.ed-delete').addEventListener('click', () => deleteTask(id));
-  const deferBtn = foot.querySelector('.ed-defer');
-  deferBtn.addEventListener('click', () => openMenu(deferBtn, DEFER_OPTS.map(([d, l]) => ({
+  const moreBtn = foot.querySelector('.ed-more');
+  moreBtn.addEventListener('click', () => openMenu(moreBtn, DEFER_OPTS.map(([d, l]) => ({
     label: `Defer ${l}`,
     onClick: () => { if (api.shiftDates(d)) toast(`Dates moved by ${l}. Save to keep the change.`); else toast('This task has no dates to defer.', true); },
-  }))));
+  })).concat([{ label: 'Save as template…', onClick: () => saveAsTemplate(t, api) }])));
   state.editor = ed;
   return true;
 }
@@ -1315,7 +1506,7 @@ async function saveEdit() {
   upd.completed_at = taskStatus(upd) === 'completed' ? (t.completed_at || new Date().toISOString()) : null;
   const btn = ed.card.querySelector('.ed-save');
   btn.disabled = true;
-  const { data, error } = await sb.from('tasks').update(upd).eq('id', t.id).select().single();
+  const { data, error } = await sb.from('tasks').update(forDb(upd)).eq('id', t.id).select().single();
   btn.disabled = false;
   if (error) { console.error(error); toast('Couldn’t save your changes. Try again.', true); return; }
   Object.assign(t, data, { items: data.items || [] });
@@ -1361,8 +1552,8 @@ async function spawnNext(t) {
   if (next < state.today) next = firstOccurrence(r.rule);
   const shift = dayDiff(r.due, next);
   const items = t.items.map(it => ({ ...it, id: uid(), done: false, due: it.due ? ymd(addDays(parseYmd(it.due), shift)) : null }));
-  const row = { title: t.title, subtitle: t.subtitle, category: t.category, items, completed_at: null, recur: { rule: r.rule, due: next, scheduled: next, series: r.series || uid() } };
-  const { data, error } = await sb.from('tasks').insert(row).select().single();
+  const row = { title: t.title, subtitle: t.subtitle, category_ids: taskCatIds(t), items, completed_at: null, recur: { rule: r.rule, due: next, scheduled: next, series: r.series || uid() } };
+  const { data, error } = await sb.from('tasks').insert(forDb(row)).select().single();
   if (error) { console.error(error); toast('Couldn’t create the next occurrence. Untick and re-tick an item to try again.', true); return; }
   state.tasks.push({ ...data, items: data.items || [] });
   t.recur = { ...r, spawned: true };
@@ -1399,13 +1590,281 @@ function openMenu(anchor, items) {
     b.addEventListener('click', e => { e.stopPropagation(); closeMenu(); it.onClick(); });
     m.appendChild(b);
   });
+  showMenu(m, anchor);
+}
+function showMenu(m, anchor) {
   document.body.appendChild(m);
   const r = anchor.getBoundingClientRect();
   m.style.left = Math.max(8, Math.min(r.left, window.innerWidth - m.offsetWidth - 8)) + 'px';
-  m.style.top = (r.bottom + m.offsetHeight + 8 > window.innerHeight ? r.top - m.offsetHeight - 4 : r.bottom + 4) + 'px';
+  m.style.top = (r.bottom + m.offsetHeight + 8 > window.innerHeight ? Math.max(8, r.top - m.offsetHeight - 4) : r.bottom + 4) + 'px';
   menuEl = m;
   setTimeout(() => document.addEventListener('mousedown', menuOutside, true));
-  m.querySelector('button').focus();
+  const f = m.querySelector('button');
+  if (f) f.focus();
+}
+
+/* ---------- Task categories ---------- */
+const CAT_MIGRATION_MSG = 'Run update-categories-templates.sql in Supabase first (see the banner at the top).';
+// Tick-box list of categories; stays open so several can be picked
+function openCatPicker(anchor, selected, onChange) {
+  closeMenu();
+  const m = document.createElement('div');
+  m.className = 'menu picker'; m.setAttribute('role', 'menu');
+  const render = () => {
+    m.innerHTML = (state.taskCats.length
+      ? sortedCats().map(c => `<button type="button" class="menu-item pick ${selected.has(c.id) ? 'on' : ''}" data-id="${esc(c.id)}" role="menuitemcheckbox" aria-checked="${selected.has(c.id)}"><span class="pick-box"></span><span class="dot" style="--cat-color:${catVar(c)}"></span>${esc(c.name)}</button>`).join('')
+      : '<div class="menu-empty">No categories yet</div>')
+      + '<div class="menu-sep"></div><button type="button" class="menu-item" data-act="new">+ New category…</button>'
+      + (appModal ? '' : '<button type="button" class="menu-item" data-act="edit">Edit categories…</button>');
+  };
+  render();
+  m.addEventListener('click', async e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    e.stopPropagation();
+    if (b.dataset.id) {
+      selected.has(b.dataset.id) ? selected.delete(b.dataset.id) : selected.add(b.dataset.id);
+      render(); onChange();
+      const again = m.querySelector(`[data-id="${CSS.escape(b.dataset.id)}"]`); if (again) again.focus();
+    } else if (b.dataset.act === 'new') {
+      const id = await promptNewTaskCategory();
+      if (id) { selected.add(id); onChange(); }
+      render();
+    } else if (b.dataset.act === 'edit') { closeMenu(); openCatManager(); }
+  });
+  showMenu(m, anchor);
+}
+async function createTaskCategory(name) {
+  if (state.needsCatMigration) { toast(CAT_MIGRATION_MSG, true); return null; }
+  name = name.trim().slice(0, 60);
+  if (!name) return null;
+  const used = new Set(state.taskCats.map(c => c.color));
+  const color = TASK_COLOURS.find(c => !used.has(c)) || TASK_COLOURS[state.taskCats.length % TASK_COLOURS.length];
+  const position = state.taskCats.reduce((mx, c) => Math.max(mx, c.position), 0) + 1;
+  const { data, error } = await sb.from('task_categories').insert({ name, color, position }).select().single();
+  if (error) { console.error(error); toast('Couldn’t create the category. Try again.', true); return null; }
+  state.taskCats.push(data);
+  afterCatChange();
+  return data.id;
+}
+const promptNewTaskCategory = () => createTaskCategory(prompt('Name for the new category') || '');
+function afterCatChange() {
+  if (state.draftEditor) state.draftEditor.refreshCats();
+  if (state.editor) state.editor.api.refreshCats();
+  if (state.tplManager && state.tplManager.editor) state.tplManager.editor.refreshCats();
+  renderAll();
+}
+async function updateTaskCategory(id, patch) {
+  const c = findCat(id);
+  if (!c) return;
+  const before = { ...c };
+  Object.assign(c, patch);
+  afterCatChange();
+  const { error } = await sb.from('task_categories').update(patch).eq('id', id);
+  if (error) { console.error(error); Object.assign(c, before); afterCatChange(); toast('Couldn’t update the category. Try again.', true); }
+}
+async function deleteTaskCategory(id) {
+  const c = findCat(id);
+  if (!c) return false;
+  const using = state.tasks.filter(t => (t.category_ids || []).includes(id));
+  if (!confirm(`Delete the category “${c.name}”?${using.length ? ` It will be removed from ${using.length} task${using.length === 1 ? '' : 's'}.` : ''}`)) return false;
+  const { error } = await sb.from('task_categories').delete().eq('id', id);
+  if (error) { console.error(error); toast('Couldn’t delete the category. Try again.', true); return false; }
+  state.taskCats = state.taskCats.filter(x => x.id !== id);
+  state.catHidden.delete(id);
+  await Promise.all(using.map(t => { t.category_ids = t.category_ids.filter(x => x !== id); return sb.from('tasks').update({ category_ids: t.category_ids }).eq('id', t.id); }));
+  await Promise.all(state.templates.filter(tp => (tp.data.category_ids || []).includes(id)).map(tp => {
+    tp.data = { ...tp.data, category_ids: tp.data.category_ids.filter(x => x !== id) };
+    return sb.from('task_templates').update({ data: tp.data }).eq('id', tp.id);
+  }));
+  afterCatChange();
+  toast('Category deleted');
+  return true;
+}
+function openCatManager() {
+  if (state.needsCatMigration) { toast(CAT_MIGRATION_MSG, true); return; }
+  const el = document.createElement('div');
+  el.className = 'cm-wrap';
+  const render = () => {
+    el.innerHTML = `<p class="muted small cm-intro">Rename, recolour or delete categories. Changes save straight away.</p>
+      <div class="cm-list">${sortedCats().map(c => `<div class="cm-row" data-id="${esc(c.id)}">
+        <input class="input cm-name" maxlength="60" value="${esc(c.name)}" aria-label="Category name">
+        <span class="cm-sw" role="radiogroup" aria-label="Colour">${TASK_COLOURS.map(k => `<button type="button" class="csw ${c.color === k ? 'on' : ''}" data-color="${k}" style="--cat-color:var(--tc-${k})" role="radio" aria-checked="${c.color === k}" title="${TASK_COLOUR_NAMES[k]}" aria-label="${TASK_COLOUR_NAMES[k]}"></button>`).join('')}</span>
+        <button type="button" class="icon-btn cm-del" title="Delete category" aria-label="Delete ${esc(c.name)}">${ICONS.x}</button>
+      </div>`).join('') || '<div class="muted small">No categories yet.</div>'}</div>
+      <div class="cm-add"><input class="input cm-new" maxlength="60" placeholder="New category name" aria-label="New category name"><button type="button" class="btn primary cm-add-btn">Add</button></div>`;
+  };
+  render();
+  const add = async () => { const inp = el.querySelector('.cm-new'); if (await createTaskCategory(inp.value)) { render(); el.querySelector('.cm-new').focus(); } };
+  el.addEventListener('change', e => {
+    if (!e.target.matches('.cm-name')) return;
+    const id = e.target.closest('.cm-row').dataset.id, c = findCat(id), name = e.target.value.trim().slice(0, 60);
+    if (!name) { e.target.value = c.name; return; }
+    if (name !== c.name) updateTaskCategory(id, { name });
+  });
+  el.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    if (e.target.matches('.cm-new')) { e.preventDefault(); add(); }
+    else if (e.target.matches('.cm-name')) { e.preventDefault(); e.target.blur(); }
+  });
+  el.addEventListener('click', async e => {
+    const row = e.target.closest('.cm-row');
+    const sw = e.target.closest('.csw');
+    if (sw && row) { await updateTaskCategory(row.dataset.id, { color: sw.dataset.color }); render(); return; }
+    if (e.target.closest('.cm-del') && row) { if (await deleteTaskCategory(row.dataset.id)) render(); return; }
+    if (e.target.closest('.cm-add-btn')) add();
+  });
+  openAppModal('Task categories', 'small', el, () => true);
+}
+
+/* ---------- App-wide pop-up ---------- */
+let appModal = null;
+function openAppModal(title, size, el, beforeClose) {
+  closeMenu();
+  if (appModal && !closeAppModal()) return;
+  $('#am-title').textContent = title;
+  $('#app-modal .am-card').className = 'am-card ' + size;
+  const body = $('#am-body');
+  body.innerHTML = '';
+  body.appendChild(el);
+  $('#app-modal').hidden = false;
+  appModal = { beforeClose };
+}
+function closeAppModal(force) {
+  if (!appModal) return true;
+  if (!force && appModal.beforeClose && !appModal.beforeClose()) return false;
+  appModal = null;
+  state.tplManager = null;
+  $('#app-modal').hidden = true;
+  $('#am-body').innerHTML = '';
+  return true;
+}
+
+/* ---------- Templates ---------- */
+const sortedTemplates = () => [...state.templates].sort((a, b) => a.name.localeCompare(b.name));
+// Template item dates are day offsets from the start (or from the due date, if the task repeats)
+function draftFromTemplate(tp) {
+  const d = tp.data || {};
+  const rule = d.recurRule || null;
+  const base = parseYmd(rule ? firstOccurrence(rule) : state.today);
+  return {
+    title: d.title || '', subtitle: d.subtitle || '', recurRule: rule,
+    category_ids: (d.category_ids || []).filter(id => findCat(id)),
+    items: (d.items || []).map(it => ({
+      id: uid(), title: it.title || '', description: it.description || '', link: it.link || '', assignee: it.assignee || null, done: false,
+      due: Number.isFinite(it.offset) ? ymd(addDays(base, it.offset)) : null,
+    })),
+  };
+}
+function renderTemplatePicker() {
+  const sel = $('#tpl-pick');
+  sel.innerHTML = '<option value="">From template…</option>'
+    + sortedTemplates().map(t => `<option value="${esc(t.id)}">${esc(t.name)}</option>`).join('')
+    + '<option value="__manage">Manage templates…</option>';
+  sel.value = '';
+}
+async function applyTemplate(id) {
+  const tp = state.templates.find(t => t.id === id);
+  if (!tp) return;
+  if (draftHasContent() && !confirm(`Replace your current draft with “${tp.name}”?`)) return;
+  mountDraft(draftFromTemplate(tp));
+  await saveDraft();
+  requestAnimationFrame(() => state.draftEditor.titleIn.focus());
+  toast(`Started from “${tp.name}”. Change anything you need, then add it.`);
+}
+async function saveAsTemplate(t, api) {
+  if (state.needsCatMigration) { toast(CAT_MIGRATION_MSG, true); return; }
+  const name = (prompt('Name for the new template', t.title) || '').trim().slice(0, 80);
+  if (!name) return;
+  const res = normaliseFromEditor(api, { template: true });
+  if (res.error) { toast(res.error, true); return; }
+  const { recurRule, recurDue, items, ...rest } = res.task;
+  const base = recurRule && (recurDue || (t.recur && t.recur.due)) ? (recurDue || t.recur.due) : ymd(new Date(t.created_at || Date.now()));
+  const data = {
+    ...rest, recurRule: recurRule || null,
+    items: items.map(it => ({ title: it.title, description: it.description, link: it.link, assignee: it.assignee, offset: it.due ? dayDiff(base, it.due) : null })),
+  };
+  const { data: row, error } = await sb.from('task_templates').insert({ name, data }).select().single();
+  if (error) { console.error(error); toast('Couldn’t save the template. Try again.', true); return; }
+  state.templates.push(row);
+  renderTemplatePicker();
+  toast(`Saved as template “${name}”`);
+}
+function openTemplates(selectId) {
+  if (state.needsCatMigration) { toast(CAT_MIGRATION_MSG, true); return; }
+  const el = document.createElement('div');
+  el.className = 'tm-wrap';
+  el.innerHTML = `<aside class="tm-side"><button class="btn small primary tm-new" type="button">+ New template</button><div class="tm-list"></div></aside><section class="tm-main"></section>`;
+  const list = el.querySelector('.tm-list'), main = el.querySelector('.tm-main');
+  const tm = { current: null, editor: null, nameIn: null, dirty: false };
+  const confirmLeave = () => !tm.dirty || confirm('Discard your unsaved changes to this template?');
+  const renderList = () => {
+    list.innerHTML = state.templates.length
+      ? sortedTemplates().map(t => `<button type="button" class="tm-item ${tm.current && tm.current.id === t.id ? 'on' : ''}" data-id="${esc(t.id)}">${esc(t.name)}</button>`).join('')
+      : '<div class="muted small tm-empty">No templates yet.</div>';
+  };
+  const show = tp => {
+    tm.current = tp; tm.dirty = false; tm.editor = null;
+    if (!tp) {
+      main.innerHTML = '<div class="tm-placeholder">Choose a template on the left, or create a new one.<br><br>A template holds checklist items, categories and a repeat setting. Pick it from <b>From template…</b> in the New task panel to start a task with them filled in. You can also turn any task into a template with <b>More → Save as template</b> when editing it.</div>';
+      renderList(); return;
+    }
+    main.innerHTML = `<div class="tm-head"><label class="field-label" for="tm-name-in">Template name</label><input class="input tm-name" id="tm-name-in" maxlength="80" placeholder="e.g. New client onboarding"></div>
+      <div class="tm-scroll"></div>
+      <div class="tm-foot"><button class="btn ghost danger tm-del" type="button">Delete template</button><span class="spacer"></span><button class="btn tm-cancel" type="button">Cancel</button><button class="btn primary tm-save" type="button">Save template</button></div>`;
+    const nameIn = main.querySelector('.tm-name');
+    nameIn.value = tp.name || '';
+    const api = buildTaskEditor(tp.data || {}, 'template', { onSubmit: save });
+    main.querySelector('.tm-scroll').appendChild(api.el);
+    tm.editor = api; tm.nameIn = nameIn;
+    const mark = () => { tm.dirty = true; };
+    api.el.addEventListener('input', mark); api.el.addEventListener('change', mark); nameIn.addEventListener('input', mark);
+    main.querySelector('.tm-del').hidden = !tp.id;
+    main.querySelector('.tm-del').addEventListener('click', del);
+    main.querySelector('.tm-cancel').addEventListener('click', () => { if (confirmLeave()) show(null); });
+    main.querySelector('.tm-save').addEventListener('click', save);
+    renderList();
+    requestAnimationFrame(() => { api.fit(); (tp.id ? api.titleIn : nameIn).focus(); });
+  };
+  async function save() {
+    const name = tm.nameIn.value.trim().slice(0, 80);
+    tm.nameIn.classList.toggle('invalid', !name);
+    if (!name) { toast('Give the template a name.', true); tm.nameIn.focus(); return; }
+    const res = normaliseFromEditor(tm.editor, { template: true });
+    if (res.error) { toast(res.error, true); return; }
+    const { recurRule, recurDue, items, ...rest } = res.task;
+    const data = { ...rest, recurRule: recurRule || null, items: items.map(it => ({ title: it.title, description: it.description, link: it.link, assignee: it.assignee, offset: Number.isFinite(it.offset) ? it.offset : null })) };
+    const q = tm.current.id
+      ? sb.from('task_templates').update({ name, data }).eq('id', tm.current.id).select().single()
+      : sb.from('task_templates').insert({ name, data }).select().single();
+    const { data: row, error } = await q;
+    if (error) { console.error(error); toast('Couldn’t save the template. Try again.', true); return; }
+    const i = state.templates.findIndex(t => t.id === row.id);
+    if (i > -1) state.templates[i] = row; else state.templates.push(row);
+    renderTemplatePicker();
+    show(row);
+    toast('Template saved');
+  }
+  async function del() {
+    const tp = tm.current;
+    if (!tp || !tp.id || !confirm(`Delete the template “${tp.name}”? Tasks already created from it won’t change.`)) return;
+    const { error } = await sb.from('task_templates').delete().eq('id', tp.id);
+    if (error) { console.error(error); toast('Couldn’t delete the template. Try again.', true); return; }
+    state.templates = state.templates.filter(t => t.id !== tp.id);
+    renderTemplatePicker();
+    show(null);
+    toast('Template deleted');
+  }
+  el.querySelector('.tm-new').addEventListener('click', () => { if (confirmLeave()) show({ name: '', data: {} }); });
+  list.addEventListener('click', e => {
+    const b = e.target.closest('.tm-item');
+    if (!b || (tm.current && tm.current.id === b.dataset.id)) return;
+    if (confirmLeave()) show(state.templates.find(t => t.id === b.dataset.id));
+  });
+  openAppModal('Templates', 'large', el, confirmLeave);
+  state.tplManager = tm;
+  const first = selectId ? state.templates.find(t => t.id === selectId) : null;
+  show(first || null);
 }
 
 // Highlight a task, open it on the right (switching tab / filter if needed) and scroll to it.
@@ -1414,7 +1873,9 @@ function selectTask(id) {
   if (!t || !openEditor(id)) return;
   state.selectedId = id;
   state.tab = taskStatus(t);
-  state.filter.add(t.category);
+  const ids = taskCatIds(t);
+  ids.forEach(cid => state.catHidden.delete(cid));
+  if (!ids.length) state.catHidden.delete('__none');
   if (isRecurring(t)) state.showRecurring = true;
   renderAll();
   requestAnimationFrame(() => {
@@ -1460,7 +1921,7 @@ function renderWeek() {
 }
 function weekCardHTML(e) {
   const shown = e.due.slice(0, 2), more = e.due.length - shown.length;
-  return `<button type="button" class="wk-card ${catCls(e.t.category)} ${e.allDone ? 'all-done' : ''} ${state.selectedId === e.t.id ? 'selected' : ''}" data-id="${esc(e.t.id)}">
+  return `<button type="button" class="wk-card ${e.allDone ? 'all-done' : ''} ${state.selectedId === e.t.id ? 'selected' : ''}" data-id="${esc(e.t.id)}" style="${stripeStyle(taskCatIds(e.t))}">
     <span class="wk-title">${isRecurring(e.t) ? ICONS.repeat : ''}${esc(e.t.title)}</span>
     ${shown.map(it => `<span class="wk-item ${it.done ? 'done' : ''}">${esc(truncate(it.title.replace(/\s*\n\s*/g, ' '), PREVIEW_CHARS))}</span>`).join('')}
     ${more > 0 ? `<span class="wk-more">+${more} more</span>` : ''}
@@ -1478,7 +1939,11 @@ function sortTasks(list, tab) {
   });
 }
 function renderRight() {
-  const visible = state.tasks.filter(t => state.filter.has(t.category) && (state.showRecurring || !isRecurring(t)));
+  const shown = k => !state.catHidden.has(k);
+  const visible = state.tasks.filter(t => {
+    const ids = taskCatIds(t);
+    return (ids.length ? ids.some(shown) : shown('__none')) && (state.showRecurring || !isRecurring(t));
+  });
   const counts = { current: 0, upcoming: 0, overdue: 0, completed: 0 };
   visible.forEach(t => counts[taskStatus(t)]++);
   document.querySelectorAll('#tabs .tab').forEach(b => {
@@ -1490,15 +1955,16 @@ function renderRight() {
     c.classList.toggle('has', counts[tab] > 0);
   });
 
-  $('#filters').innerHTML = '<span class="field-label">Show</span>' + CATEGORIES.map(c =>
-    `<button type="button" class="chip-toggle ${c.cls} ${state.filter.has(c.id) ? 'on' : ''}" data-cat="${esc(c.id)}" aria-pressed="${state.filter.has(c.id)}"><span class="dot"></span>${esc(c.id)}</button>`).join('')
-    + `<span class="f-sep" aria-hidden="true"></span><button type="button" class="chip-toggle rec-chip ${state.showRecurring ? 'on' : ''}" data-rec="1" aria-pressed="${state.showRecurring}">${ICONS.repeat}Recurring</button>`;
+  const chips = sortedCats().map(c => ({ key: c.id, name: c.name, color: catVar(c) })).concat([{ key: '__none', name: 'No category', color: 'var(--cat-none)' }]);
+  $('#filters').innerHTML = '<span class="field-label">Show</span>' + chips.map(c =>
+    `<button type="button" class="chip-toggle ${shown(c.key) ? 'on' : ''}" data-cat="${esc(c.key)}" aria-pressed="${shown(c.key)}" style="--cat-color:${c.color}"><span class="dot"></span>${esc(c.name)}</button>`).join('')
+    + `<button type="button" class="chip-edit" data-edit-cats="1">Edit</button><span class="f-sep" aria-hidden="true"></span><button type="button" class="chip-toggle rec-chip ${state.showRecurring ? 'on' : ''}" data-rec="1" aria-pressed="${state.showRecurring}">${ICONS.repeat}Recurring</button>`;
 
   const list = $('#task-list');
   const tasks = sortTasks(visible.filter(t => taskStatus(t) === state.tab), state.tab);
   list.innerHTML = '';
   if (!tasks.length) {
-    const msg = !state.filter.size ? 'Choose at least one category above to see tasks.'
+    const msg = !chips.some(c => shown(c.key)) ? 'Choose at least one category above to see tasks.'
       : { current: 'No current tasks. Add one from the New task panel.', upcoming: 'Recurring tasks due more than a week from now appear here.', overdue: 'Nothing overdue.', completed: 'Completed tasks will appear here.' }[state.tab];
     list.innerHTML = `<div class="list-empty">${msg}</div>`;
     return;
@@ -1542,13 +2008,13 @@ function taskCardHTML(t) {
   if (cLead) rows += collapsedHTML(lead) + '<li class="tc-divider" aria-hidden="true"></li>';
   items.slice(cLead ? lead : 0, cTrail ? n - trail : n).forEach(it => { rows += itemRowHTML(it); });
   if (cTrail) rows += '<li class="tc-divider" aria-hidden="true"></li>' + collapsedHTML(trail);
-  return `<article class="task-card ${catCls(t.category)} ${state.selectedId === t.id ? 'selected' : ''}" data-id="${esc(t.id)}" tabindex="0">
+  return `<article class="task-card ${state.selectedId === t.id ? 'selected' : ''}" data-id="${esc(t.id)}" tabindex="0" style="${stripeStyle(taskCatIds(t))}">
     <div class="tc-head">
       <div class="tc-head-text">
         <div class="tc-title">${esc(t.title)}</div>
         ${textOf(t.subtitle) ? `<div class="tc-sub fmt">${sanitizeHTML(t.subtitle)}</div>` : ''}
       </div>
-      <div class="tc-meta">${recPillHTML(t, allDone)}${t.category !== 'None' ? `<span class="cat-tag">${esc(t.category)}</span>` : ''}<span class="tc-progress">${done}/${n}</span>${!allDone && nextDue(t) ? `<button type="button" class="icon-btn tc-defer" data-defer="${esc(t.id)}" title="Defer" aria-label="Defer">${ICONS.clock}</button>` : ''}</div>
+      <div class="tc-meta">${recPillHTML(t, allDone)}${catTagsHTML(taskCatIds(t))}<span class="tc-progress">${done}/${n}</span>${!allDone && nextDue(t) ? `<button type="button" class="icon-btn tc-defer" data-defer="${esc(t.id)}" title="Defer" aria-label="Defer">${ICONS.clock}</button>` : ''}</div>
     </div>
     <ul class="tc-items">${rows}</ul>
   </article>`;
@@ -1562,6 +2028,15 @@ function updateAssigneeList() {
 /* ---------- Events ---------- */
 function wireEvents() {
   $('#add-task-btn').addEventListener('click', addTask);
+  $('#tpl-pick').addEventListener('change', e => {
+    const v = e.target.value;
+    e.target.value = '';
+    if (v === '__manage') openTemplates(); else if (v) applyTemplate(v);
+  });
+  $('#templates-btn').addEventListener('click', () => openTemplates());
+  $('#am-close').innerHTML = ICONS.x;
+  $('#am-close').addEventListener('click', () => closeAppModal());
+  $('#am-backdrop').addEventListener('click', () => closeAppModal());
   $('#clear-draft').addEventListener('click', clearDraft);
   $('#overdue-strip').addEventListener('click', () => { state.tab = 'overdue'; renderRight(); });
   $('#week-days').addEventListener('click', e => {
@@ -1573,11 +2048,12 @@ function wireEvents() {
     if (b) { state.tab = b.dataset.tab; renderRight(); }
   });
   $('#filters').addEventListener('click', e => {
+    if (e.target.closest('.chip-edit')) { openCatManager(); return; }
     const b = e.target.closest('.chip-toggle');
     if (!b) return;
     if (b.dataset.rec) { state.showRecurring = !state.showRecurring; renderRight(); return; }
     const c = b.dataset.cat;
-    state.filter.has(c) ? state.filter.delete(c) : state.filter.add(c);
+    state.catHidden.has(c) ? state.catHidden.delete(c) : state.catHidden.add(c);
     renderRight();
   });
   const list = $('#task-list');
@@ -1620,7 +2096,10 @@ function wireEvents() {
     }
     checkDay();
     if (!state.noteModal && !state.dragNoteEl && !state.needsMigration && await loadNotes()) renderNotes();
-    if (state.editor) return; // don't disturb an open edit
+    if (state.editor || appModal) return; // don't disturb an open edit
+    await loadTaskMeta();
+    renderTemplatePicker();
+    if (state.draftEditor) state.draftEditor.refreshCats();
     if (await loadTasks()) renderAll();
   });
   // Esc: close a menu, then an open note, then the open task (unless typing in the New task panel)
@@ -1629,6 +2108,7 @@ function wireEvents() {
   }, true);
   document.addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;
+    if (appModal) { closeAppModal(); return; }
     if (state.noteModal) { closeNote(); return; }
     if (!state.editor || state.view !== 'todo') return;
     if (state.draftEditor && state.draftEditor.el.contains(e.target)) return;
@@ -1672,9 +2152,21 @@ const topPosition = (catId, exceptId) => {
 };
 
 async function checkMigration() {
-  const [a, b] = await Promise.all([sb.from('tasks').select('recur').limit(1), sb.from('notes').select('id').limit(1)]);
+  const [a, b, c, d] = await Promise.all([
+    sb.from('tasks').select('recur').limit(1), sb.from('notes').select('id').limit(1),
+    sb.from('tasks').select('category_ids').limit(1), sb.from('task_templates').select('id').limit(1),
+  ]);
   state.needsMigration = !!(a.error || b.error);
-  $('#db-banner').hidden = !state.needsMigration;
+  state.needsCatMigration = !!(c.error || d.error);
+  const files = [state.needsMigration && 'update-recurring-notes.sql', state.needsCatMigration && 'update-categories-templates.sql'].filter(Boolean);
+  $('#db-banner').hidden = !files.length;
+  $('#db-banner').innerHTML = `One-time database update needed: run ${files.map(f => `<code>${f}</code>`).join(' and then ')} in Supabase’s SQL Editor, then refresh this page.`;
+}
+async function loadTaskMeta() {
+  if (state.needsCatMigration) return;
+  const [c, t] = await Promise.all([sb.from('task_categories').select('*'), sb.from('task_templates').select('*')]);
+  if (!c.error) state.taskCats = c.data;
+  if (!t.error) state.templates = t.data.map(x => ({ ...x, data: x.data || {} }));
 }
 async function loadNotes() {
   const [n, c] = await Promise.all([sb.from('notes').select('*'), sb.from('note_categories').select('*')]);
@@ -2013,6 +2505,7 @@ function setView(v) {
   state.view = v === 'notes' ? 'notes' : 'todo';
   $('#todo-view').hidden = state.view !== 'todo';
   $('#notes-view').hidden = state.view !== 'notes';
+  $('#templates-btn').hidden = state.view !== 'todo';
   document.querySelectorAll('.vs-opt').forEach(b => { const on = b.dataset.view === state.view; b.classList.toggle('active', on); b.setAttribute('aria-selected', on); });
   positionThumb();
   try { localStorage.setItem('todo-view', state.view); } catch (e) {}
@@ -2066,7 +2559,8 @@ async function start(user) {
   $('#week-days').innerHTML = $('#task-list').innerHTML = '<div class="loading">Loading your tasks…</div>';
   renderNotes();
   const [, drafts] = await Promise.all([loadTasks(), loadDraft(), checkMigration()]);
-  if (!state.needsMigration) await loadNotes();
+  await Promise.all([state.needsMigration ? null : loadNotes(), loadTaskMeta()]);
+  renderTemplatePicker();
   mountDraft(drafts.data && Object.keys(drafts.data).length ? drafts.data : null);
   mountNoteDraft(drafts.note_data || null);
   renderAll();
@@ -2078,7 +2572,8 @@ function resetState() {
   closeMenu();
   Object.assign(state, { user: null, started: false, tasks: [], tab: 'current', selectedId: null, editor: null, draftEditor: null, showRecurring: true,
     notes: [], noteCats: [], notesReady: false, noteSearch: '', noteDraft: null, dragNoteEl: null });
-  state.filter = new Set(CATEGORIES.map(c => c.id));
+  state.catHidden = new Set(); state.taskCats = []; state.templates = [];
+  closeAppModal(true);
   state.noteHidden = new Set();
   clearTimeout(state.draftTimer); state.draftTimer = null;
   clearTimeout(state.noteDraftTimer); state.noteDraftTimer = null;
