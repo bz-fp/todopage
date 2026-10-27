@@ -198,7 +198,23 @@ svg.ic{width:13px;height:13px;display:block}
 .det-link .link-in::placeholder{color:var(--faint)}
 .det-open{font-size:11.3px;font-weight:700;color:var(--accent);text-decoration:none}
 .det-open:hover{text-decoration:underline}
-.line-ghost{padding:6px 0 6px 20px;border-bottom:1px solid var(--rule);color:var(--faint);cursor:text}
+.pe-adds{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--rule)}
+.line-ghost{flex:1;padding:6px 0 6px 20px;color:var(--faint);cursor:text}
+.line-ghost.gone{visibility:hidden}
+.add-divider{border:0;background:transparent;padding:4px 2px;color:var(--faint);font-size:11.3px;font-weight:700;cursor:pointer}
+.add-divider:hover{color:var(--accent)}
+.line.sub{margin-left:22px}
+.line.sub .line-bullet{width:11px;height:11px;margin-top:4px}
+.line.sub .check{width:14px;height:14px;margin-top:2px}
+.line.divider{padding-top:13px;border-bottom-color:var(--line-strong)}
+.line.divider .line-bullet,.line.divider .check,.line.divider .line-tags,.line.divider .tool:not(.tool-remove){display:none}
+.line.divider .line-text{font-size:10.8px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.line.divider .line-grip{top:14px}
+.tc-item.sub{padding-left:23px;font-size:11.7px}
+.tc-item.sub .check{width:14px;height:14px}
+.tc-section{display:flex;align-items:center;gap:8px;margin-top:5px;font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--faint)}
+.tc-section:first-child{margin-top:0}
+.tc-section::after{content:"";flex:1;height:1px;background:var(--line)}
 .line-ghost:hover{color:var(--muted)}
 .pe-hint{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:10px;font-size:10.8px;color:var(--faint)}
 .pe-hint kbd,.pe-hint code{font:inherit;font-weight:700;color:var(--muted)}
@@ -648,16 +664,42 @@ function toast(msg, isError = false) {
 /* ---------- Task status ---------- */
 const isRecurring = t => !!(t && t.recur && t.recur.rule);
 // Items without their own date use a recurring task's due date
-const effDue = (it, t) => it.due || (isRecurring(t) ? t.recur.due : null);
+const isDivider = it => it && it.kind === 'divider';
+const realItems = t => (t.items || []).filter(i => !isDivider(i));
+// The item a sub-item sits under (nearest top-level item above it)
+function parentOf(it, t) {
+  const items = t.items || [];
+  for (let i = items.indexOf(it) - 1; i >= 0; i--) { if (isDivider(items[i])) return null; if (!items[i].indent) return items[i]; }
+  return null;
+}
+// Own date, else the parent's date (for sub-items), else a recurring task's due date
+const effDue = (it, t) => {
+  if (isDivider(it)) return null;
+  if (it.due) return it.due;
+  if (it.indent) { const p = parentOf(it, t); if (p && p.due) return p.due; }
+  return isRecurring(t) ? t.recur.due : null;
+};
 const itemOverdue = (it, t) => { const d = effDue(it, t); return !it.done && !!d && d < state.today; };
 function taskStatus(t) {
-  const items = t.items || [];
+  const items = realItems(t);
   if (items.length && items.every(i => i.done)) return 'completed';
   if (items.some(i => itemOverdue(i, t))) return 'overdue';
   if (isRecurring(t)) { const nd = nextDue(t); if (nd && nd > ymd(addDays(parseYmd(state.today), 6))) return 'upcoming'; }
   return 'current';
 }
-function nextDue(t) { return (t.items || []).filter(i => !i.done).map(i => effDue(i, t)).filter(Boolean).sort()[0] || null; }
+function nextDue(t) { return realItems(t).filter(i => !i.done).map(i => effDue(i, t)).filter(Boolean).sort()[0] || null; }
+// Ticking a parent ticks its sub-items; a parent is ticked when all its sub-items are
+function cascadeItems(items, idx) {
+  const it = items[idx];
+  if (!it || isDivider(it)) return;
+  if (!it.indent) { for (let j = idx + 1; j < items.length && items[j].indent && !isDivider(items[j]); j++) items[j].done = it.done; return; }
+  let p = idx - 1;
+  while (p >= 0 && items[p].indent) p--;
+  if (p < 0 || isDivider(items[p])) return;
+  const kids = [];
+  for (let j = p + 1; j < items.length && items[j].indent && !isDivider(items[j]); j++) kids.push(items[j]);
+  items[p].done = kids.every(k => k.done);
+}
 
 /* ---------- Recurrence (business days = Monday to Friday) ---------- */
 const isWeekday = d => d.getDay() !== 0 && d.getDay() !== 6;
@@ -990,9 +1032,11 @@ function nextMonday() { const b = parseYmd(state.today); return ymd(addDays(b, (
 function buildLine(it, mode, ctx) {
   const T = mode === 'template';
   const s = { id: it.id || uid(), assignee: it.assignee || null, due: T ? null : it.due || null, done: !T && !!it.done, offset: T && Number.isFinite(+it.offset) && it.offset !== null && it.offset !== '' ? +it.offset : null };
+  s.kind = isDivider(it) ? 'divider' : 'item';
+  s.indent = s.kind === 'item' && it.indent ? 1 : 0;
   const offLabel = o => (o === 0 ? 'Start day' : `${o > 0 ? '+' : '−'}${Math.abs(o)} day${Math.abs(o) === 1 ? '' : 's'}`);
   const el = document.createElement('div');
-  el.className = 'line' + (s.done ? ' done' : '');
+  el.className = 'line' + (s.done ? ' done' : '') + (s.kind === 'divider' ? ' divider' : '') + (s.indent ? ' sub' : '');
   el.innerHTML = `
     <button type="button" class="line-grip" tabindex="-1" title="Drag to reorder" aria-label="Drag to reorder">${ICONS.grip}</button>
     ${mode === 'edit' ? '<input type="checkbox" class="check line-check" aria-label="Done">' : '<span class="line-bullet" aria-hidden="true"></span>'}
@@ -1041,6 +1085,17 @@ function buildLine(it, mode, ctx) {
 
   ta.value = it.title || '';
   linkIn.value = it.link || '';
+  const dividerLabels = () => { ta.placeholder = s.kind === 'divider' ? 'Divider name' : 'Add an item'; ta.setAttribute('aria-label', s.kind === 'divider' ? 'Divider name' : 'Checklist item'); };
+  dividerLabels();
+  const setIndent = n => { s.indent = s.kind === 'item' && n ? 1 : 0; el.classList.toggle('sub', !!s.indent); };
+  const setDone = v => { s.done = !!v; if (check) check.checked = s.done; el.classList.toggle('done', s.done); renderTags(); };
+  const toDivider = () => {
+    s.kind = 'divider'; s.indent = 0; s.done = false; s.assignee = null; s.due = null; s.offset = null;
+    ta.value = '';
+    el.classList.add('divider'); el.classList.remove('sub', 'done');
+    Object.values(P).forEach(x => { x.hidden = true; });
+    dividerLabels(); renderTags(); fit(); ctx.fixIndents(); ctx.changed();
+  };
   const descHasText = () => !!textOf(desc.getHTML());
   P.desc.hidden = !descHasText();
   P.link.hidden = !linkIn.value.trim();
@@ -1092,6 +1147,7 @@ function buildLine(it, mode, ctx) {
   const setDue = v => { s.due = v; renderTags(); ctx.changed(); };
   const setOffset = v => { s.offset = v; renderTags(); ctx.changed(); };
   const applyShortcuts = () => {
+    if (s.kind === 'divider') return;
     const r = parseShortcuts(ta.value);
     if (!r.hit) return;
     ta.value = r.text;
@@ -1099,7 +1155,7 @@ function buildLine(it, mode, ctx) {
     if (r.due) { if (T) s.offset = dayDiff(state.today, r.due); else s.due = r.due; }
     renderTags(); fit(); ctx.changed();
   };
-  const hasDetails = () => !!(s.assignee || s.due || s.offset !== null || descHasText() || linkIn.value.trim());
+  const hasDetails = () => s.kind !== 'divider' && !!(s.assignee || s.due || s.offset !== null || descHasText() || linkIn.value.trim());
 
   el.addEventListener('click', e => {
     const t = e.target.closest('[data-tool]');
@@ -1131,9 +1187,12 @@ function buildLine(it, mode, ctx) {
   linkIn.addEventListener('input', () => { updateOpen(); renderTags(); });
   linkIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); focusEnd(); } });
   desc.editor.addEventListener('input', () => renderTags());
-  if (check) check.addEventListener('change', () => { s.done = check.checked; el.classList.toggle('done', s.done); renderTags(); ctx.changed(); });
+  if (check) check.addEventListener('change', () => { setDone(check.checked); ctx.cascade(api); ctx.changed(); });
 
-  ta.addEventListener('input', () => { fit(); ctx.updateGhost(); });
+  ta.addEventListener('input', () => {
+    if (s.kind === 'item' && /^#\s$/.test(ta.value)) { toDivider(); return; } // "# " starts a divider
+    fit(); ctx.updateGhost();
+  });
   ta.addEventListener('keydown', e => {
     if (e.isComposing) return;
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { applyShortcuts(); return; } // bubbles up to submit
@@ -1143,7 +1202,16 @@ function buildLine(it, mode, ctx) {
       ta.dispatchEvent(new Event('input', { bubbles: true }));
       return;
     }
-    if (e.key === 'Enter') { e.preventDefault(); applyShortcuts(); ctx.newAfter(api); return; }
+    if (e.key === 'Tab' && !e.ctrlKey && !e.altKey && !e.metaKey && s.kind === 'item') {
+      if (e.shiftKey) { if (s.indent) { e.preventDefault(); setIndent(0); ctx.changed(); } return; }
+      if (s.indent || ctx.canIndent(api)) { e.preventDefault(); if (!s.indent) { setIndent(1); ctx.changed(); } }
+      return;
+    }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (s.indent && !ta.value.trim() && !hasDetails()) { setIndent(0); ctx.changed(); return; } // Enter on an empty sub-item steps back out
+      applyShortcuts(); ctx.newAfter(api, { indent: s.indent }); return;
+    }
     if (e.key === 'Backspace' && !ta.value && ta.selectionStart === 0 && !hasDetails()) { e.preventDefault(); ctx.remove(api, true); return; }
     if (e.key === 'ArrowUp' && !e.shiftKey && !ta.value.slice(0, ta.selectionStart).includes('\n')) { e.preventDefault(); ctx.nav(api, -1); return; }
     if (e.key === 'ArrowDown' && !e.shiftKey && !ta.value.slice(ta.selectionEnd).includes('\n')) { e.preventDefault(); ctx.nav(api, 1); }
@@ -1164,14 +1232,27 @@ function buildLine(it, mode, ctx) {
   const grip = el.querySelector('.line-grip');
   grip.addEventListener('mousedown', () => { el.draggable = true; });
   document.addEventListener('mouseup', () => { el.draggable = false; });
-  el.addEventListener('dragstart', e => { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', ''); ctx.dragging = el; requestAnimationFrame(() => el.classList.add('dragging')); });
-  el.addEventListener('dragend', () => { el.draggable = false; el.classList.remove('dragging'); ctx.dragging = null; ctx.changed(); });
+  el.addEventListener('dragstart', e => {
+    e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', '');
+    ctx.dragging = el; ctx.dragKids = ctx.kidsOf(api);
+    requestAnimationFrame(() => { el.classList.add('dragging'); ctx.dragKids.forEach(k => k.el.classList.add('dragging')); });
+  });
+  el.addEventListener('dragend', () => {
+    el.draggable = false; el.classList.remove('dragging');
+    // Sub-items travel with their parent
+    let after = el;
+    (ctx.dragKids || []).forEach(k => { k.el.classList.remove('dragging'); after.after(k.el); after = k.el; });
+    ctx.dragging = null; ctx.dragKids = null; ctx.fixIndents(); ctx.changed();
+  });
 
   const api = {
-    el, ta, fit, focusEnd, applyShortcuts, hasDetails,
+    el, ta, fit, focusEnd, applyShortcuts, hasDetails, s, setIndent, setDone,
     shift: days => { if (!s.due) return false; s.due = ymd(addDays(parseYmd(s.due), days)); renderTags(); return true; },
     isBlank: () => !ta.value.trim() && !hasDetails(),
-    getData: () => ({ id: s.id, title: ta.value, description: desc.getHTML(), link: linkIn.value, assignee: s.assignee, due: s.due, done: s.done, ...(T ? { offset: s.offset } : {}) }),
+    shiftable: () => s.kind === 'item',
+    getData: () => (s.kind === 'divider'
+      ? { id: s.id, kind: 'divider', title: ta.value, description: '', link: '', assignee: null, due: null, done: false }
+      : { id: s.id, title: ta.value, description: desc.getHTML(), link: linkIn.value, assignee: s.assignee, due: s.due, done: s.done, indent: s.indent, ...(T ? { offset: s.offset } : {}) }),
   };
   return api;
 }
@@ -1181,10 +1262,10 @@ function buildTaskEditor(data, mode, handlers = {}) {
   const root = document.createElement('div');
   root.className = 'task-editor paper';
   const hint = mode === 'draft'
-    ? `<span><kbd>Enter</kbd> next item</span><span><kbd>${ALT}+Enter</kbd> line break</span><span><code>@name</code> assign</span><span><code>!fri</code> due date</span><span><kbd>${MOD}+Enter</kbd> add to board</span>`
+    ? `<span><kbd>Enter</kbd> next item</span><span><kbd>Tab</kbd> sub-item</span><span><code># </code> divider</span><span><kbd>${ALT}+Enter</kbd> line break</span><span><code>@name</code> assign</span><span><code>!fri</code> due date</span><span><kbd>${MOD}+Enter</kbd> add to board</span>`
     : mode === 'template'
-      ? `<span><kbd>Enter</kbd> next item</span><span><code>@name</code> assign</span><span><code>!+3</code> due 3 days after the start</span><span><kbd>${MOD}+Enter</kbd> save</span>`
-      : `<span><kbd>Enter</kbd> next item</span><span><code>@name</code> assign</span><span><code>!fri</code> due date</span><span><kbd>${MOD}+Enter</kbd> save</span><span><kbd>Esc</kbd> close</span>`;
+      ? `<span><kbd>Enter</kbd> next item</span><span><kbd>Tab</kbd> sub-item</span><span><code># </code> divider</span><span><code>@name</code> assign</span><span><code>!+3</code> due 3 days after the start</span><span><kbd>${MOD}+Enter</kbd> save</span>`
+      : `<span><kbd>Enter</kbd> next item</span><span><kbd>Tab</kbd> sub-item</span><span><code># </code> divider</span><span><code>@name</code> assign</span><span><code>!fri</code> due date</span><span><kbd>${MOD}+Enter</kbd> save</span><span><kbd>Esc</kbd> close</span>`;
   root.innerHTML = `
     <input class="pe-title" maxlength="200" placeholder="Task title" aria-label="Task title">
     <div class="pe-sub"></div>
@@ -1192,7 +1273,7 @@ function buildTaskEditor(data, mode, handlers = {}) {
       <button type="button" class="pe-repeat pe-rep" aria-label="Repeat settings">${ICONS.repeat}<span>Repeat</span></button></div>
     <div class="pe-recur" hidden></div>
     <div class="pe-lines"></div>
-    <div class="line-ghost" role="button" tabindex="0">Add an item</div>
+    <div class="pe-adds"><div class="line-ghost" role="button" tabindex="0">Add an item</div><button type="button" class="add-divider">+ Add divider</button></div>
     <div class="pe-hint">${hint}</div>`;
   const titleIn = root.querySelector('.pe-title');
   titleIn.value = data.title || '';
@@ -1275,18 +1356,32 @@ function buildTaskEditor(data, mode, handlers = {}) {
   const changed = () => root.dispatchEvent(new Event('input', { bubbles: true }));
   const ctx = {
     dragging: null, changed,
-    updateGhost() { const ls = lines(); const last = ls[ls.length - 1]; ghost.hidden = !!last && last.isBlank(); },
-    newAfter(api) {
-      const n = make({});
-      if (api) api.el.after(n.el); else box.appendChild(n.el);
-      n.fit(); n.ta.focus(); ctx.updateGhost(); changed();
+    updateGhost() { const ls = lines(); const last = ls[ls.length - 1]; ghost.classList.toggle('gone', !!last && last.isBlank()); },
+    newAfter(api, opts = {}) {
+      const n = make(opts.kind === 'divider' ? { kind: 'divider' } : { indent: opts.indent || 0 });
+      if (api) { const kids = opts.kind === 'divider' || opts.indent ? [] : ctx.kidsOf(api); (kids.length ? kids[kids.length - 1].el : api.el).after(n.el); }
+      else box.appendChild(n.el);
+      n.fit(); n.ta.focus(); ctx.fixIndents(); ctx.updateGhost(); changed();
+    },
+    kidsOf(api) {
+      const ls = lines(), out = [];
+      if (api.s.kind !== 'item' || api.s.indent) return out;
+      for (let j = ls.indexOf(api) + 1; j < ls.length && ls[j].s.indent && ls[j].s.kind === 'item'; j++) out.push(ls[j]);
+      return out;
+    },
+    canIndent(api) { const ls = lines(), prev = ls[ls.indexOf(api) - 1]; return !!prev && prev.s.kind === 'item'; },
+    fixIndents() { lines().forEach((l, i, ls) => { if (l.s.indent && (!ls[i - 1] || ls[i - 1].s.kind !== 'item')) l.setIndent(0); }); },
+    cascade(api) {
+      const ls = lines(), items = ls.map(l => ({ done: l.s.done, indent: l.s.indent, kind: l.s.kind }));
+      cascadeItems(items, ls.indexOf(api));
+      items.forEach((x, i) => { if (ls[i].s.kind === 'item' && x.done !== ls[i].s.done) ls[i].setDone(x.done); });
     },
     remove(api, focusPrev) {
       const ls = lines(), i = ls.indexOf(api);
       if (focusPrev && ls.length <= 1) return;
       api.el.remove(); map.delete(api.el);
       if (focusPrev) { const prev = ls[i - 1]; prev ? prev.focusEnd() : titleIn.focus(); }
-      ctx.updateGhost(); changed();
+      ctx.fixIndents(); ctx.updateGhost(); changed();
     },
     nav(api, dir) {
       const ls = lines(), t = ls[ls.indexOf(api) + dir];
@@ -1303,6 +1398,7 @@ function buildTaskEditor(data, mode, handlers = {}) {
   });
   const addAtEnd = () => { const ls = lines(); ctx.newAfter(ls[ls.length - 1] || null); };
   ghost.addEventListener('click', addAtEnd);
+  root.querySelector('.add-divider').addEventListener('click', () => { const ls = lines(); ctx.newAfter(ls[ls.length - 1] || null, { kind: 'divider' }); });
   ghost.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); addAtEnd(); } });
 
   box.addEventListener('dragover', e => {
@@ -1328,7 +1424,7 @@ function buildTaskEditor(data, mode, handlers = {}) {
     getData: () => ({ title: titleIn.value, subtitle: sub.getHTML(), category_ids: [...cats].filter(id => findCat(id)), items: lines().map(l => l.getData()), recurRule: rec.rule ? { ...rec.rule } : null, recurDue: rec.due }),
     shiftDates: days => {
       let any = false;
-      lines().forEach(l => { if (l.shift(days)) any = true; });
+      lines().forEach(l => { if (l.shiftable() && l.shift(days)) any = true; });
       if (rec.rule && rec.due) { rec.due = ymd(addDays(parseYmd(rec.due), days)); any = true; renderRecur(); }
       if (any) changed();
       return any;
@@ -1347,11 +1443,14 @@ function normaliseFromEditor(api, opts = {}) {
   const items = [];
   d.items.forEach((it, i) => {
     const t = it.title.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+    if (isDivider(it)) { if (t) items.push({ id: it.id, kind: 'divider', title: t.replace(/\s*\n\s*/g, ' ') }); return; }
     const hasOther = textOf(it.description) || it.link.trim() || it.assignee || it.due || (it.offset !== undefined && it.offset !== null);
     if (!t && !hasOther) return; // blank line: ignore
     if (!t) { ls[i].el.classList.add('invalid'); error = error || 'Each checklist item needs a title.'; return; }
-    items.push({ ...it, title: t, link: normLink(it.link) });
+    items.push({ ...it, title: t, link: normLink(it.link), indent: it.indent ? 1 : 0 });
   });
+  // A sub-item needs an item above it (not a divider or the top of the list)
+  items.forEach((it, i) => { if (it.indent && (!items[i - 1] || isDivider(items[i - 1]))) it.indent = 0; });
   let recurRule = d.recurRule;
   if (recurRule && /^nth/.test(recurRule.mode || '')) {
     const n = parseInt(recurRule.n, 10);
@@ -1359,7 +1458,7 @@ function normaliseFromEditor(api, opts = {}) {
     else recurRule = { ...recurRule, n };
   }
   if (error) return { error };
-  if (!items.length && !opts.template) items.push({ id: uid(), title: 'Clarify steps', description: '', link: null, assignee: null, due: null, done: false });
+  if (!items.some(i => !isDivider(i)) && !opts.template) items.push({ id: uid(), title: 'Clarify steps', description: '', link: null, assignee: null, due: null, done: false });
   return { task: { title, subtitle: d.subtitle, category_ids: d.category_ids, items, recurRule, recurDue: d.recurDue } };
 }
 
@@ -1500,7 +1599,7 @@ async function saveEdit() {
     else { const first = firstOccurrence(recurRule); upd.recur = { rule: recurRule, due: first, scheduled: first, series: uid() }; }
   } else if (prev && prev.rule) {
     // Recurrence turned off: items keep the date they were using
-    upd.items = upd.items.map(it => (it.due ? it : { ...it, due: prev.due }));
+    upd.items = upd.items.map(it => (it.due || isDivider(it) || it.indent ? it : { ...it, due: prev.due }));
     upd.recur = null;
   }
   upd.completed_at = taskStatus(upd) === 'completed' ? (t.completed_at || new Date().toISOString()) : null;
@@ -1535,6 +1634,7 @@ async function toggleItem(taskId, itemId, done) {
   const before = { items: JSON.parse(JSON.stringify(t.items)), completed_at: t.completed_at };
   const prev = taskStatus(t);
   it.done = done;
+  cascadeItems(t.items, t.items.indexOf(it));
   const st = taskStatus(t);
   t.completed_at = st === 'completed' ? (t.completed_at || new Date().toISOString()) : null;
   renderAll();
@@ -1750,9 +1850,9 @@ function draftFromTemplate(tp) {
   return {
     title: d.title || '', subtitle: d.subtitle || '', recurRule: rule,
     category_ids: (d.category_ids || []).filter(id => findCat(id)),
-    items: (d.items || []).map(it => ({
+    items: (d.items || []).map(it => (isDivider(it) ? { id: uid(), kind: 'divider', title: it.title || '' } : {
       id: uid(), title: it.title || '', description: it.description || '', link: it.link || '', assignee: it.assignee || null, done: false,
-      due: Number.isFinite(it.offset) ? ymd(addDays(base, it.offset)) : null,
+      indent: it.indent ? 1 : 0, due: Number.isFinite(it.offset) ? ymd(addDays(base, it.offset)) : null,
     })),
   };
 }
@@ -1782,7 +1882,7 @@ async function saveAsTemplate(t, api) {
   const base = recurRule && (recurDue || (t.recur && t.recur.due)) ? (recurDue || t.recur.due) : ymd(new Date(t.created_at || Date.now()));
   const data = {
     ...rest, recurRule: recurRule || null,
-    items: items.map(it => ({ title: it.title, description: it.description, link: it.link, assignee: it.assignee, offset: it.due ? dayDiff(base, it.due) : null })),
+    items: items.map(it => (isDivider(it) ? { kind: 'divider', title: it.title } : { title: it.title, description: it.description, link: it.link, assignee: it.assignee, indent: it.indent ? 1 : 0, offset: it.due ? dayDiff(base, it.due) : null })),
   };
   const { data: row, error } = await sb.from('task_templates').insert({ name, data }).select().single();
   if (error) { console.error(error); toast('Couldn’t save the template. Try again.', true); return; }
@@ -1833,7 +1933,7 @@ function openTemplates(selectId) {
     const res = normaliseFromEditor(tm.editor, { template: true });
     if (res.error) { toast(res.error, true); return; }
     const { recurRule, recurDue, items, ...rest } = res.task;
-    const data = { ...rest, recurRule: recurRule || null, items: items.map(it => ({ title: it.title, description: it.description, link: it.link, assignee: it.assignee, offset: Number.isFinite(it.offset) ? it.offset : null })) };
+    const data = { ...rest, recurRule: recurRule || null, items: items.map(it => (isDivider(it) ? { kind: 'divider', title: it.title } : { title: it.title, description: it.description, link: it.link, assignee: it.assignee, indent: it.indent ? 1 : 0, offset: Number.isFinite(it.offset) ? it.offset : null })) };
     const q = tm.current.id
       ? sb.from('task_templates').update({ name, data }).eq('id', tm.current.id).select().single()
       : sb.from('task_templates').insert({ name, data }).select().single();
@@ -1891,7 +1991,7 @@ function selectTask(id) {
 function renderAll() { renderWeek(); renderRight(); updateAssigneeList(); }
 
 function renderWeek() {
-  const overdue = state.tasks.reduce((n, t) => n + t.items.filter(it => itemOverdue(it, t)).length, 0);
+  const overdue = state.tasks.reduce((n, t) => n + realItems(t).filter(it => itemOverdue(it, t)).length, 0);
   const strip = $('#overdue-strip');
   strip.classList.toggle('none', !overdue);
   strip.disabled = !overdue;
@@ -1904,7 +2004,7 @@ function renderWeek() {
   for (let i = 0; i < 7; i++) {
     const d = addDays(base, i), ds = ymd(d);
     const entries = state.tasks
-      .map(t => ({ t, due: t.items.filter(it => effDue(it, t) === ds) }))
+      .map(t => ({ t, due: realItems(t).filter(it => effDue(it, t) === ds) }))
       .filter(e => e.due.length)
       .map(e => ({ ...e, allDone: e.due.every(x => x.done) }))
       .sort((a, b) => (a.allDone - b.allDone) || String(a.t.created_at).localeCompare(String(b.t.created_at)));
@@ -1981,7 +2081,7 @@ function renderRight() {
 function itemRowHTML(it) {
   const dueCls = !it.due ? '' : (!it.done && it.due < state.today) ? 'due-over' : (it.due === state.today && !it.done ? 'due-today' : '');
   const href = safeHref(it.link);
-  return `<li class="tc-item ${it.done ? 'done' : ''}" data-item="${esc(it.id)}">
+  return `<li class="tc-item ${it.done ? 'done' : ''} ${it.indent ? 'sub' : ''}" data-item="${esc(it.id)}">
     <input type="checkbox" class="check tc-check" ${it.done ? 'checked' : ''} aria-label="Mark ${esc(it.title)} as done">
     <span class="tc-item-title">${esc(it.title)}</span>
     ${href ? `<a class="tc-link" href="${esc(href)}" target="_blank" rel="noopener noreferrer" title="${esc(href)}">Link</a>` : ''}
@@ -1996,18 +2096,36 @@ function recPillHTML(t, allDone) {
   return `<span class="pill rec-pill ${cls}" title="${esc(describeRule(t.recur.rule))}">${ICONS.repeat}${esc(formatDue(d))}</span>`;
 }
 const collapsedHTML = n => `<li class="tc-collapsed">${ICONS.done}+${n} items complete</li>`;
-function taskCardHTML(t) {
-  const items = t.items, n = items.length;
-  const done = items.filter(i => i.done).length;
-  const allDone = n > 0 && done === n;
-  // Runs of 2+ ticked items at the very start or end collapse (unless every item is ticked)
-  let lead = 0; while (lead < n && items[lead].done) lead++;
-  let trail = 0; while (trail < n - lead && items[n - 1 - trail].done) trail++;
+// Rows for one section (items under a divider, or before the first divider)
+function sectionRowsHTML(sec, allDone) {
+  let h = sec.divider ? `<li class="tc-section"><span>${esc(sec.divider.title)}</span></li>` : '';
+  const its = sec.items, n = its.length;
+  if (!n) return h;
+  // A fully completed named section shrinks to its name and a count
+  if (!allDone && sec.divider && n >= 2 && its.every(i => i.done)) return h + collapsedHTML(n);
+  // Runs of 2+ ticked items at the start or end collapse, without splitting a parent from its sub-items
+  let lead = 0; while (lead < n && its[lead].done) lead++;
+  while (lead > 0 && lead < n && its[lead].indent) lead--;
+  let trail = 0; while (trail < n - lead && its[n - 1 - trail].done) trail++;
+  while (trail > 0 && its[n - trail].indent) trail--;
   const cLead = !allDone && lead >= 2, cTrail = !allDone && trail >= 2;
-  let rows = '';
-  if (cLead) rows += collapsedHTML(lead) + '<li class="tc-divider" aria-hidden="true"></li>';
-  items.slice(cLead ? lead : 0, cTrail ? n - trail : n).forEach(it => { rows += itemRowHTML(it); });
-  if (cTrail) rows += '<li class="tc-divider" aria-hidden="true"></li>' + collapsedHTML(trail);
+  if (cLead) h += collapsedHTML(lead) + '<li class="tc-divider" aria-hidden="true"></li>';
+  its.slice(cLead ? lead : 0, cTrail ? n - trail : n).forEach(it => { h += itemRowHTML(it); });
+  if (cTrail) h += '<li class="tc-divider" aria-hidden="true"></li>' + collapsedHTML(trail);
+  return h;
+}
+function taskCardHTML(t) {
+  const real = realItems(t), n = real.length;
+  const done = real.filter(i => i.done).length;
+  const allDone = n > 0 && done === n;
+  const sections = [];
+  let cur = { divider: null, items: [] };
+  t.items.forEach(it => {
+    if (isDivider(it)) { if (cur.divider || cur.items.length) sections.push(cur); cur = { divider: it, items: [] }; }
+    else cur.items.push(it);
+  });
+  sections.push(cur);
+  const rows = sections.map(sec => sectionRowsHTML(sec, allDone)).join('');
   return `<article class="task-card ${state.selectedId === t.id ? 'selected' : ''}" data-id="${esc(t.id)}" tabindex="0" style="${stripeStyle(taskCatIds(t))}">
     <div class="tc-head">
       <div class="tc-head-text">
