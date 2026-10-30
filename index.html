@@ -4,17 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Todo List</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✅</text></svg>">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23FF8A4D'/><stop offset='1' stop-color='%23E8507A'/></linearGradient></defs><path fill='url(%23g)' d='M 7 3 L 7 4 C 7 5.105 7.895 6 9 6 L 15 6 C 16.105 6 17 5.105 17 4 L 17 3 L 18 3 C 19.105 3 20 3.895 20 5 L 20 16 C 20 19.314 17.314 22 14 22 L 6 22 C 4.895 22 4 21.105 4 20 L 4 5 C 4 3.895 4.895 3 6 3 L 7 3 Z' opacity='.62'></path><path fill='url(%23g)' d='M 14 2 C 14.77 2.001 15.25 2.835 14.864 3.501 C 14.707 3.773 14.43 3.956 14.117 3.993 L 14 4 L 10 4 C 9.23 3.999 8.75 3.165 9.136 2.499 C 9.293 2.227 9.57 2.044 9.883 2.007 L 10 2 L 14 2 Z'></path><path fill='url(%23g)' d='M 15 10 L 9 10 C 8.23 10.001 7.75 10.835 8.136 11.501 C 8.293 11.773 8.57 11.956 8.883 11.993 L 9 12 L 15 12 C 15.77 12 16.251 11.167 15.866 10.5 C 15.687 10.191 15.357 10 15 10 Z'></path><path fill='url(%23g)' d='M 12 14 L 9 14 C 8.23 14 7.749 14.833 8.134 15.5 C 8.313 15.809 8.643 16 9 16 L 12 16 C 12.77 16 13.251 15.167 12.866 14.5 C 12.687 14.191 12.357 14 12 14 Z'></path></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>
   (function () {
     var r = document.documentElement;
     try {
       var t = localStorage.getItem('todo-theme');
       if (t === 'light' || t === 'dark') r.setAttribute('data-theme', t);
-      r.setAttribute('data-gradient', localStorage.getItem('todo-gradient') === 'off' ? 'off' : 'on');
+      r.setAttribute('data-gradient', 'off');
     } catch (e) { r.setAttribute('data-gradient', 'on'); }
   })();
 </script>
@@ -655,6 +655,275 @@ body{font:13px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", 
 .topbar-slot:has(#templates-btn[hidden])::before{display:none}
 .ne-body .rich{font-size:13.5px;line-height:1.55}
 .nm-card .ne-body .rich{font-size:14.5px;line-height:1.6}
+
+/* ===================== Glassy redesign ===================== */
+:root{
+  --bg:#eeeef1; --panel:#ffffff; --panel-2:rgba(29,26,46,.05); --line:rgba(29,26,46,.08); --line-strong:rgba(29,26,46,.16); --rule:rgba(29,26,46,.07);
+  --ink:#1d1a2e; --ink2:#3d3852; --muted:#5e5872; --faint:#8d889e; --done:#9a96a8;
+  --accent:#c9551c; --accent-soft:rgba(232,112,58,.14); --accent-ink:#ffffff;
+  --danger:#c2264b; --danger-soft:rgba(194,38,75,.10); --red:#c62828;
+  --primary-bg:#1d1a2e; --primary-ink:#ffffff;
+  --glass:linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.78));
+  --glass-border:#ffffff;
+  --glass-shadow:inset 0 1px 0 #ffffff, 0 1px 2px rgba(30,25,40,.05), 0 14px 34px rgba(30,25,40,.08);
+  --card-shadow:0 2px 6px rgba(30,25,40,.04), 0 10px 24px rgba(30,25,40,.06);
+  --cat-none:#c9c5d6;
+  --tc-blue:#3563d9; --tc-purple:#7a4cd9; --tc-amber:#f0a52a; --tc-green:#2e8b57; --tc-teal:#138a84; --tc-red:#d23f3f; --tc-pink:#c93c7e; --tc-slate:#5e6675;
+  --radius-lg:22px; --radius:14px; --radius-sm:10px;
+  --display:"Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --mono:"Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111216; --panel:#1e1f27; --panel-2:rgba(255,255,255,.05); --line:rgba(255,255,255,.08); --line-strong:rgba(255,255,255,.16); --rule:rgba(255,255,255,.06);
+    --ink:#eceaf4; --ink2:#c9c6d6; --muted:#a3a0b5; --faint:#767386; --done:#6e6b7d;
+    --accent:#ff9a6b; --accent-soft:rgba(255,154,107,.16); --accent-ink:#1a0e08;
+    --danger:#ff6f8e; --danger-soft:rgba(255,111,142,.14); --red:#ff7a70;
+    --primary-bg:#eceaf4; --primary-ink:#16161c;
+    --glass:linear-gradient(180deg, rgba(38,39,49,.94), rgba(28,29,37,.88));
+    --glass-border:rgba(255,255,255,.06);
+    --glass-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 14px 34px rgba(0,0,0,.38);
+    --card-shadow:0 2px 6px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.25);
+    --cat-none:#4a4858;
+    --tc-blue:#4a74e0; --tc-purple:#8459e0; --tc-amber:#f0a52a; --tc-green:#2f9a60; --tc-teal:#179690; --tc-red:#d9504f; --tc-pink:#d04c8a; --tc-slate:#6b7384;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#111216; --panel:#1e1f27; --panel-2:rgba(255,255,255,.05); --line:rgba(255,255,255,.08); --line-strong:rgba(255,255,255,.16); --rule:rgba(255,255,255,.06);
+    --ink:#eceaf4; --ink2:#c9c6d6; --muted:#a3a0b5; --faint:#767386; --done:#6e6b7d;
+    --accent:#ff9a6b; --accent-soft:rgba(255,154,107,.16); --accent-ink:#1a0e08;
+    --danger:#ff6f8e; --danger-soft:rgba(255,111,142,.14); --red:#ff7a70;
+    --primary-bg:#eceaf4; --primary-ink:#16161c;
+    --glass:linear-gradient(180deg, rgba(38,39,49,.94), rgba(28,29,37,.88));
+    --glass-border:rgba(255,255,255,.06);
+    --glass-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 14px 34px rgba(0,0,0,.38);
+    --card-shadow:0 2px 6px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.25);
+    --cat-none:#4a4858;
+    --tc-blue:#4a74e0; --tc-purple:#8459e0; --tc-amber:#f0a52a; --tc-green:#2f9a60; --tc-teal:#179690; --tc-red:#d9504f; --tc-pink:#d04c8a; --tc-slate:#6b7384;
+    color-scheme:dark;
+}
+body{font:13.5px/1.45 "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;letter-spacing:0;background:var(--bg)}
+.ic.duo{width:17px;height:17px;flex:none}
+.field-label{font-family:inherit;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.input{border-radius:10px;border-color:var(--line-strong);background:var(--panel)}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.check{border-radius:50%;width:17px;height:17px;border:2px solid var(--line-strong)}
+.check:checked{background:var(--accent);border-color:var(--accent)}
+.tc-item.sub .check,.line.sub .check{width:14px;height:14px}
+
+/* Buttons */
+.btn{border-radius:12px;border:0;background:var(--panel-2);color:var(--ink2);padding:9px 14px;font-weight:700}
+.btn:hover{background:var(--line-strong);color:var(--ink)}
+.btn.primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--primary-bg);color:var(--primary-ink);padding:11px 18px;filter:none}
+.btn.primary:hover{background:var(--primary-bg);filter:brightness(1.12)}
+.btn.ghost{background:var(--panel-2);color:var(--ink2)}
+.btn.danger{color:var(--danger)}
+.btn .ic.duo{width:18px;height:18px;margin:0}
+.kbd-hint{font-weight:600;opacity:.6}
+.icon-btn{border-radius:10px}
+
+/* Top bar: a floating glass bar */
+.topbar{height:auto;min-height:58px;margin:16px 16px 0;padding:10px 12px 10px 16px;gap:14px;background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;box-shadow:var(--glass-shadow);overflow:visible}
+.topbar::before,.mesh{display:none!important}
+#gradient-btn{display:none!important}
+.brand-mark{width:32px;height:32px;flex:none;border-radius:10px;background:linear-gradient(135deg,#ffb24d,#ff7a4d 50%,#e8507a)}
+.view-switch{align-self:center;gap:4px;padding:4px;border-radius:14px;background:var(--panel-2);border:0}
+.vs-thumb{display:block;top:4px;bottom:4px;border-radius:10px;background:var(--panel);box-shadow:0 2px 8px rgba(30,25,40,.10)}
+.vs-opt{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border-radius:10px;font-family:inherit;font-size:13.5px;font-weight:600;letter-spacing:0;color:var(--muted);box-shadow:none}
+.vs-opt.active{color:var(--ink);font-weight:700;box-shadow:none}
+.topbar-slot::before{display:none}
+#templates-btn{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 12px;border-radius:10px;background:transparent;font-family:inherit;font-size:13.5px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--muted)}
+#templates-btn:hover{background:var(--panel-2);color:var(--ink)}
+.tb-icon{width:36px;height:36px;border:0;border-radius:12px;background:var(--panel-2);color:var(--ink)}
+.tb-icon .ic.duo{width:18px;height:18px}
+.user-chip{display:inline-flex;align-items:center;gap:6px;color:var(--ink)}
+#user-email{font-family:inherit;font-size:12.5px;font-weight:600;color:var(--muted);margin:0}
+#signout-btn{height:36px;padding:0 14px;border-radius:12px;background:var(--primary-bg);color:var(--primary-ink);font-size:12.5px}
+#signout-btn:hover{filter:brightness(1.12)}
+.db-banner{margin:12px 16px 0;border-radius:12px}
+
+/* Panels */
+.columns{gap:16px;padding:16px;background:transparent}
+#todo-view{grid-template-columns:minmax(330px,390px) minmax(0,1fr) minmax(290px,330px)}
+.columns.notes-cols{grid-template-columns:minmax(330px,390px) minmax(0,1fr)}
+.col,.columns > .col:first-child{background:var(--glass);border:1px solid var(--glass-border);border-radius:22px;box-shadow:var(--glass-shadow)}
+.col-head{margin:0 22px;padding:20px 0 14px;border-bottom:1px solid var(--line);align-items:center;flex-wrap:wrap}
+.col-head h2{font-family:inherit;font-size:19px;font-weight:800;letter-spacing:-.02em}
+.col-head:has(.tabs){padding-bottom:14px}
+.col-meta,#draft-status,#note-draft-status{font-family:inherit;font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--muted)}
+.col-scroll{padding:16px 22px 20px}
+.col-foot{margin:0 22px;padding:14px 0 20px;border-top:1px solid var(--line);gap:10px}
+.col-foot .spacer{display:none}
+.col-foot .btn.primary{flex:1}
+.col-head .tpl-pick{height:30px;padding:0 26px 0 12px;border:0;border-radius:999px;background-color:var(--panel-2);font-family:inherit;font-size:12.5px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--ink);background-position:calc(100% - 13px) 50%,calc(100% - 9px) 50%}
+.filters{margin:0 22px;padding:14px 0 4px;border-bottom:0;gap:6px}
+.loading{color:var(--muted)}
+
+/* Tabs as a segmented control */
+.tabs{gap:4px;padding:4px;margin-left:auto;border-radius:14px;background:var(--panel-2);align-items:center}
+.tab,.tab.active{display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;letter-spacing:0;line-height:1;color:var(--muted);box-shadow:none}
+.tab.active{background:var(--panel);color:var(--ink);font-weight:700;box-shadow:0 2px 8px rgba(30,25,40,.08)}
+.tab-count,.tab.active .tab-count{font-family:inherit;font-size:12px;font-weight:700;color:inherit;opacity:.7}
+.tab[data-tab=overdue]{color:var(--danger)}
+.tab[data-tab=overdue] .tab-count.has{color:var(--danger);opacity:1}
+
+/* Filter chips: solid when on */
+.chip-toggle{height:28px;padding:0 11px;border-radius:9px;border:1.5px dashed var(--line-strong);background:transparent;color:var(--muted);font-size:12px;font-weight:700}
+.chip-toggle .dot{display:none}
+.chip-toggle.on{border:1.5px solid transparent;background:var(--cat-color);color:#ffffff}
+.chip-toggle.on[style*="--tc-amber"]{color:#3a2400}
+.chip-toggle.on[style*="--cat-none"]{background:var(--panel-2);color:var(--ink2);border-color:var(--line-strong);border-style:dashed}
+.chip-toggle.rec-chip.on{background:var(--panel-2);color:var(--ink2);border-color:transparent}
+.chip-toggle .ic{width:11px;height:11px}
+.chip-edit{font-family:inherit;font-size:12px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--accent)}
+.f-sep{background:var(--line-strong)}
+
+/* Task cards */
+.task-card{margin-bottom:14px;padding:16px 18px 18px;border:1px solid var(--line);border-radius:18px;background:var(--panel);box-shadow:var(--card-shadow)}
+.task-card:hover{border-color:var(--line-strong)}
+.task-card.selected{outline:2px solid var(--accent);outline-offset:1px}
+.task-card.expanded{padding:16px 18px 16px 30px}
+.tc-labels{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;font-family:inherit;font-size:12px;font-weight:700;letter-spacing:0;text-transform:none}
+.tc-label{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:8px;background:var(--panel-2);color:var(--ink2)}
+.tc-label.cat{background:var(--cat-color);color:#ffffff}
+.tc-label.cat[style*="--tc-amber"]{color:#3a2400}
+.tc-label .ic{width:11px;height:11px}
+.tc-label.rec.due-today{color:var(--accent)}
+.tc-label.rec.due-over{color:var(--danger)}
+.tc-title{font-family:inherit;font-size:17px;font-weight:800;letter-spacing:-.02em}
+.tc-sub{font-size:13px;color:var(--muted)}
+.tc-progress{padding-top:2px;font-family:inherit;font-size:12px;font-weight:800;color:var(--ink2)}
+.tc-defer{width:30px;height:30px;border:0;border-radius:10px;background:var(--panel-2);color:var(--ink)}
+.tc-defer .ic.duo{width:16px;height:16px}
+.tc-bar{height:6px;margin:12px 0;border-radius:999px;background:var(--panel-2);overflow:hidden}
+.tc-bar span{display:block;height:100%;border-radius:999px;background:var(--accent)}
+.tc-items{margin-top:0;gap:8px}
+.tc-item{font-size:13.5px;gap:10px}
+.tc-item.sub{padding-left:27px;font-size:13px}
+.pill,.pill.due-today,.pill.due-over{height:max-content;padding:1px 8px;border-radius:999px;border:0;background:var(--panel-2);font-family:inherit;font-size:11px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--ink2)}
+.pill.due-today{background:var(--accent-soft);color:var(--accent)}
+.pill.due-over{background:var(--danger-soft);color:var(--danger)}
+.tc-link{font-family:inherit;font-size:12px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--accent)}
+.tc-collapsed{font-family:inherit;font-size:12px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--muted)}
+.tc-divider{border-top:1px dashed var(--line-strong)}
+.tc-section{font-family:inherit;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:var(--muted)}
+.list-empty{border:1.5px dashed var(--line-strong);border-radius:16px}
+
+/* Next 7 days: agenda */
+.overdue-strip,.overdue-strip.none{width:auto;margin:14px 22px 0;padding:0 14px;height:40px;border:0;border-radius:12px;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:0;text-transform:none}
+.overdue-strip{background:var(--danger-soft);color:var(--danger)}
+.overdue-strip.none{background:var(--panel-2);color:var(--muted)}
+.strip-go{text-decoration:none}
+#week-days{padding-top:10px}
+.ag-day-block + .ag-day-block,.ag-empty + .ag-day-block,.ag-day-block + .ag-empty{margin-top:14px}
+.ag-head{display:flex;align-items:center;gap:8px;padding:7px 4px;border-bottom:2px solid var(--line)}
+.ag-head .ag-day{font-weight:800}
+.ag-head .ag-date{font-weight:600;color:var(--muted)}
+.ag-head .ag-count{margin-left:auto;font-size:12px;font-weight:800;color:var(--ink2)}
+.ag-head.today{padding:8px 10px;border:0;border-radius:12px;background:var(--primary-bg);color:var(--primary-ink)}
+.ag-head.today .ag-date{color:inherit;opacity:.7}
+.ag-head.today .ag-count{padding:1px 8px;border-radius:999px;background:#ffb08a;color:#3a1405}
+.ag-list{list-style:none;margin:4px 0 0;padding:0}
+.ag-row{display:flex;align-items:flex-start;gap:10px;padding:7px 4px;border-bottom:1px solid var(--rule)}
+.ag-row:last-child{border-bottom:0}
+.ag-row .check{width:15px;height:15px;margin-top:2px}
+.ag-main{flex:1;min-width:0;display:flex;flex-direction:column;align-items:stretch;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;color:inherit}
+.ag-title{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ag-main:hover .ag-title{color:var(--accent)}
+.ag-task{display:flex;align-items:center;gap:5px;min-width:0;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ag-task .sq{width:7px;height:7px;border-radius:2px;flex:none}
+.ag-row.done .ag-title{text-decoration:line-through;color:var(--done)}
+.ag-more{margin:4px 0 0 29px;padding:2px 0;border:0;background:transparent;font:inherit;font-size:12.5px;font-weight:700;color:var(--accent);cursor:pointer}
+.ag-empty{padding:6px 4px;font-weight:600;color:var(--muted)}
+
+/* New task form */
+.paper .pe-title{font-family:inherit;font-size:24px;font-weight:800;letter-spacing:-.03em}
+.pe-sub{color:var(--faint)}
+.pe-repeat,.pe-cat{height:30px;border:0;border-radius:10px;background-color:var(--panel-2);font-size:12.5px;font-weight:600;color:var(--ink2)}
+.pe-repeat.on{background:var(--accent-soft);color:var(--accent)}
+.cat-tag{height:30px;padding:0 12px;border:0;border-radius:10px;background:var(--cat-color);color:#ffffff;font-size:12.5px;font-weight:700}
+.cat-tag[style*="--tc-amber"]{color:#3a2400}
+.cat-tag::before{display:none}
+.pe-lines{border-top:0}
+.line{padding:8px 0;border-bottom:1px solid var(--rule)}
+.line:focus-within{margin:2px -10px;padding:9px 10px;border-radius:14px;border-bottom-color:transparent;background:rgba(77,124,240,.07);box-shadow:inset 0 0 0 1px rgba(77,124,240,.18)}
+.line-bullet{width:17px;height:17px;border-radius:50%;border:2px solid var(--line-strong)}
+.line.sub .line-bullet{width:14px;height:14px}
+.line-text{font-size:13.5px}
+.ltag,.ltag.over,.ltag.today{border:0;border-radius:8px;padding:1px 8px;background:var(--panel-2);font-family:inherit;font-size:11.5px;font-weight:700;letter-spacing:0;line-height:18px;text-transform:none;color:var(--ink2)}
+.ltag.over{background:var(--danger-soft);color:var(--danger)}
+.ltag.today{background:var(--accent-soft);color:var(--accent)}
+.line.divider{padding-top:16px;border-bottom:1px solid var(--line-strong)}
+.line.divider:focus-within{margin:2px -10px;padding:16px 10px 9px}
+.line.divider .line-text{font-family:inherit;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:var(--muted)}
+.pe-adds{border-bottom:0}
+.add-divider{font-family:inherit;font-size:12px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--muted)}
+.pe-hint{font-family:inherit;font-size:11.5px;letter-spacing:0;text-transform:none;color:var(--muted)}
+.pe-hint kbd,.pe-hint code{font-weight:700;color:var(--ink2)}
+.det-chip,.det-input{border-radius:9px}
+.pe-recur{border-radius:14px;border:0;background:var(--panel-2)}
+.rc-lbl{font-family:inherit;font-size:11px;font-weight:700;letter-spacing:0;text-transform:none}
+.rich-toolbar{gap:2px;padding:4px;border:0;border-radius:12px;background:var(--panel-2)}
+.tb-btn{height:28px;border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--ink)}
+.tb-btn:hover{background:var(--panel)}
+
+/* Notes */
+.notes-tools{gap:8px}
+.search-wrap{position:relative;display:flex;align-items:center}
+.search-wrap .ic.duo{position:absolute;left:12px;color:var(--ink);pointer-events:none}
+.note-search{width:260px;height:38px;padding-left:38px;border:0;border-radius:12px;background:var(--panel-2)}
+.notes-tools .btn{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border-radius:12px;font-family:inherit;font-size:13px;letter-spacing:0;text-transform:none;color:var(--ink2)}
+#note-filters .chip-toggle{border:0;background:transparent;color:var(--muted)}
+#note-filters .chip-toggle.on{background:var(--panel);color:var(--ink);box-shadow:0 2px 8px rgba(30,25,40,.08)}
+#note-filters{margin:0 22px;padding:12px 0 4px}
+.ns-head{margin:18px 0 12px;gap:10px}
+.ns-name{font-family:inherit;font-size:16px;font-weight:800;letter-spacing:-.015em;text-transform:none;color:var(--ink)}
+.ns-count{padding:1px 8px;border-radius:999px;background:var(--panel-2);font-family:inherit;font-size:11.5px;font-weight:800;color:var(--ink2)}
+.ns-menu{width:28px;height:28px;border-radius:8px;background:var(--panel-2);color:var(--ink2)}
+.ns-grid{gap:14px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.ns-empty{border:1.5px dashed var(--line-strong);border-radius:16px}
+.note-card,.note-card.nc-none{height:172px;padding:16px 18px;border-radius:18px;border:1px solid color-mix(in srgb, var(--note-bg) 75%, var(--ink) 10%);box-shadow:var(--card-shadow)}
+.note-title{font-family:inherit;font-size:16px;font-weight:800;letter-spacing:-.02em}
+.note-preview{font-size:13px;color:var(--ink2)}
+.note-card.pinned .nc-pin{color:var(--ink)}
+.nc-pin .ic.duo{width:16px;height:16px}
+.nsw{width:22px;height:22px;border-radius:50%;border:1px solid var(--line-strong)}
+.nsw.on{box-shadow:0 0 0 2px var(--panel),0 0 0 4px var(--accent)}
+.note-editor.tinted{padding:16px;border:1px solid var(--line);border-radius:18px}
+.ne-pin{display:inline-flex;align-items:center;gap:6px}
+.ne-pin .ic.duo{width:16px;height:16px}
+.nm-backdrop{border-radius:22px;background:color-mix(in srgb, var(--bg) 50%, transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.nm-card,.nm-card.nc-none{border-radius:26px;border:1px solid var(--glass-border);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 30px 70px rgba(30,25,60,.22),0 4px 12px rgba(30,25,60,.08)}
+.nm-head{padding:14px 14px 10px 28px;border-bottom:0;gap:8px}
+#nm-status{font-family:inherit;font-size:12px;font-weight:700;letter-spacing:0;text-transform:none}
+#nm-delete{display:inline-flex;align-items:center;gap:6px;height:34px;border-radius:11px;background:color-mix(in srgb, var(--panel) 70%, transparent)}
+#nm-delete .ic.duo{width:16px;height:16px;color:var(--ink)}
+#nm-close{width:34px;height:34px;border-radius:11px;background:var(--primary-bg);color:var(--primary-ink)}
+.nm-scroll{padding:4px 34px 30px}
+.nm-card .pe-title{font-size:30px}
+.nm-card .ne-body .rich{padding:18px 20px;border-radius:16px;background:color-mix(in srgb, var(--panel) 72%, transparent)}
+/* Note colours (same names in the data, glassy tints) */
+.nc-butter{--note-bg:#fff0bf} .nc-peach{--note-bg:#ffe1cf} .nc-coral{--note-bg:#f4e2d2} .nc-rose{--note-bg:#fce1e8} .nc-lavender{--note-bg:#e6dcfc}
+.nc-sky{--note-bg:#dce7fd} .nc-aqua{--note-bg:#d6f0ef} .nc-mint{--note-bg:#d5f2e4} .nc-sage{--note-bg:#e3edd9} .nc-stone{--note-bg:#eceae6}
+:root[data-theme="dark"] .nc-butter{--note-bg:#3a3420} :root[data-theme="dark"] .nc-peach{--note-bg:#3d2a22} :root[data-theme="dark"] .nc-coral{--note-bg:#3a2c24} :root[data-theme="dark"] .nc-rose{--note-bg:#3b2530} :root[data-theme="dark"] .nc-lavender{--note-bg:#2f2840}
+:root[data-theme="dark"] .nc-sky{--note-bg:#22304a} :root[data-theme="dark"] .nc-aqua{--note-bg:#1f3638} :root[data-theme="dark"] .nc-mint{--note-bg:#1f3a2e} :root[data-theme="dark"] .nc-sage{--note-bg:#2c3526} :root[data-theme="dark"] .nc-stone{--note-bg:#302e2c}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .nc-butter{--note-bg:#3a3420} :root:not([data-theme="light"]) .nc-peach{--note-bg:#3d2a22} :root:not([data-theme="light"]) .nc-coral{--note-bg:#3a2c24} :root:not([data-theme="light"]) .nc-rose{--note-bg:#3b2530} :root:not([data-theme="light"]) .nc-lavender{--note-bg:#2f2840}
+  :root:not([data-theme="light"]) .nc-sky{--note-bg:#22304a} :root:not([data-theme="light"]) .nc-aqua{--note-bg:#1f3638} :root:not([data-theme="light"]) .nc-mint{--note-bg:#1f3a2e} :root:not([data-theme="light"]) .nc-sage{--note-bg:#2c3526} :root:not([data-theme="light"]) .nc-stone{--note-bg:#302e2c}
+}
+
+/* Pop-ups, menus, sign-in */
+.am-card{border-radius:24px;border:1px solid var(--glass-border);background:var(--panel);box-shadow:0 30px 70px rgba(20,20,40,.25)}
+.am-head h2{font-family:inherit;font-size:18px;font-weight:800}
+.tm-side{background:var(--panel-2)}
+.tm-item{border-radius:10px}
+.menu{border-radius:14px;border:1px solid var(--line);box-shadow:0 14px 34px rgba(20,20,40,.18)}
+.menu-item{border-radius:9px}
+.auth-card{border-radius:24px;border:1px solid var(--glass-border);background:var(--glass);box-shadow:var(--glass-shadow)}
+.auth-card h1{font-family:inherit;font-size:24px;font-weight:800}
+.toast{border-radius:12px;background:var(--primary-bg);color:var(--primary-ink)}
 </style>
 </head>
 <body>
@@ -680,18 +949,18 @@ body{font:13px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", 
 
 <div id="main" class="main" hidden>
   <header class="topbar">
-    <div class="mesh" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span><span class="blob b5"></span></div>
+    <span class="brand-mark" aria-hidden="true"></span>
     <div class="view-switch" role="tablist" aria-label="Switch between todo list and notes">
       <span class="vs-thumb" aria-hidden="true"></span>
-      <button type="button" class="vs-opt active" data-view="todo" role="tab" aria-selected="true">Todo List</button>
-      <button type="button" class="vs-opt" data-view="notes" role="tab" aria-selected="false">Notes</button>
+      <button type="button" class="vs-opt active" data-view="todo" role="tab" aria-selected="true"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M 7 3 L 7 4 C 7 5.105 7.895 6 9 6 L 15 6 C 16.105 6 17 5.105 17 4 L 17 3 L 18 3 C 19.105 3 20 3.895 20 5 L 20 16 C 20 19.314 17.314 22 14 22 L 6 22 C 4.895 22 4 21.105 4 20 L 4 5 C 4 3.895 4.895 3 6 3 L 7 3 Z" opacity=".3"></path><path fill="currentColor" d="M 14 2 C 14.77 2.001 15.25 2.835 14.864 3.501 C 14.707 3.773 14.43 3.956 14.117 3.993 L 14 4 L 10 4 C 9.23 3.999 8.75 3.165 9.136 2.499 C 9.293 2.227 9.57 2.044 9.883 2.007 L 10 2 L 14 2 Z"></path><path fill="currentColor" d="M 15 10 L 9 10 C 8.23 10.001 7.75 10.835 8.136 11.501 C 8.293 11.773 8.57 11.956 8.883 11.993 L 9 12 L 15 12 C 15.77 12 16.251 11.167 15.866 10.5 C 15.687 10.191 15.357 10 15 10 Z"></path><path fill="currentColor" d="M 12 14 L 9 14 C 8.23 14 7.749 14.833 8.134 15.5 C 8.313 15.809 8.643 16 9 16 L 12 16 C 12.77 16 13.251 15.167 12.866 14.5 C 12.687 14.191 12.357 14 12 14 Z"></path></svg>Todo List</button>
+      <button type="button" class="vs-opt" data-view="notes" role="tab" aria-selected="false"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M 4 5 C 4 3.343 5.343 2 7 2 L 18 2 C 19.105 2 20 2.895 20 4 L 20 16.99 C 20 17.158 19.962 17.312 19.887 17.462 L 19.342 18.552 C 19.201 18.834 19.201 19.165 19.342 19.447 L 19.885 20.535 C 20.235 21.201 19.752 22 19 22 L 7 22 C 5.343 22 4 20.657 4 19 L 4 5 Z" fill-rule="evenodd" opacity=".3"></path><path fill="currentColor" d="M 10 7 C 9.23 7 8.749 7.833 9.134 8.5 C 9.313 8.809 9.643 9 10 9 L 14 9 C 14.77 9 15.251 8.167 14.866 7.5 C 14.687 7.191 14.357 7 14 7 L 10 7 Z" fill-rule="evenodd"></path><path fill="currentColor" d="M 7 18 L 17.408 18 C 17.179 18.647 17.179 19.353 17.408 20 L 7 20 C 6.23 20 5.749 19.167 6.134 18.5 C 6.313 18.191 6.643 18 7 18 Z" fill-rule="evenodd"></path></svg>Notes</button>
     </div>
     <!-- Space reserved for future buttons -->
-    <div class="topbar-slot" id="topbar-slot"><button class="btn ghost small" id="templates-btn" type="button">Templates</button></div>
+    <div class="topbar-slot" id="topbar-slot"><button class="btn ghost small" id="templates-btn" type="button"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M 19 11 C 20.047 11 20.917 11.806000000000001 20.995 12.85 L 21 13 L 21 19 C 21 20.047 20.194 20.917 19.15 20.995 L 19 21 L 15 21 C 13.953 21 13.083 20.194 13.005 19.15 L 13 19 L 13 13 C 13 11.953 13.806000000000001 11.083 14.85 11.005 L 15 11 L 19 11 Z" fill-rule="evenodd" opacity=".3"></path><path fill="currentColor" d="M 19 3 C 20.105 3 21 3.895 21 5 L 21 7 C 21 8.105 20.105 9 19 9 L 15 9 C 13.895 9 13 8.105 13 7 L 13 5 C 13 3.895 13.895 3 15 3 L 19 3 Z" fill-rule="evenodd" opacity=".3"></path><path fill="currentColor" d="M 9 3 C 10.105 3 11 3.895 11 5 L 11 11 C 11 12.105 10.105 13 9 13 L 5 13 C 3.895 13 3 12.105 3 11 L 3 5 C 3 3.895 3.895 3 5 3 L 9 3 Z" fill-rule="evenodd"></path><path fill="currentColor" d="M 9 15 C 10.105 15 11 15.895 11 17 L 11 19 C 11 20.105 10.105 21 9 21 L 5 21 C 3.895 21 3 20.105 3 19 L 3 17 C 3 15.895 3.895 15 5 15 L 9 15 Z" fill-rule="evenodd" opacity=".3"></path></svg>Templates</button></div>
     <div class="topbar-user">
       <button class="icon-btn tb-icon" id="gradient-btn" type="button" aria-pressed="true" aria-label="Gradient" title="Turn gradient off"></button>
       <button class="icon-btn tb-icon" id="theme-btn" type="button" aria-label="Switch colour mode" title="Switch to dark mode"></button>
-      <span class="muted small" id="user-email"></span>
+      <span class="user-chip"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M 12 13 C 14.396 13 16.575 13.693999999999999 18.178 14.671 C 18.978 15.161 19.662 15.736 20.156 16.361 C 20.642 16.977 21 17.713 21 18.5 C 21 19.345 20.589 20.011 19.997 20.486 C 19.437 20.936 18.698 21.234 17.913 21.442 C 16.335 21.859 14.229 22 12 22 C 9.771 22 7.665 21.86 6.087 21.442 C 5.302 21.234 4.563 20.936 4.003 20.486 C 3.41 20.01 3 19.345 3 18.5 C 3 17.713 3.358 16.977 3.8440000000000003 16.361 C 4.338 15.736 5.021 15.161 5.822 14.671 C 7.425 13.693999999999999 9.605 13 12 13 Z"></path><path fill="currentColor" d="M 12 2 C 15.849 2 18.255 6.167 16.33 9.5 C 15.437 11.047 13.786 12 12 12 C 8.151 12 5.745 7.833 7.67 4.5 C 8.563 2.9530000000000003 10.214 2 12 2 Z" opacity=".3"></path></svg><span class="muted small" id="user-email"></span></span>
       <button class="btn ghost small" id="signout-btn" type="button">Sign out</button>
     </div>
   </header>
@@ -705,20 +974,14 @@ body{font:13px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", 
       <div class="col-foot">
         <button class="btn ghost" id="clear-draft" type="button">Clear</button>
         <span class="spacer"></span>
-        <button class="btn primary" id="add-task-btn" type="button">Add task to board</button>
+        <button class="btn primary" id="add-task-btn" type="button"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M 12 2 C 17.523 2 22 6.477 22 12 C 22 17.523 17.523 22 12 22 C 6.477 22 2 17.523 2 12 C 2 6.477 6.477 2 12 2 Z" opacity=".3"></path><path fill="currentColor" d="M 12 7 C 11.493 7 11.066 7.38 11.007 7.883 L 11 8 L 11 11 L 8 11 C 7.23 11.001 6.75 11.835 7.136 12.501 C 7.293 12.773 7.57 12.956 7.883 12.993 L 8 13 L 11 13 L 11 16 C 11.001 16.77 11.835 17.25 12.501 16.864 C 12.773 16.707 12.956 16.43 12.993 16.117 L 13 16 L 13 13 L 16 13 C 16.77 12.999 17.25 12.165 16.864 11.499 C 16.707 11.227 16.43 11.044 16.117 11.007 L 16 11 L 13 11 L 13 8 C 13 7.448 12.552 7 12 7 Z"></path></svg>Add task to board <span class="kbd-hint">Ctrl ↵</span></button>
       </div>
-    </section>
-
-    <!-- Middle: next 7 days -->
-    <section class="col" aria-label="Next 7 days">
-      <div class="col-head"><h2>Next 7 days</h2><span class="col-meta" id="week-range"></span></div>
-      <button class="overdue-strip none" id="overdue-strip" type="button" disabled></button>
-      <div class="col-scroll" id="week-days"></div>
     </section>
 
     <!-- Right: all tasks -->
     <section class="col" aria-label="All tasks">
       <div class="col-head">
+        <h2>Tasks</h2>
         <div class="tabs" role="tablist" id="tabs">
           <button class="tab active" data-tab="current" role="tab" type="button">Current <span class="tab-count">0</span></button>
           <button class="tab" data-tab="upcoming" role="tab" type="button">Upcoming <span class="tab-count">0</span></button>
@@ -728,6 +991,12 @@ body{font:13px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", 
       </div>
       <div class="filters" id="filters"></div>
       <div class="col-scroll" id="task-list"></div>
+    </section>
+    <!-- Middle: next 7 days -->
+    <section class="col" aria-label="Next 7 days">
+      <div class="col-head"><h2>Next 7 days</h2><span class="col-meta" id="week-range"></span></div>
+      <button class="overdue-strip none" id="overdue-strip" type="button" disabled></button>
+      <div class="col-scroll" id="week-days"></div>
     </section>
   </div>
 
@@ -739,7 +1008,7 @@ body{font:13px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", 
       <div class="col-foot">
         <button class="btn ghost" id="clear-note" type="button">Clear</button>
         <span class="spacer"></span>
-        <button class="btn primary" id="add-note-btn" type="button">Add note</button>
+        <button class="btn primary" id="add-note-btn" type="button"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M 12 2 C 17.523 2 22 6.477 22 12 C 22 17.523 17.523 22 12 22 C 6.477 22 2 17.523 2 12 C 2 6.477 6.477 2 12 2 Z" opacity=".3"></path><path fill="currentColor" d="M 12 7 C 11.493 7 11.066 7.38 11.007 7.883 L 11 8 L 11 11 L 8 11 C 7.23 11.001 6.75 11.835 7.136 12.501 C 7.293 12.773 7.57 12.956 7.883 12.993 L 8 13 L 11 13 L 11 16 C 11.001 16.77 11.835 17.25 12.501 16.864 C 12.773 16.707 12.956 16.43 12.993 16.117 L 13 16 L 13 13 L 16 13 C 16.77 12.999 17.25 12.165 16.864 11.499 C 16.707 11.227 16.43 11.044 16.117 11.007 L 16 11 L 13 11 L 13 8 C 13 7.448 12.552 7 12 7 Z"></path></svg>Add note <span class="kbd-hint">Ctrl ↵</span></button>
       </div>
     </section>
 
@@ -748,8 +1017,8 @@ body{font:13px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", 
       <div class="col-head">
         <h2>Notes</h2>
         <div class="notes-tools">
-          <input class="input note-search" id="note-search" type="search" placeholder="Search notes" aria-label="Search notes">
-          <button class="btn small" id="add-cat-btn" type="button">+ Category</button>
+          <label class="search-wrap"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><circle fill="currentColor" cx="10.5" cy="10.5" r="7.5" opacity=".3"></circle><path fill="currentColor" d="M10.5 5.5a5 5 0 015 5 1 1 0 01-2 0 3 3 0 00-3-3 1 1 0 010-2z"></path><rect fill="currentColor" x="15.3" y="14" width="2.8" height="8.6" rx="1.4" transform="rotate(-45 16.7 18.3)"></rect></svg><input class="input note-search" id="note-search" type="search" placeholder="Search notes" aria-label="Search notes"></label>
+          <button class="btn small" id="add-cat-btn" type="button"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M 12 2 C 17.523 2 22 6.477 22 12 C 22 17.523 17.523 22 12 22 C 6.477 22 2 17.523 2 12 C 2 6.477 6.477 2 12 2 Z" opacity=".3"></path><path fill="currentColor" d="M 12 7 C 11.493 7 11.066 7.38 11.007 7.883 L 11 8 L 11 11 L 8 11 C 7.23 11.001 6.75 11.835 7.136 12.501 C 7.293 12.773 7.57 12.956 7.883 12.993 L 8 13 L 11 13 L 11 16 C 11.001 16.77 11.835 17.25 12.501 16.864 C 12.773 16.707 12.956 16.43 12.993 16.117 L 13 16 L 13 13 L 16 13 C 16.77 12.999 17.25 12.165 16.864 11.499 C 16.707 11.227 16.43 11.044 16.117 11.007 L 16 11 L 13 11 L 13 8 C 13 7.448 12.552 7 12 7 Z"></path></svg>Category</button>
         </div>
       </div>
       <div class="filters" id="note-filters"></div>
@@ -759,7 +1028,7 @@ body{font:13px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", 
         <div class="nm-card nc-none" role="dialog" aria-modal="true" aria-label="Note">
           <div class="nm-head">
             <span class="muted small" id="nm-status"></span><span class="spacer"></span>
-            <button class="btn ghost danger small" id="nm-delete" type="button">Delete note</button>
+            <button class="btn ghost danger small" id="nm-delete" type="button"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5.6 8h12.8l-.95 11.3A2 2 0 0115.46 21H8.54a2 2 0 01-1.99-1.7z" opacity=".3"></path><path fill="currentColor" d="M9 3.6A1.6 1.6 0 0110.6 2h2.8A1.6 1.6 0 0115 3.6V4h4a1 1 0 010 2H5a1 1 0 010-2h4z"></path><rect fill="currentColor" x="9.2" y="10.5" width="1.8" height="7.5" rx=".9"></rect><rect fill="currentColor" x="13" y="10.5" width="1.8" height="7.5" rx=".9"></rect></svg>Delete</button>
             <button class="icon-btn" id="nm-close" type="button" aria-label="Close" title="Close (Esc)"></button>
           </div>
           <div class="nm-scroll" id="nm-body"></div>
@@ -799,7 +1068,7 @@ const MON_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','
 
 const state = {
   user: null, started: false, tasks: [],
-  tab: 'current', catHidden: new Set(), taskCats: [], templates: [], needsCatMigration: false, tplManager: null, showRecurring: true, view: 'todo', needsMigration: false,
+  tab: 'current', agendaOpen: new Set(), catHidden: new Set(), taskCats: [], templates: [], needsCatMigration: false, tplManager: null, showRecurring: true, view: 'todo', needsMigration: false,
   notes: [], noteCats: [], notesReady: false, noteHidden: new Set(), noteSearch: '', noteDraft: null, noteDraftTimer: null, noteModal: null, noteChain: Promise.resolve(), dragNoteEl: null,
   selectedId: null, editor: null,
   today: null, draftEditor: null, draftTimer: null, draftChain: Promise.resolve(),
@@ -823,7 +1092,7 @@ function stripeStyle(ids) {
   return `--stripe:linear-gradient(to bottom, ${cs.map((c, i) => `${catVar(c)} ${(i * step).toFixed(2)}% ${((i + 1) * step).toFixed(2)}%`).join(', ')})`;
 }
 const catSquaresHTML = ids => ids.map(findCat).filter(Boolean).map(c => `<span class="sq" style="--cat-color:${catVar(c)}" title="${esc(c.name)}"></span>`).join('');
-const catLabelsHTML = ids => ids.map(findCat).filter(Boolean).map(c => `<span class="tc-label"><span class="sq" style="--cat-color:${catVar(c)}"></span>${esc(c.name)}</span>`).join('');
+const catLabelsHTML = ids => ids.map(findCat).filter(Boolean).map(c => `<span class="tc-label cat" style="--cat-color:${catVar(c)}">${esc(c.name)}</span>`).join('');
 const FREQ_WORD = { daily: 'Daily', weekly: 'Weekly', monthly: 'Monthly', quarterly: 'Quarterly', annually: 'Annually' };
 function recLabelHTML(t, allDone) {
   if (!isRecurring(t)) return '';
@@ -1181,10 +1450,22 @@ function applyFmt(cmd, ed) {
 }
 
 /* ---------- Task editor: "paper" style, used for the new-task form and for editing ---------- */
+// Duo Icons (MIT, github.com/fazdiu/duo-icons); search and trash drawn to match
+const DUO = {
+"moon-stars": "<path fill=\"currentColor\" d=\"M 12.477 4.546 C 12.158 3.837 12.725999999999999 3.048 13.5 3.127 C 13.525 3.129 13.549 3.133 13.574 3.137 C 20.395 4.35 23.345 12.493 18.884 17.793 C 14.422 23.094 5.896 21.577 3.536 15.063 C 3.3609999999999998 14.579 3.227 14.081 3.137 13.574 C 3.002 12.808 3.746 12.183 4.476 12.449 C 4.5 12.457 4.523 12.467 4.546 12.477 C 8.76 14.369 13.441 10.989 12.972 6.394 C 12.907 5.756 12.74 5.132 12.477 4.546 Z\" opacity=\".3\"></path><path fill=\"currentColor\" d=\"M 8.397 2.857 C 8.437 2.767 8.563 2.767 8.603 2.857 L 8.705 3.079 C 9.139 3.977 9.823 4.731 10.675 5.251 L 10.832 5.343 C 10.905 5.383 10.907 5.487 10.835 5.53 C 10.834 5.531 10.833 5.531 10.832 5.532 L 10.674 5.624 C 9.752 6.187 9.028 7.024 8.604 8.018 C 8.569 8.098 8.461 8.11 8.409 8.04 C 8.405 8.033 8.4 8.026 8.397 8.018 L 8.295 7.796 C 7.861 6.898 7.177 6.144 6.325 5.624 L 6.167 5.532 C 6.094 5.492 6.092 5.388 6.164 5.345 C 6.165 5.344 6.166 5.344 6.167 5.343 L 6.325 5.251 C 7.177 4.731 7.861 3.977 8.295 3.079 L 8.397 2.857 Z\"></path><path fill=\"currentColor\" d=\"M 5.565 7.716 L 5.629 7.856 C 5.902 8.42 6.3309999999999995 8.893 6.866 9.219 L 6.966 9.278 C 7.011 9.304 7.012 9.369 6.966 9.396 C 6.966 9.396 6.966 9.396 6.966 9.396 L 6.866 9.454 C 6.3309999999999995 9.78 5.902 10.254 5.629 10.818 L 5.565 10.958 C 5.543 11.008 5.475 11.016 5.443 10.971 C 5.44 10.967 5.437 10.963 5.4350000000000005 10.958 L 5.371 10.818 C 5.098 10.254 4.669 9.78 4.134 9.454 L 4.034 9.396 C 3.989 9.37 3.988 9.305 4.034 9.278 C 4.034 9.278 4.034 9.278 4.034 9.278 L 4.134 9.219 C 4.668 8.893 5.098 8.419 5.37 7.855 L 5.434 7.715 C 5.456 7.665 5.524 7.657 5.556 7.702 C 5.559 7.7059999999999995 5.562 7.71 5.564 7.715 L 5.565 7.716 Z\"></path>",
+"moon-2": "<path fill=\"currentColor\" d=\"M 20.15 18.125 L 5.875 3.85 C 6.591666666666667 3.1166666666666667 7.404000000000001 2.5083333333333333 8.312000000000001 2.025 C 9.220666666666668 1.5416666666666667 10.200000000000001 1.2 11.25 1 C 10.950000000000001 2.6500000000000004 11.041666666666668 4.262333333333333 11.525 5.837 C 12.008333333333333 7.412333333333333 12.841666666666667 8.791666666666666 14.025 9.975 C 15.208333333333334 11.158333333333333 16.587666666666667 11.991666666666667 18.163 12.475 C 19.737666666666666 12.958333333333332 21.349999999999998 13.049999999999999 23 12.75 C 22.816666666666666 13.799999999999999 22.479333333333333 14.779333333333334 21.988 15.688 C 21.496 16.596 20.883333333333333 17.408333333333335 20.15 18.125 Z\"></path><path fill=\"currentColor\" d=\"M 19.375 23.05 L 16.675 20.35 C 16.108333333333334 20.566666666666666 15.529333333333334 20.729 14.938 20.837 C 14.346 20.945666666666668 13.733333333333334 21 13.1 21 C 11.7 21 10.387333333333332 20.733333333333334 9.161999999999999 20.2 C 7.937333333333332 19.666666666666664 6.8709999999999996 18.945999999999998 5.962999999999999 18.038 C 5.054333333333333 17.129333333333335 4.333333333333333 16.06266666666667 3.7999999999999994 14.838000000000001 C 3.2666666666666666 13.612666666666668 3 12.3 3 10.9 C 3 10.266666666666667 3.054333333333333 9.654000000000002 3.163 9.062000000000001 C 3.271 8.470666666666668 3.433333333333333 7.8916666666666675 3.65 7.325000000000001 L 0.975 4.65 L 2.4 3.225 L 20.799999999999997 21.625 L 19.375 23.05 Z\" opacity=\".3\"></path>",
+"sun": "<path fill=\"currentColor\" d=\"M 12 18.5 C 12.773 18.5 13.419 19.087 13.493 19.856 L 13.5 20 L 13.5 21 C 13.499 22.155 12.249 22.876 11.249 22.298000000000002 C 10.83 22.056 10.554 21.626 10.507 21.144 L 10.5 21 L 10.5 20 C 10.5 19.172 11.172 18.5 12 18.5 Z\"></path><path fill=\"currentColor\" d=\"M 12 1.5 C 12.773 1.5 13.419 2.087 13.493 2.856 L 13.5 3 L 13.5 4 C 13.499 5.155 12.249 5.876 11.249 5.298 C 10.83 5.056 10.554 4.626 10.507 4.144 L 10.5 4 L 10.5 3 C 10.5 2.172 11.172 1.5 12 1.5 Z\"></path><path fill=\"currentColor\" d=\"M 17.303 4.575 C 18.113 3.753 19.51 4.116 19.817 5.229 C 19.947 5.701 19.839 6.206 19.528 6.583 L 19.425 6.697 L 18.718 7.404 C 17.908 8.226 16.511 7.863 16.204 6.75 C 16.074 6.2780000000000005 16.182 5.773 16.493 5.396 L 16.596 5.282 L 17.303 4.575 Z\"></path><path fill=\"currentColor\" d=\"M 4.575 4.575 C 5.119 4.031 5.986 3.9859999999999998 6.583 4.472 L 6.697 4.575 L 7.404 5.282 C 8.226 6.092 7.863 7.489 6.75 7.796 C 6.2780000000000005 7.926 5.773 7.818 5.396 7.507 L 5.282 7.404 L 4.575 6.697 C 3.989 6.111 3.989 5.161 4.575 4.575 Z\"></path><path fill=\"currentColor\" d=\"M 21 10.5 C 22.155 10.501 22.876 11.751 22.298000000000002 12.751 C 22.056 13.17 21.626 13.446 21.144 13.493 L 21 13.5 L 20 13.5 C 18.845 13.499 18.124 12.249 18.701999999999998 11.249 C 18.944 10.83 19.374 10.554 19.856 10.507 L 20 10.5 L 21 10.5 Z\"></path><path fill=\"currentColor\" d=\"M 4 10.5 C 5.155 10.501 5.876 11.751 5.298 12.751 C 5.056 13.17 4.626 13.446 4.144 13.493 L 4 13.5 L 3 13.5 C 1.8450000000000002 13.499 1.124 12.249 1.702 11.249 C 1.944 10.83 2.374 10.554 2.856 10.507 L 3 10.5 L 4 10.5 Z\"></path><path fill=\"currentColor\" d=\"M 12 6 C 16.619 6 19.506 11 17.196 15 C 16.124 16.856 14.144 18 12 18 C 7.381 18 4.494 13 6.804 9 C 7.876 7.144 9.856 6 12 6 Z\" opacity=\".3\"></path><path fill=\"currentColor\" d=\"M 5.282 16.596 C 6.092 15.774000000000001 7.489 16.137 7.796 17.25 C 7.926 17.722 7.818 18.227 7.507 18.604 L 7.404 18.718 L 6.697 19.425 C 5.8870000000000005 20.247 4.49 19.884 4.183 18.771 C 4.053 18.299 4.161 17.794 4.472 17.417 L 4.575 17.303 L 5.282 16.596 Z\"></path><path fill=\"currentColor\" d=\"M 16.596 16.596 C 17.14 16.052 18.007 16.007 18.604 16.493 L 18.718 16.596 L 19.425 17.303 C 20.247 18.113 19.884 19.51 18.771 19.817 C 18.299 19.947 17.794 19.839 17.417 19.528 L 17.303 19.425 L 16.596 18.718 C 16.01 18.132 16.01 17.182 16.596 16.596 Z\"></path>",
+"bookmark": "<path fill=\"currentColor\" d=\"M 17 2 C 18.657 2 20 3.343 20 5 L 20 21 C 20 21.77 19.166 22.25 18.499 21.865 C 18.456 21.84 18.414 21.811 18.375 21.78 L 16.5 20.28 L 14.625 21.78 C 14.227 22.099 13.654 22.067 13.293 21.707 L 12 20.414 L 10.707 21.707 C 10.347 22.067 9.773 22.099 9.375 21.781 L 7.5 20.28 L 5.625 21.78 C 5.024 22.261 4.128 21.911 4.011 21.15 C 4.004 21.101 4 21.05 4 21 L 4 5 C 4 3.343 5.343 2 7 2 L 17 2 Z\" fill-rule=\"evenodd\" opacity=\".3\"></path><path fill=\"currentColor\" d=\"M 15 8 L 9 8 C 8.23 8.001 7.75 8.835 8.136 9.501 C 8.293 9.773 8.57 9.956 8.883 9.993 L 9 10 L 15 10 C 15.77 9.999 16.25 9.165 15.864 8.499 C 15.707 8.227 15.43 8.044 15.117 8.007 L 15 8 Z\" fill-rule=\"evenodd\"></path><path fill=\"currentColor\" d=\"M 12 12 L 9 12 C 8.23 12 7.749 12.833 8.134 13.5 C 8.313 13.809 8.643 14 9 14 L 12 14 C 12.77 14 13.251 13.167 12.866 12.5 C 12.687 12.191 12.357 12 12 12 Z\" fill-rule=\"evenodd\"></path>",
+"clock": "<path fill=\"currentColor\" d=\"M 12 4 C 18.928 4 23.258 11.5 19.794 17.5 C 18.187 20.285 15.215 22 12 22 C 5.072 22 0.742 14.5 4.206 8.5 C 5.813 5.715 8.785 4 12 4 Z\" opacity=\".3\"></path><path fill=\"currentColor\" d=\"M 7.366 2.971 C 7.642 3.449 7.478 4.061 7 4.337 C 5.959 4.94 5.035 5.724 4.271 6.6530000000000005 C 3.799 7.261 2.846 7.13 2.555 6.417 C 2.4130000000000003 6.068 2.479 5.668 2.727 5.383 C 3.642 4.269 4.75 3.329 5.998 2.606 C 6.476 2.329 7.088 2.492 7.365 2.971 L 7.366 2.971 Z\"></path><path fill=\"currentColor\" d=\"M 18 2.606 C 19.248 3.328 20.356 4.268 21.272 5.382 C 21.744 5.99 21.381 6.881 20.618 6.986 C 20.284 7.032 19.949 6.906 19.728 6.652 C 18.964 5.723 18.04 4.939 16.999 4.337 C 16.333 3.951 16.334 2.989 17.001 2.605 C 17.311 2.427 17.692 2.427 18.001 2.606 L 18 2.606 Z\"></path><path fill=\"currentColor\" d=\"M 12 8 C 11.493 8 11.066 8.38 11.007 8.883 L 11 9 L 11 12.986 C 10.997 13.208 11.068 13.426 11.202 13.603 L 11.292 13.707 L 13.398 15.812 C 13.94 16.359 14.870000000000001 16.114 15.073 15.372 C 15.156 15.067 15.091 14.741 14.896 14.492 L 14.812 14.398 L 13 12.586 L 13 9 C 13 8.448 12.552 8 12 8 Z\"></path>",
+"add-circle": "<path fill=\"currentColor\" d=\"M 12 2 C 17.523 2 22 6.477 22 12 C 22 17.523 17.523 22 12 22 C 6.477 22 2 17.523 2 12 C 2 6.477 6.477 2 12 2 Z\" opacity=\".3\"></path><path fill=\"currentColor\" d=\"M 12 7 C 11.493 7 11.066 7.38 11.007 7.883 L 11 8 L 11 11 L 8 11 C 7.23 11.001 6.75 11.835 7.136 12.501 C 7.293 12.773 7.57 12.956 7.883 12.993 L 8 13 L 11 13 L 11 16 C 11.001 16.77 11.835 17.25 12.501 16.864 C 12.773 16.707 12.956 16.43 12.993 16.117 L 13 16 L 13 13 L 16 13 C 16.77 12.999 17.25 12.165 16.864 11.499 C 16.707 11.227 16.43 11.044 16.117 11.007 L 16 11 L 13 11 L 13 8 C 13 7.448 12.552 7 12 7 Z\"></path>",
+"trash": "<path fill=\"currentColor\" d=\"M5.6 8h12.8l-.95 11.3A2 2 0 0115.46 21H8.54a2 2 0 01-1.99-1.7z\" opacity=\".3\"></path><path fill=\"currentColor\" d=\"M9 3.6A1.6 1.6 0 0110.6 2h2.8A1.6 1.6 0 0115 3.6V4h4a1 1 0 010 2H5a1 1 0 010-2h4z\"></path><rect fill=\"currentColor\" x=\"9.2\" y=\"10.5\" width=\"1.8\" height=\"7.5\" rx=\".9\"></rect><rect fill=\"currentColor\" x=\"13\" y=\"10.5\" width=\"1.8\" height=\"7.5\" rx=\".9\"></rect>",
+"search": "<circle fill=\"currentColor\" cx=\"10.5\" cy=\"10.5\" r=\"7.5\" opacity=\".3\"></circle><path fill=\"currentColor\" d=\"M10.5 5.5a5 5 0 015 5 1 1 0 01-2 0 3 3 0 00-3-3 1 1 0 010-2z\"></path><rect fill=\"currentColor\" x=\"15.3\" y=\"14\" width=\"2.8\" height=\"8.6\" rx=\"1.4\" transform=\"rotate(-45 16.7 18.3)\"></rect>"
+};
 const IS_MAC = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
 const MOD = IS_MAC ? '⌘' : 'Ctrl';
 const ALT = IS_MAC ? 'Option' : 'Alt';
 const svg = (d, fill) => `<svg class="ic" viewBox="0 0 16 16" fill="${fill ? 'currentColor' : 'none'}" stroke="${fill ? 'none' : 'currentColor'}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const duo = n => `<svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true">${DUO[n]}</svg>`;
 const ICONS = {
   person: svg('<circle cx="8" cy="5.4" r="2.6"/><path d="M3 13.6c.8-2.4 2.7-3.6 5-3.6s4.2 1.2 5 3.6"/>'),
   calendar: svg('<rect x="2.5" y="3.5" width="11" height="10" rx="1.6"/><path d="M2.5 6.8h11M5.5 2v3M10.5 2v3"/>'),
@@ -1194,11 +1475,11 @@ const ICONS = {
   grip: svg('<circle cx="6" cy="3.5" r="1.2"/><circle cx="10" cy="3.5" r="1.2"/><circle cx="6" cy="8" r="1.2"/><circle cx="10" cy="8" r="1.2"/><circle cx="6" cy="12.5" r="1.2"/><circle cx="10" cy="12.5" r="1.2"/>', true),
   done: svg('<path d="M2 8.5l2.5 2.5L9.5 5"/><path d="M7.5 10.5l.5.5L14 5"/>'),
   sparkle: svg('<path d="M7 2.5l1.3 3.2 3.2 1.3-3.2 1.3L7 11.5 5.7 8.3 2.5 7l3.2-1.3z"/><path d="M12 10.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z"/>'),
-  sun: svg('<circle cx="8" cy="8" r="2.8"/><path d="M8 1.8v1.4M8 12.8v1.4M1.8 8h1.4M12.8 8h1.4M3.6 3.6l1 1M11.4 11.4l1 1M3.6 12.4l1-1M11.4 4.6l1-1"/>'),
-  moon: svg('<path d="M13.2 9.6A5.4 5.4 0 016.4 2.8a5.4 5.4 0 106.8 6.8z"/>'),
+  sun: duo('sun'),
+  moon: duo('moon-stars'),
   repeat: svg('<path d="M3 7.5a5 5 0 018.6-3.4L13 5.5"/><path d="M13 2.5v3h-3"/><path d="M13 8.5a5 5 0 01-8.6 3.4L3 10.5"/><path d="M3 13.5v-3h3"/>'),
-  clock: svg('<circle cx="8" cy="8" r="5.6"/><path d="M8 5v3.2l2.1 1.3"/>'),
-  pin: svg('<path d="M10 2.2l3.8 3.8-2 .8-2.4 2.4-.3 3-1.3 1.3-5.3-5.3 1.3-1.3 3-.3 2.4-2.4z"/><path d="M5 11l-2.8 2.8"/>'),
+  clock: duo('clock'),
+  pin: duo('bookmark'),
   tag: svg('<path d="M2.5 8.6V3.3a.8.8 0 01.8-.8h5.3l5 5a.9.9 0 010 1.3l-4.4 4.4a.9.9 0 01-1.3 0z"/><circle cx="5.6" cy="5.6" r=".9"/>'),
   dots: svg('<circle cx="3.5" cy="8" r="1.3"/><circle cx="8" cy="8" r="1.3"/><circle cx="12.5" cy="8" r="1.3"/>', true),
 };
@@ -2201,47 +2482,55 @@ function selectTask(id) {
 /* ---------- Rendering ---------- */
 function renderAll() { renderWeek(); renderRight(); updateAssigneeList(); }
 
+// Next 7 days as a compact agenda: one row per item, grouped by day
+const AGENDA_ROWS = 5;
 function renderWeek() {
   const overdue = state.tasks.reduce((n, t) => n + realItems(t).filter(it => itemOverdue(it, t)).length, 0);
   const strip = $('#overdue-strip');
   strip.classList.toggle('none', !overdue);
   strip.disabled = !overdue;
   strip.innerHTML = overdue
-    ? `<span>${overdue} overdue item${overdue === 1 ? '' : 's'}</span><span class="strip-go">Show</span>`
+    ? `<span>${overdue} overdue item${overdue === 1 ? '' : 's'}</span><span class="strip-go">Show →</span>`
     : '<span>Nothing overdue</span>';
 
   const base = parseYmd(state.today);
-  let html = '';
-  for (let i = 0; i < 7; i++) {
-    const d = addDays(base, i), ds = ymd(d);
-    const entries = state.tasks
-      .map(t => ({ t, due: realItems(t).filter(it => effDue(it, t) === ds) }))
-      .filter(e => e.due.length)
-      .map(e => ({ ...e, allDone: e.due.every(x => x.done) }))
-      .sort((a, b) => (a.allDone - b.allDone) || String(a.t.created_at).localeCompare(String(b.t.created_at)));
-    const tag = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : (d.getDate() === 1 || i === 0 ? MON_SHORT[d.getMonth()] : '');
-    html += `<section class="day ${i === 0 ? 'today' : ''} ${entries.length ? '' : 'empty'}" aria-label="${WD_LONG[d.getDay()]} ${ordinal(d.getDate())} of ${MON_LONG[d.getMonth()]}">
-      <div class="day-date" aria-hidden="true">
-        <div class="day-dow">${WD_SHORT[d.getDay()]}</div>
-        <div class="day-num">${d.getDate()}</div>
-        ${tag ? `<div class="day-tag">${tag}</div>` : ''}
-      </div>
-      <div class="day-body">${entries.length ? entries.map(weekCardHTML).join('') : '<div class="day-empty">Nothing due</div>'}</div>
-    </section>`;
-  }
-  $('#week-days').innerHTML = html;
   const end = addDays(base, 6);
   $('#week-range').textContent = `${base.getDate()} ${MON_SHORT[base.getMonth()]} – ${end.getDate()} ${MON_SHORT[end.getMonth()]}`;
+  const dayLabel = d => `${WD_SHORT[d.getDay()]} ${d.getDate()}`;
+  let html = '', empty = [];
+  const flushEmpty = () => {
+    if (!empty.length) return;
+    const label = empty.length === 1 ? dayLabel(empty[0]) : `${dayLabel(empty[0])} – ${dayLabel(empty[empty.length - 1])}`;
+    html += `<div class="ag-empty">${label} · nothing due</div>`;
+    empty = [];
+  };
+  for (let i = 0; i < 7; i++) {
+    const d = addDays(base, i), ds = ymd(d);
+    const rows = [];
+    state.tasks.forEach(t => realItems(t).forEach(it => { if (effDue(it, t) === ds) rows.push({ t, it }); }));
+    if (!rows.length) { empty.push(d); continue; }
+    flushEmpty();
+    rows.sort((a, b) => (a.it.done - b.it.done) || String(a.t.created_at).localeCompare(String(b.t.created_at)));
+    const open = state.agendaOpen.has(ds);
+    const shown = open ? rows : rows.slice(0, AGENDA_ROWS);
+    const head = i === 0
+      ? `<div class="ag-head today"><span class="ag-day">Today</span><span class="ag-date">${dayLabel(d)}</span><span class="ag-count">${rows.length} item${rows.length === 1 ? '' : 's'}</span></div>`
+      : `<div class="ag-head"><span class="ag-day">${dayLabel(d)}</span>${i === 1 ? '<span class="ag-date">tomorrow</span>' : ''}<span class="ag-count">${rows.length}</span></div>`;
+    html += `<section class="ag-day-block" aria-label="${WD_LONG[d.getDay()]} ${ordinal(d.getDate())} of ${MON_LONG[d.getMonth()]}">${head}<ul class="ag-list">`
+      + shown.map(({ t, it }) => {
+        const c = findCat(taskCatIds(t)[0]);
+        return `<li class="ag-row ${it.done ? 'done' : ''}" data-id="${esc(t.id)}" data-item="${esc(it.id)}">
+          <input type="checkbox" class="check ag-check" ${it.done ? 'checked' : ''} aria-label="Mark ${esc(it.title)} as done">
+          <button type="button" class="ag-main"><span class="ag-title">${esc(it.title.replace(/\s*\n\s*/g, ' '))}</span>
+            <span class="ag-task"><span class="sq" style="--cat-color:${c ? catVar(c) : 'var(--cat-none)'}"></span>${isRecurring(t) ? '↻ ' : ''}${esc(t.title)}</span></button>
+        </li>`;
+      }).join('') + '</ul>'
+      + (rows.length > AGENDA_ROWS ? `<button type="button" class="ag-more" data-day="${ds}">${open ? 'Show less' : `+${rows.length - AGENDA_ROWS} more${i === 0 ? ' today' : ''}`}</button>` : '')
+      + '</section>';
+  }
+  flushEmpty();
+  $('#week-days').innerHTML = html;
 }
-function weekCardHTML(e) {
-  const shown = e.due.slice(0, 2), more = e.due.length - shown.length;
-  return `<button type="button" class="wk-card ${e.allDone ? 'all-done' : ''} ${state.selectedId === e.t.id ? 'selected' : ''}" data-id="${esc(e.t.id)}">
-    <span class="wk-title">${catSquaresHTML(taskCatIds(e.t))}${isRecurring(e.t) ? ICONS.repeat : ''}<span class="wk-title-text">${esc(e.t.title)}</span></span>
-    ${shown.map(it => `<span class="wk-item ${it.done ? 'done' : ''}">${esc(truncate(it.title.replace(/\s*\n\s*/g, ' '), PREVIEW_CHARS))}</span>`).join('')}
-    ${more > 0 ? `<span class="wk-more">+${more} more</span>` : ''}
-  </button>`;
-}
-
 function sortTasks(list, tab) {
   if (tab === 'completed') return list.sort((a, b) => String(b.completed_at || '').localeCompare(String(a.completed_at || '')));
   return list.sort((a, b) => {
@@ -2341,7 +2630,10 @@ function taskCardHTML(t) {
   sections.push(cur);
   const rows = sections.map(sec => sectionRowsHTML(sec, allDone)).join('');
   const labels = catLabelsHTML(taskCatIds(t)) + recLabelHTML(t, allDone);
+  const firstCat = findCat(taskCatIds(t)[0]);
+  const pct = n ? Math.round(done / n * 100) : 0;
   return `<article class="task-card ${state.selectedId === t.id ? 'selected' : ''}" data-id="${esc(t.id)}" tabindex="0">
+    ${labels ? `<div class="tc-labels">${labels}</div>` : ''}
     <div class="tc-head">
       <div class="tc-head-text">
         <div class="tc-title">${esc(t.title)}</div>
@@ -2349,7 +2641,7 @@ function taskCardHTML(t) {
       </div>
       <div class="tc-meta"><span class="tc-progress">${done}/${n}</span>${!allDone && nextDue(t) ? `<button type="button" class="icon-btn tc-defer" data-defer="${esc(t.id)}" title="Defer" aria-label="Defer">${ICONS.clock}</button>` : ''}</div>
     </div>
-    ${labels ? `<div class="tc-labels">${labels}</div>` : ''}
+    <div class="tc-bar" aria-hidden="true"><span style="width: ${pct}%; ${firstCat ? `background: ${catVar(firstCat)}` : ''}"></span></div>
     <ul class="tc-items">${rows}</ul>
   </article>`;
 }
@@ -2374,8 +2666,15 @@ function wireEvents() {
   $('#clear-draft').addEventListener('click', clearDraft);
   $('#overdue-strip').addEventListener('click', () => { state.tab = 'overdue'; renderRight(); });
   $('#week-days').addEventListener('click', e => {
-    const card = e.target.closest('.wk-card');
-    if (card) selectTask(card.dataset.id);
+    const more = e.target.closest('.ag-more');
+    if (more) { const d = more.dataset.day; state.agendaOpen.has(d) ? state.agendaOpen.delete(d) : state.agendaOpen.add(d); renderWeek(); return; }
+    const main = e.target.closest('.ag-main');
+    if (main) selectTask(main.closest('.ag-row').dataset.id);
+  });
+  $('#week-days').addEventListener('change', e => {
+    if (!e.target.classList.contains('ag-check')) return;
+    const row = e.target.closest('.ag-row');
+    toggleItem(row.dataset.id, row.dataset.item, e.target.checked);
   });
   $('#tabs').addEventListener('click', e => {
     const b = e.target.closest('.tab');
@@ -2474,7 +2773,7 @@ function checkDay() {
 
 /* ---------- Notes ---------- */
 const NOTE_COLOURS = ['none', 'butter', 'peach', 'coral', 'rose', 'lavender', 'sky', 'aqua', 'mint', 'sage', 'stone'];
-const NOTE_COLOUR_NAMES = { none: 'No colour', butter: 'Sand', peach: 'Peach', coral: 'Clay', rose: 'Rose', lavender: 'Lilac', sky: 'Sky', aqua: 'Aqua', mint: 'Moss', sage: 'Sage', stone: 'Stone' };
+const NOTE_COLOUR_NAMES = { none: 'No colour', butter: 'Lemon', peach: 'Peach', coral: 'Clay', rose: 'Rose', lavender: 'Lilac', sky: 'Sky', aqua: 'Aqua', mint: 'Mint', sage: 'Sage', stone: 'Stone' };
 const MIGRATION_MSG = 'Run update-recurring-notes.sql in Supabase first (see the banner at the top).';
 const noteCls = c => 'nc-' + (NOTE_COLOURS.includes(c) ? c : 'none');
 const findNote = id => state.notes.find(n => n.id === id);
