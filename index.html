@@ -929,17 +929,20 @@ body{font:13.5px/1.45 "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-syst
 .task-cols{display:flex;align-items:flex-start;gap:14px}
 .tcol{flex:1 1 0;min-width:0;display:flex;flex-direction:column}
 /* Priority */
-.tc-prio{border:0;cursor:pointer;font:inherit;font-size:12px;font-weight:700}
-.tc-prio.prio-0{background:var(--panel-2);color:var(--muted)}
-.tc-prio.prio-2{background:#f28a3c;color:#3a1600}
-.tc-prio.prio-3{background:var(--danger);color:#ffffff}
-.tc-prio .ic.duo{width:14px;height:14px}
+.tc-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px}
+.tc-top .tc-labels{flex:1;min-width:0;margin:0}
+.tc-prio{flex:none;margin:-4px -6px 0 auto;width:32px;height:30px;padding:0;border:0;border-radius:9px;background:transparent;display:grid;place-items:center;cursor:pointer;color:var(--faint)}
+.tc-prio:hover{background:var(--panel-2)}
+.tc-prio .ic.bars{width:19px;height:19px}
+.tc-prio.prio-0,.tc-prio.prio-1{opacity:.75}
+.tc-prio.prio-2{color:#e8782a}
+.tc-prio.prio-3{color:var(--danger);background:var(--danger-soft)}
 .task-card.prio-top{border-color:color-mix(in srgb, var(--danger) 45%, transparent);box-shadow:0 0 0 3px var(--danger-soft), 0 10px 28px color-mix(in srgb, var(--danger) 18%, transparent)}
 .pe-prio{display:inline-flex;align-items:center;gap:5px}
-.pe-prio .ic.duo{width:15px;height:15px}
-.pe-prio.prio-0{color:var(--muted)}
-.pe-prio.prio-2{background:#f28a3c;color:#3a1600}
-.pe-prio.prio-3{background:var(--danger);color:#ffffff}
+.pe-prio .ic.bars{width:15px;height:15px;color:var(--faint)}
+.pe-prio.prio-2 .ic.bars{color:#e8782a}
+.pe-prio.prio-3{background:var(--danger-soft);color:var(--danger)}
+.pe-prio.prio-3 .ic.bars{color:var(--danger)}
 .ag-row.prio-top .ag-title::before{content:"";display:inline-block;width:7px;height:7px;margin:0 6px 1px 0;border-radius:50%;background:var(--danger);vertical-align:middle}
 </style>
 </head>
@@ -1077,6 +1080,10 @@ const SUPABASE_KEY = String(CONFIG.SUPABASE_KEY || '');
 const PRIORITIES = [{ v: 3, label: 'Top' }, { v: 2, label: 'High' }, { v: 1, label: 'Medium' }, { v: 0, label: 'Low' }];
 const prioOf = t => (t && Number.isFinite(+t.priority) && t.priority !== null && t.priority !== '' ? Math.max(0, Math.min(3, +t.priority)) : 1);
 const prioLabel = v => PRIORITIES.find(x => x.v === v).label;
+// Signal bars in the Duo two-tone style: filled bars = priority level (Low 1 … Top 4)
+const prioBars = v => '<svg class="ic duo bars" viewBox="0 0 24 24" aria-hidden="true">'
+  + [[2.5, 15, 6], [8, 11, 10], [13.5, 7, 14], [19, 3, 18]].map(([x, y, h], i) =>
+    `<rect fill="currentColor" x="${x}" y="${y}" width="3.6" height="${h}" rx="1.2"${i <= v ? '' : ' opacity=".25"'}></rect>`).join('') + '</svg>';
 const TASK_COLOURS = ['blue', 'purple', 'amber', 'green', 'teal', 'red', 'pink', 'slate'];
 const TASK_COLOUR_NAMES = { blue: 'Blue', purple: 'Purple', amber: 'Amber', green: 'Green', teal: 'Teal', red: 'Red', pink: 'Pink', slate: 'Slate' };
 const TAB_LABEL = { current: 'Current', upcoming: 'Upcoming', overdue: 'Overdue', completed: 'Completed' };
@@ -1811,7 +1818,7 @@ function buildTaskEditor(data, mode, handlers = {}) {
   let prio = prioOf(data);
   const prioBtn = root.querySelector('.pe-prio');
   const renderPrio = () => {
-    prioBtn.innerHTML = `${prio === 3 ? duo('alert-triangle') : ''}<span>${prio === 1 ? 'Priority' : prioLabel(prio) + ' priority'}</span>`;
+    prioBtn.innerHTML = `${prioBars(prio)}<span>${prioLabel(prio)} priority</span>`;
     prioBtn.className = 'pe-repeat pe-prio prio-' + prio;
   };
   renderPrio();
@@ -2705,12 +2712,12 @@ function taskCardHTML(t) {
   sections.push(cur);
   const rows = sections.map(sec => sectionRowsHTML(sec, allDone)).join('');
   const pr = prioOf(t);
-  const prioBadge = pr === 1 ? '' : `<button type="button" class="tc-label tc-prio prio-${pr}" title="Change priority">${pr === 3 ? duo('alert-triangle') + 'Top priority' : prioLabel(pr)}</button>`;
-  const labels = prioBadge + catLabelsHTML(taskCatIds(t)) + recLabelHTML(t, allDone);
+  const prioBtn = `<button type="button" class="tc-prio prio-${pr}" title="${prioLabel(pr)} priority (click to change)" aria-label="${prioLabel(pr)} priority. Change priority">${prioBars(pr)}</button>`;
+  const labels = catLabelsHTML(taskCatIds(t)) + recLabelHTML(t, allDone);
   const firstCat = findCat(taskCatIds(t)[0]);
   const pct = n ? Math.round(done / n * 100) : 0;
   return `<article class="task-card ${pr === 3 && !allDone ? 'prio-top' : ''} ${state.selectedId === t.id ? 'selected' : ''}" data-id="${esc(t.id)}" tabindex="0">
-    ${labels ? `<div class="tc-labels">${labels}</div>` : ''}
+    <div class="tc-top">${labels ? `<div class="tc-labels">${labels}</div>` : '<span class="spacer"></span>'}${prioBtn}</div>
     <div class="tc-head">
       <div class="tc-head-text">
         <div class="tc-title">${esc(t.title)}</div>
@@ -2755,7 +2762,7 @@ function wireEvents() {
   });
   $('#tabs').addEventListener('click', e => {
     const b = e.target.closest('.tab');
-    if (b) { state.tab = b.dataset.tab; renderRight(); }
+    if (b) { state.tab = b.dataset.tab; renderRight(); $('#task-list').scrollTop = 0; }
   });
   $('#filters').addEventListener('click', e => {
     if (e.target.closest('.chip-edit')) { openCatManager(); return; }
@@ -3327,6 +3334,21 @@ async function init() {
   const { data: { session } } = await sb.auth.getSession();
   if (session) start(session.user); else show('login');
 }
+// Re-rendering a list empties it for a moment, which would jump it back to the top.
+// Keep each scrolling area where it was (ticking items, pinning notes, etc.).
+function keepScroll(sel, fn) {
+  return function (...args) {
+    const el = document.querySelector(sel);
+    const top = el ? el.scrollTop : 0;
+    const out = fn.apply(this, args);
+    if (el) el.scrollTop = top;
+    return out;
+  };
+}
+renderRight = keepScroll('#task-list', renderRight);
+renderWeek = keepScroll('#week-days', renderWeek);
+renderNotes = keepScroll('#notes-board', renderNotes);
+
 init();
 </script>
 </body>
