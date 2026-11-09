@@ -944,6 +944,140 @@ body{font:13.5px/1.45 "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-syst
 .pe-prio.prio-3{background:var(--danger-soft);color:var(--danger)}
 .pe-prio.prio-3 .ic.bars{color:var(--danger)}
 .ag-row.prio-top .ag-title::before{content:"";display:inline-block;width:7px;height:7px;margin:0 6px 1px 0;border-radius:50%;background:var(--danger);vertical-align:middle}
+
+/* Clients */
+:root{--cl-blue-bg:#dce6fc; --cl-blue-ink:#1e46a8; --cl-blue-dot:#3563d9; --cl-teal-bg:#d2f0ec; --cl-teal-ink:#0b675f; --cl-teal-dot:#149c90; --cl-green-bg:#dcf1df; --cl-green-ink:#1e6a35; --cl-green-dot:#2e9b51; --cl-lime-bg:#eaf2cc; --cl-lime-ink:#4c620e; --cl-lime-dot:#8aae1e; --cl-amber-bg:#fbeac4; --cl-amber-ink:#7a4d00; --cl-amber-dot:#e0a21e; --cl-orange-bg:#ffe1cd; --cl-orange-ink:#933f0c; --cl-orange-dot:#f07a33; --cl-red-bg:#fbd9d9; --cl-red-ink:#991b1b; --cl-red-dot:#dc4545; --cl-pink-bg:#fadaea; --cl-pink-ink:#8d1c54; --cl-pink-dot:#d9478e; --cl-purple-bg:#e9defc; --cl-purple-ink:#5a2aae; --cl-purple-dot:#8656e0; --cl-slate-bg:#e2e5eb; --cl-slate-ink:#3b4454; --cl-slate-dot:#6b7588;}
+:root[data-theme="dark"]{--cl-blue-bg:rgba(53,99,217,.30); --cl-blue-ink:#afc6ff; --cl-teal-bg:rgba(20,156,144,.30); --cl-teal-ink:#8fe3d9; --cl-green-bg:rgba(46,155,81,.30); --cl-green-ink:#a3e0b1; --cl-lime-bg:rgba(138,174,30,.30); --cl-lime-ink:#d2e68e; --cl-amber-bg:rgba(224,162,30,.30); --cl-amber-ink:#f6cb73; --cl-orange-bg:rgba(240,122,51,.30); --cl-orange-ink:#ffb68a; --cl-red-bg:rgba(220,69,69,.32); --cl-red-ink:#ffa3a3; --cl-pink-bg:rgba(217,71,142,.32); --cl-pink-ink:#f7a8cd; --cl-purple-bg:rgba(134,86,224,.32); --cl-purple-ink:#cbb0ff; --cl-slate-bg:rgba(107,117,136,.34); --cl-slate-ink:#cdd3de;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--cl-blue-bg:rgba(53,99,217,.30); --cl-blue-ink:#afc6ff; --cl-teal-bg:rgba(20,156,144,.30); --cl-teal-ink:#8fe3d9; --cl-green-bg:rgba(46,155,81,.30); --cl-green-ink:#a3e0b1; --cl-lime-bg:rgba(138,174,30,.30); --cl-lime-ink:#d2e68e; --cl-amber-bg:rgba(224,162,30,.30); --cl-amber-ink:#f6cb73; --cl-orange-bg:rgba(240,122,51,.30); --cl-orange-ink:#ffb68a; --cl-red-bg:rgba(220,69,69,.32); --cl-red-ink:#ffa3a3; --cl-pink-bg:rgba(217,71,142,.32); --cl-pink-ink:#f7a8cd; --cl-purple-bg:rgba(134,86,224,.32); --cl-purple-ink:#cbb0ff; --cl-slate-bg:rgba(107,117,136,.34); --cl-slate-ink:#cdd3de;}}
+.cl-badge{display:inline-flex;align-items:center;height:22px;max-width:220px;padding:0 10px;margin-right:7px;border-radius:999px;background:var(--cl-bg);color:var(--cl-ink);font-size:12px;font-weight:700;letter-spacing:0;line-height:1;vertical-align:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cl-badge.sm{height:16px;padding:0 7px;margin:0 2px 0 0;font-size:10.5px;vertical-align:0;flex:none;max-width:140px}
+.pe-client{display:inline-flex;align-items:center;gap:5px}
+.pe-client .ic.duo{width:15px;height:15px}
+.pe-client.has{padding:0;background:transparent}
+.pe-client.has .cl-badge{height:30px;margin:0;padding:0 12px;font-size:12.5px;vertical-align:0}
+.client-picker{min-width:240px;max-height:380px}
+.cp-search{margin:2px 2px 6px;width:calc(100% - 4px);height:34px}
+.cp-list{display:flex;flex-direction:column;max-height:240px;overflow-y:auto}
+.client-picker .pick{display:flex;align-items:center;gap:8px}
+.client-picker .pick.on{background:var(--panel-2);font-weight:800}
+.cl-dot{width:9px;height:9px;flex:none;border-radius:50%}
+.client-filter{height:30px;max-width:200px;padding:0 26px 0 12px;border:0;border-radius:999px;background-color:var(--panel-2);font:inherit;font-size:12.5px;font-weight:700;color:var(--ink2);cursor:pointer;appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 13px) 50%,calc(100% - 9px) 50%;background-size:4px 4px;background-repeat:no-repeat}
+.client-filter.active{background-color:var(--primary-bg);color:var(--primary-ink)}
+.cm-row .cl-badge{flex:none;margin:0;vertical-align:0}
+
+/* ===== Agendas ===== */
+.agendas-view{flex:1;min-height:0;display:flex;flex-direction:column;gap:16px;padding:16px}
+.agendas-view[hidden]{display:none}
+.agd-tabs{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:18px;box-shadow:var(--glass-shadow)}
+.agd-tabs .spacer{flex:1}
+.agd-tabs .btn.primary{height:34px;padding:0 14px}
+.agd-tab{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;border:0;border-radius:11px;background:transparent;font:inherit;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer}
+.agd-tab:hover{background:var(--panel-2)}
+.agd-tab.on{background:var(--panel);color:var(--ink);font-weight:800;box-shadow:0 2px 8px rgba(30,25,40,.08)}
+.agd-tab.cl{background:var(--cl-bg);color:var(--cl-ink);font-weight:700}
+.agd-tab.cl.on{font-weight:800;box-shadow:inset 0 0 0 2px var(--cl-ink)}
+.agd-count{padding:0 7px;border-radius:999px;background:color-mix(in srgb, var(--panel) 70%, transparent);font-size:11.5px;font-weight:800;color:var(--ink2)}
+.agd-cols{flex:1;min-height:0;display:grid;grid-template-columns:minmax(280px,330px) minmax(0,1fr);gap:16px}
+.agd-side-col .col-scroll{padding:18px 20px}
+.agd-group{margin:16px 0 8px}
+.agd-group:first-child{margin-top:0}
+.agd-noclient{font-size:12px;font-weight:700;color:var(--muted)}
+.agd-card{display:flex;flex-direction:column;align-items:flex-start;width:100%;margin-bottom:8px;padding:12px 14px;border:0;border-radius:16px;background:var(--panel-2);text-align:left;font:inherit;color:var(--ink);cursor:pointer}
+.agd-card:hover{background:var(--line-strong)}
+.agd-card.on{background:var(--panel);box-shadow:0 0 0 2px var(--ink),0 6px 16px rgba(30,25,40,.08)}
+.agd-card-name{font-weight:800}
+.agd-card-sub{margin-top:2px;font-size:12.5px;color:var(--muted)}
+.agd-tl-title{margin:24px 0 10px;font-size:12px;font-weight:800;letter-spacing:.07em;color:var(--muted)}
+.agd-tl{position:relative;padding-left:22px}
+.agd-tl::before{content:"";position:absolute;left:6px;top:10px;bottom:10px;width:2px;border-radius:2px;background:var(--line-strong)}
+.agd-tl-row{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin-bottom:2px;padding:7px 8px;border-radius:10px}
+.agd-tl-row[data-meeting],.agd-tl-row[data-current]{cursor:pointer}
+.agd-tl-row[data-meeting]:hover,.agd-tl-row[data-current]:hover,.agd-tl-row.sel{background:var(--panel-2)}
+.agd-tl-dot{position:absolute;left:-20px;top:13px;width:10px;height:10px;border-radius:50%;background:var(--line-strong)}
+.agd-tl-row.past .agd-tl-dot{background:var(--ink)}
+.agd-tl-row.cur .agd-tl-dot{left:-23px;top:10px;width:16px;height:16px;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.agd-tl-row.can,.agd-tl-row.can .agd-tl-note{color:var(--danger)}
+.agd-tl-row.can .agd-tl-date{text-decoration:line-through}
+.agd-tl-row.can .agd-tl-dot{box-sizing:border-box;border:2px solid var(--danger);background:var(--panel)}
+.agd-tl-date{font-weight:800}
+.agd-tl-note{font-size:12.5px;color:var(--muted)}
+.agd-link{padding:0;border:0;background:none;font:inherit;font-size:12.5px;font-weight:700;color:var(--accent);text-decoration:underline;cursor:pointer}
+.agd-tl-cancel{margin-left:auto;color:var(--danger);opacity:0}
+.agd-tl-row:hover .agd-tl-cancel,.agd-tl-cancel:focus{opacity:1}
+.agd-chip{padding:1px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:700}
+.agd-chip.held{background:var(--panel-2);color:var(--ink2)}
+.agd-doc{display:flex;flex-direction:column;overflow:hidden}
+.agd-head{display:flex;flex-wrap:wrap;align-items:flex-start;gap:14px;padding:22px 26px 18px;background:linear-gradient(160deg, var(--cl-bg), transparent 75%)}
+.agd-head-main{flex:1;min-width:260px}
+.agd-kicker{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--cl-ink)}
+.agd-date-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:4px}
+.agd-date-row h2{margin:0;font-size:28px;font-weight:800;letter-spacing:-.035em}
+.agd-sub{margin-top:4px;font-size:13px;color:var(--muted)}
+.agd-people{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:12px}
+.agd-av{width:28px;height:28px;flex:none;display:grid;place-items:center;border-radius:50%;background:var(--panel);color:var(--cl-ink, var(--ink));font-size:10.5px;font-weight:800}
+.agd-av.me{background:var(--primary-bg);color:var(--primary-ink)}
+.agd-av.col{background:var(--panel-2);color:var(--ink)}
+.agd-av.none{box-sizing:border-box;border:2px dashed var(--line-strong);background:transparent;color:var(--muted)}
+.agd-pill{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border:0;border-radius:999px;background:color-mix(in srgb, var(--panel) 75%, transparent);font:inherit;font-size:12px;font-weight:700;color:var(--ink);cursor:pointer}
+.agd-pill .ic.duo{width:15px;height:15px}
+.agd-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.agd-views{margin:0;background:color-mix(in srgb, var(--panel) 60%, transparent)}
+.agd-actions .btn{height:40px}
+.agd-cancel-mtg{color:var(--danger)}
+.agd-more{width:40px;height:40px;border-radius:12px;background:var(--panel-2);color:var(--ink)}
+.agd-more .ic.duo{width:18px;height:18px}
+.agd-body{flex:1;min-height:0;overflow-y:auto;padding:2px 26px 26px}
+.agd-status{min-height:18px;text-align:right}
+.agd-empty{padding:40px 26px;text-align:center;color:var(--muted)}
+.agd-empty.small{padding:12px 0;text-align:left}
+.agd-sec{display:flex;align-items:center;gap:10px;margin:20px 0 6px;font-size:16px;font-weight:800;letter-spacing:-.015em}
+.agd-sec::after{content:"";flex:1;height:1px;background:var(--line)}
+.agd-row{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--rule)}
+.agd-row.lvl1{padding-left:27px}
+.agd-row.lvl2{padding-left:54px}
+.agd-row .check{margin-top:2px}
+.agd-row-main{flex:1;min-width:0}
+.agd-row-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.agd-row-title{margin-right:4px;font-weight:600}
+.agd-row.lvl0 .agd-row-title{font-weight:700}
+.agd-row.done .agd-row-title{text-decoration:line-through;color:var(--done)}
+.agd-desc{margin-top:4px;font-size:13px;color:var(--ink2)}
+.agd-outcome{display:flex;align-items:flex-start;gap:8px;margin-top:6px;padding:8px 10px;border-radius:10px;background:rgba(61,179,122,.13);font-size:13px}
+.agd-outcome > span{flex:none;font-weight:800}
+.agd-outcome textarea{flex:1;min-width:0;padding:0;border:0;background:transparent;font:inherit;color:var(--ink);resize:none;outline:none;overflow:hidden}
+.agd-path{font-weight:600;color:var(--muted)}
+.agd-section{display:block;margin-bottom:2px;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.agd-who{display:flex;align-items:center;gap:10px;margin:20px 0 6px}
+.agd-who .ns-line{flex:1;height:1px;background:var(--line)}
+.agd-who .agd-av:not(.me):not(.none){background:var(--panel-2);color:var(--ink)}
+/* Agenda editor: third level, standing, outcome */
+.line.sub2{margin-left:44px}
+.line.sub2 .check,.line.sub2 .line-bullet{width:13px;height:13px}
+.line.sub2:focus-within{margin-left:34px}
+.tool.tool-txt{font-size:13px;font-weight:800;line-height:1}
+.tool .ic.duo{width:14px;height:14px}
+.ltag.standing{background:var(--panel-2);color:var(--ink2)}
+.det-outcome{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:10px;background:rgba(61,179,122,.13)}
+.oc-label{flex:none;padding-top:1px;font-size:12px;font-weight:800}
+.oc-in{flex:1;min-width:0;padding:0;border:0;background:transparent;font:inherit;font-size:13px;color:var(--ink);resize:none;outline:none;overflow:hidden}
+.agenda-editor{padding-top:4px}
+/* Meetings in Next 7 days */
+.ag-meet{display:flex;align-items:flex-start;gap:9px;width:100%;margin:4px 0;padding:8px 10px;border:0;border-radius:12px;background:var(--accent-soft);text-align:left;font:inherit;color:var(--ink);cursor:pointer}
+.ag-meet:hover{filter:brightness(.97)}
+.ag-meet .ic.duo{width:16px;height:16px;margin-top:2px;color:var(--accent)}
+.ag-main-txt{display:flex;flex-direction:column;min-width:0}
+/* Agenda pop-ups */
+.agf .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.agf .agf-client{align-self:flex-start}
+.agf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.agf-preview{margin:0 0 12px}
+.agf-foot{display:flex;align-items:center;gap:8px}
+.agf-foot .spacer{flex:1}
+.ppl-title{margin:18px 0 8px;font-size:13px;font-weight:800}
+.ppl .cm-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.ppl .cm-row .input{flex:1;min-width:0}
+.ppl .cm-add{display:flex;gap:8px;margin-top:8px}
+.ppl .cm-add .input{flex:1;min-width:0}
 </style>
 </head>
 <body>
@@ -974,6 +1108,7 @@ body{font:13.5px/1.45 "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-syst
       <span class="vs-thumb" aria-hidden="true"></span>
       <button type="button" class="vs-opt active" data-view="todo" role="tab" aria-selected="true"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M 7 3 L 7 4 C 7 5.105 7.895 6 9 6 L 15 6 C 16.105 6 17 5.105 17 4 L 17 3 L 18 3 C 19.105 3 20 3.895 20 5 L 20 16 C 20 19.314 17.314 22 14 22 L 6 22 C 4.895 22 4 21.105 4 20 L 4 5 C 4 3.895 4.895 3 6 3 L 7 3 Z" opacity=".3"></path><path fill="currentColor" d="M 14 2 C 14.77 2.001 15.25 2.835 14.864 3.501 C 14.707 3.773 14.43 3.956 14.117 3.993 L 14 4 L 10 4 C 9.23 3.999 8.75 3.165 9.136 2.499 C 9.293 2.227 9.57 2.044 9.883 2.007 L 10 2 L 14 2 Z"></path><path fill="currentColor" d="M 15 10 L 9 10 C 8.23 10.001 7.75 10.835 8.136 11.501 C 8.293 11.773 8.57 11.956 8.883 11.993 L 9 12 L 15 12 C 15.77 12 16.251 11.167 15.866 10.5 C 15.687 10.191 15.357 10 15 10 Z"></path><path fill="currentColor" d="M 12 14 L 9 14 C 8.23 14 7.749 14.833 8.134 15.5 C 8.313 15.809 8.643 16 9 16 L 12 16 C 12.77 16 13.251 15.167 12.866 14.5 C 12.687 14.191 12.357 14 12 14 Z"></path></svg>Todo List</button>
       <button type="button" class="vs-opt" data-view="notes" role="tab" aria-selected="false"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M 4 5 C 4 3.343 5.343 2 7 2 L 18 2 C 19.105 2 20 2.895 20 4 L 20 16.99 C 20 17.158 19.962 17.312 19.887 17.462 L 19.342 18.552 C 19.201 18.834 19.201 19.165 19.342 19.447 L 19.885 20.535 C 20.235 21.201 19.752 22 19 22 L 7 22 C 5.343 22 4 20.657 4 19 L 4 5 Z" fill-rule="evenodd" opacity=".3"></path><path fill="currentColor" d="M 10 7 C 9.23 7 8.749 7.833 9.134 8.5 C 9.313 8.809 9.643 9 10 9 L 14 9 C 14.77 9 15.251 8.167 14.866 7.5 C 14.687 7.191 14.357 7 14 7 L 10 7 Z" fill-rule="evenodd"></path><path fill="currentColor" d="M 7 18 L 17.408 18 C 17.179 18.647 17.179 19.353 17.408 20 L 7 20 C 6.23 20 5.749 19.167 6.134 18.5 C 6.313 18.191 6.643 18 7 18 Z" fill-rule="evenodd"></path></svg>Notes</button>
+        <button type="button" class="vs-opt" data-view="agendas" role="tab" aria-selected="false"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M 21 12 L 21 19 C 21 20.105 20.105 21 19 21 L 5 21 C 3.895 21 3 20.105 3 19 L 3 12 L 21 12 Z" opacity=".3"></path><path fill="currentColor" d="M 16 3 C 16.552 3 17 3.448 17 4 L 17 5 L 19 5 C 20.105 5 21 5.895 21 7 L 21 10 L 3 10 L 3 7 C 3 5.895 3.895 5 5 5 L 7 5 L 7 4 C 7 3.23 7.833 2.749 8.5 3.134 C 8.809 3.313 9 3.643 9 4 L 9 5 L 15 5 L 15 4 C 15 3.448 15.448 3 16 3 Z"></path></svg>Agendas</button>
     </div>
     <!-- Space reserved for future buttons -->
     <div class="topbar-slot" id="topbar-slot"><button class="btn ghost small" id="templates-btn" type="button"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M 19 11 C 20.047 11 20.917 11.806000000000001 20.995 12.85 L 21 13 L 21 19 C 21 20.047 20.194 20.917 19.15 20.995 L 19 21 L 15 21 C 13.953 21 13.083 20.194 13.005 19.15 L 13 19 L 13 13 C 13 11.953 13.806000000000001 11.083 14.85 11.005 L 15 11 L 19 11 Z" fill-rule="evenodd" opacity=".3"></path><path fill="currentColor" d="M 19 3 C 20.105 3 21 3.895 21 5 L 21 7 C 21 8.105 20.105 9 19 9 L 15 9 C 13.895 9 13 8.105 13 7 L 13 5 C 13 3.895 13.895 3 15 3 L 19 3 Z" fill-rule="evenodd" opacity=".3"></path><path fill="currentColor" d="M 9 3 C 10.105 3 11 3.895 11 5 L 11 11 C 11 12.105 10.105 13 9 13 L 5 13 C 3.895 13 3 12.105 3 11 L 3 5 C 3 3.895 3.895 3 5 3 L 9 3 Z" fill-rule="evenodd"></path><path fill="currentColor" d="M 9 15 C 10.105 15 11 15.895 11 17 L 11 19 C 11 20.105 10.105 21 9 21 L 5 21 C 3.895 21 3 20.105 3 19 L 3 17 C 3 15.895 3.895 15 5 15 L 9 15 Z" fill-rule="evenodd" opacity=".3"></path></svg>Templates</button></div>
@@ -1002,6 +1137,7 @@ body{font:13.5px/1.45 "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-syst
     <section class="col" aria-label="All tasks">
       <div class="col-head">
         <h2>Tasks</h2>
+        <select class="client-filter" id="client-filter" aria-label="Filter by client"></select>
         <div class="tabs" role="tablist" id="tabs">
           <button class="tab active" data-tab="current" role="tab" type="button">Current <span class="tab-count">0</span></button>
           <button class="tab" data-tab="upcoming" role="tab" type="button">Upcoming <span class="tab-count">0</span></button>
@@ -1056,6 +1192,15 @@ body{font:13.5px/1.45 "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-syst
       </div>
     </section>
   </div>
+  <!-- Agendas -->
+  <div class="agendas-view" id="agendas-view" hidden>
+    <nav class="agd-tabs" id="agd-tabs" aria-label="Clients"></nav>
+    <div class="agd-cols">
+      <section class="col agd-side-col" aria-label="Agendas and meetings"><div class="col-scroll" id="agd-side"></div></section>
+      <section class="col agd-doc" id="agd-doc" aria-label="Agenda"></section>
+    </div>
+  </div>
+  <datalist id="agenda-people"></datalist>
 </div>
 
 <div class="app-modal" id="app-modal" hidden>
@@ -1084,6 +1229,14 @@ const prioLabel = v => PRIORITIES.find(x => x.v === v).label;
 const prioBars = v => '<svg class="ic duo bars" viewBox="0 0 24 24" aria-hidden="true">'
   + [[2.5, 15, 6], [8, 11, 10], [13.5, 7, 14], [19, 3, 18]].map(([x, y, h], i) =>
     `<rect fill="currentColor" x="${x}" y="${y}" width="3.6" height="${h}" rx="1.2"${i <= v ? '' : ' opacity=".25"'}></rect>`).join('') + '</svg>';
+// Clients: one per task (or none), each with its own colour
+const CLIENT_COLOURS = ['blue', 'teal', 'green', 'lime', 'amber', 'orange', 'red', 'pink', 'purple', 'slate'];
+const CLIENT_COLOUR_NAMES = { blue: 'Blue', teal: 'Teal', green: 'Green', lime: 'Lime', amber: 'Amber', orange: 'Orange', red: 'Red', pink: 'Pink', purple: 'Purple', slate: 'Slate' };
+const findClient = id => (id ? state.clients.find(c => c.id === id) : null);
+const sortedClients = () => [...state.clients].sort((a, b) => a.name.localeCompare(b.name));
+const clColour = c => (CLIENT_COLOURS.includes(c.color) ? c.color : 'slate');
+const clStyle = c => `--cl-bg:var(--cl-${clColour(c)}-bg);--cl-ink:var(--cl-${clColour(c)}-ink)`;
+const clientBadge = (t, small) => { const c = findClient(t.client_id); return c ? `<span class="cl-badge${small ? ' sm' : ''}" style="${clStyle(c)}">${esc(c.name)}</span>` : ''; };
 const TASK_COLOURS = ['blue', 'purple', 'amber', 'green', 'teal', 'red', 'pink', 'slate'];
 const TASK_COLOUR_NAMES = { blue: 'Blue', purple: 'Purple', amber: 'Amber', green: 'Green', teal: 'Teal', red: 'Red', pink: 'Pink', slate: 'Slate' };
 const TAB_LABEL = { current: 'Current', upcoming: 'Upcoming', overdue: 'Overdue', completed: 'Completed' };
@@ -1096,7 +1249,7 @@ const MON_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','
 
 const state = {
   user: null, started: false, tasks: [],
-  tab: 'current', agendaOpen: new Set(), needsPrioMigration: false, taskColCount: 0, catHidden: new Set(), taskCats: [], templates: [], needsCatMigration: false, tplManager: null, showRecurring: true, view: 'todo', needsMigration: false,
+  tab: 'current', agendas: [], meetings: [], contacts: [], agClient: '', agSel: null, agView: 'category', agViewing: null, agEditor: null, agEditorKey: '', agSaveTimer: null, needsAgendaMigration: false, agendaOpen: new Set(), needsPrioMigration: false, clients: [], clientFilter: '', needsClientMigration: false, taskColCount: 0, catHidden: new Set(), taskCats: [], templates: [], needsCatMigration: false, tplManager: null, showRecurring: true, view: 'todo', needsMigration: false,
   notes: [], noteCats: [], notesReady: false, noteHidden: new Set(), noteSearch: '', noteDraft: null, noteDraftTimer: null, noteModal: null, noteChain: Promise.resolve(), dragNoteEl: null,
   selectedId: null, editor: null,
   today: null, draftEditor: null, draftTimer: null, draftChain: Promise.resolve(),
@@ -1131,7 +1284,7 @@ function recLabelHTML(t, allDone) {
 }
 const catTagsHTML = ids => ids.map(findCat).filter(Boolean).map(c => `<span class="cat-tag" style="--cat-color:${catVar(c)}">${esc(c.name)}</span>`).join('');
 // Leave out category_ids until the database update has been run
-const forDb = o => { if (state.needsCatMigration) delete o.category_ids; if (state.needsPrioMigration) delete o.priority; return o; };
+const forDb = o => { if (state.needsCatMigration) delete o.category_ids; if (state.needsPrioMigration) delete o.priority; if (state.needsClientMigration) delete o.client_id; return o; };
 const truncate = (s, n) => (s.length > n ? s.slice(0, n).trimEnd() + '…' : s);
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const findTask = id => state.tasks.find(t => t.id === id);
@@ -1480,6 +1633,13 @@ function applyFmt(cmd, ed) {
 /* ---------- Task editor: "paper" style, used for the new-task form and for editing ---------- */
 // Duo Icons (MIT, github.com/fazdiu/duo-icons); search and trash drawn to match
 const DUO = {
+"calendar": "<path fill=\"currentColor\" d=\"M 21 12 L 21 19 C 21 20.105 20.105 21 19 21 L 5 21 C 3.895 21 3 20.105 3 19 L 3 12 L 21 12 Z\" opacity=\".3\"></path><path fill=\"currentColor\" d=\"M 16 3 C 16.552 3 17 3.448 17 4 L 17 5 L 19 5 C 20.105 5 21 5.895 21 7 L 21 10 L 3 10 L 3 7 C 3 5.895 3.895 5 5 5 L 7 5 L 7 4 C 7 3.23 7.833 2.749 8.5 3.134 C 8.809 3.313 9 3.643 9 4 L 9 5 L 15 5 L 15 4 C 15 3.448 15.448 3 16 3 Z\"></path>",
+"message": "<path fill=\"currentColor\" d=\"M 2 6 C 2 4.343 3.343 3 5 3 L 19 3 C 20.657 3 22 4.343 22 6 L 22 16 C 22 17.657 20.657 19 19 19 L 7.333 19 L 4 21.5 C 3.176 22.118 2 21.53 2 20.5 L 2 6 Z\" opacity=\".3\" fill-rule=\"evenodd\"></path><path fill=\"currentColor\" d=\"M 8 12 C 7.23 12 6.749 12.833 7.134 13.5 C 7.313 13.809 7.643 14 8 14 L 11 14 C 11.77 14 12.251 13.167 11.866 12.5 C 11.687 12.191 11.357 12 11 12 L 8 12 Z\" fill-rule=\"evenodd\"></path><path fill=\"currentColor\" d=\"M 7 9 C 7 8.448 7.448 8 8 8 L 16 8 C 16.77 8 17.251 8.833 16.866 9.5 C 16.687 9.809 16.357 10 16 10 L 8 10 C 7.448 10 7 9.552 7 9 Z\" fill-rule=\"evenodd\"></path>",
+"check-circle": "<path fill=\"currentColor\" d=\"M 12 2 C 17.523 2 22 6.477 22 12 C 22 17.523 17.523 22 12 22 C 6.477 22 2 17.523 2 12 C 2 6.477 6.477 2 12 2 Z\" opacity=\".3\"></path><path fill=\"currentColor\" d=\"M 15.535 8.381 L 10.585 13.331 L 8.465 11.21 C 7.921 10.665 6.991 10.914 6.791 11.658 C 6.699 12.003 6.797 12.371 7.05 12.624 L 9.808 15.382 C 10.238 15.812 10.934 15.812 11.364 15.382 L 16.95 9.796 C 17.495 9.251 17.245 8.321 16.501 8.122 C 16.156 8.03 15.788 8.128 15.535 8.381 Z\"></path>",
+"user-card": "<path fill=\"currentColor\" d=\"M 14.447 1.106 C 14.941 1.353 15.141 1.953 14.894 2.447 L 14.118 4 L 18 4 C 19.105 4 20 4.895 20 6 L 20 20 C 20 21.105 19.105 22 18 22 L 6 22 C 4.895 22 4 21.105 4 20 L 4 6 C 4 4.895 4.895 4 6 4 L 9.882 4 L 9.106 2.447 C 8.783 1.748 9.338 0.962 10.105 1.032 C 10.438 1.062 10.735 1.258 10.894 1.553 L 12 3.763 L 13.106 1.553 C 13.353 1.059 13.953 0.8590000000000001 14.447 1.106 Z\" fill-rule=\"evenodd\" opacity=\".3\"></path><path fill=\"currentColor\" d=\"M 12 9 C 10.46 9 9.498 10.667 10.268 12 C 10.625 12.619 11.285 13 12 13 C 13.54 13 14.502 11.333 13.732 10 C 13.375 9.381 12.715 9 12 9 Z\" fill-rule=\"evenodd\"></path><path fill=\"currentColor\" d=\"M 13.5 14 L 10.5 14 C 9.183 14 8.091 15.022 8.005 16.336 L 8 16.5 L 8 17 C 8.001 17.77 8.835 18.25 9.501 17.864 C 9.773 17.707 9.956 17.43 9.993 17.117 L 10 17 L 10 16.5 C 10 16.259 10.172 16.051 10.41 16.008 L 10.5 16 L 13.5 16 C 13.741 16 13.949 16.172 13.992 16.41 L 14 16.5 L 14 17 C 14.001 17.77 14.835 18.25 15.501 17.864 C 15.773 17.707 15.956 17.43 15.993 17.117 L 16 17 L 16 16.5 C 16 15.183 14.978 14.091 13.664 14.005 L 13.5 14 Z\" fill-rule=\"evenodd\"></path>",
+"file": "<path fill=\"currentColor\" d=\"M 12 2 L 12 8.5 C 12 9.328 12.672 10 13.5 10 L 20 10 L 20 20 C 20 21.105 19.105 22 18 22 L 6 22 C 4.895 22 4 21.105 4 20 L 4 4 C 4 2.895 4.895 2 6 2 L 12 2 Z\" fill-rule=\"evenodd\" opacity=\".3\"></path><path fill=\"currentColor\" d=\"M 14 2.043 C 14.379 2.123 14.725999999999999 2.312 15 2.586 L 19.414 7 C 19.688 7.274 19.877 7.621 19.957 8 L 14 8 L 14 2.043 Z\" fill-rule=\"evenodd\"></path><path fill=\"currentColor\" d=\"M 11.654 11.699 L 10.76 13.234 L 9.023 13.61 C 8.723 13.675 8.605 14.04 8.81 14.268 L 9.994 15.593 L 9.814 17.361 C 9.783 17.666 10.093 17.891 10.374 17.767 L 12 17.051 L 13.626 17.767 C 13.907 17.891 14.217 17.666 14.186 17.361 L 14.006 15.593 L 15.19 14.268 C 15.395 14.04 15.277 13.675 14.977 13.61 L 13.24 13.234 L 12.346 11.699 C 12.192 11.433 11.808 11.433 11.654 11.699 Z\" fill-rule=\"evenodd\"></path>",
+"settings": "<path fill=\"currentColor\" d=\"M 9.965 2.809 C 9.561 2.513 9.036 2.4370000000000003 8.564 2.606 C 7.478 3.004 6.469 3.588 5.582 4.3309999999999995 C 5.201 4.655 5.004 5.147 5.058 5.644 C 5.133 6.397 5 7.124 4.638 7.75 C 4.277 8.377 3.713 8.856 3.023 9.167 C 2.565 9.37 2.237 9.786999999999999 2.148 10.28 C 1.9500000000000002 11.418 1.9500000000000002 12.582 2.148 13.72 C 2.241 14.257 2.608 14.646 3.023 14.834 C 3.713 15.144 4.277 15.624 4.639 16.25 C 5 16.877 5.133 17.603 5.058 18.356 C 5.013 18.808 5.165 19.32 5.582 19.669 C 6.469 20.412 7.478 20.996 8.564 21.394 C 9.035 21.563 9.56 21.487 9.964 21.191 C 10.579 20.749 11.276 20.5 12 20.5 C 12.724 20.5 13.42 20.749 14.035 21.191 C 14.405 21.457 14.925 21.581 15.436 21.394 C 16.522 20.996 17.531 20.412 18.418 19.669 C 18.835 19.32 18.988 18.809 18.942 18.356 C 18.867 17.603 18.999 16.876 19.362 16.25 C 19.723 15.623 20.287 15.145 20.977 14.834 C 21.391 14.646 21.759 14.257 21.852 13.72 C 22.049 12.582 22.049 11.418 21.852 10.28 C 21.763 9.786999999999999 21.435 9.37 20.977 9.167 C 20.287 8.856 19.723 8.377 19.361 7.75 C 18.999 7.124 18.867 6.397 18.942 5.644 C 18.995 5.147 18.799 4.655 18.418 4.3309999999999995 C 17.531 3.588 16.522 3.004 15.436 2.606 C 14.965 2.438 14.44 2.5140000000000002 14.036 2.809 C 13.42 3.25 12.723 3.5 12 3.5 C 11.277 3.5 10.58 3.251 9.965 2.809 Z\" fill-rule=\"evenodd\" opacity=\".3\"></path><path fill=\"currentColor\" d=\"M 9 12 C 9 9.691 11.5 8.247 13.5 9.402 C 14.428 9.938 15 10.928 15 12 C 15 14.309 12.5 15.753 10.5 14.598 C 9.572 14.062 9 13.072 9 12 Z\" fill-rule=\"evenodd\"></path>",
+"briefcase": "<path fill=\"currentColor\" d=\"M 14 3 C 15.657 3 17 4.343 17 6 L 20 6 C 21.105 6 22 6.895 22 8 L 22 19 C 22 20.105 21.105 21 20 21 L 4 21 C 2.895 21 2 20.105 2 19 L 2 8 C 2 6.895 2.895 6 4 6 L 7 6 C 7 4.343 8.343 3 10 3 L 14 3 Z\" opacity=\".3\"></path><path fill=\"currentColor\" d=\"M 14 5 L 10 5 C 9.493 5 9.066 5.38 9.007 5.883 L 9 6 L 15 6 C 15 5.493 14.62 5.066 14.117 5.007 L 14 5 Z\"></path><path fill=\"currentColor\" d=\"M 19 10 L 5 10 C 4.23 10.001 3.75 10.835 4.136 11.501 C 4.293 11.773 4.57 11.956 4.883 11.993 L 5 12 L 11 12 L 11 13 C 11.001 13.77 11.835 14.25 12.501 13.864 C 12.773 13.707 12.956 13.43 12.993 13.117 L 13 13 L 13 12 L 19 12 C 19.77 11.999 20.25 11.165 19.864 10.499 C 19.707 10.227 19.43 10.044 19.117 10.007 L 19 10 Z\"></path>",
 "alert-triangle": "<path fill=\"currentColor\" d=\"M 13.299 3.148 L 21.933 18.102 C 22.51 19.102 21.789 20.352 20.634 20.352 C 20.634 20.352 20.634 20.352 20.634 20.352 L 3.366 20.352 C 2.211 20.352 1.49 19.102 2.067 18.102 C 2.067 18.102 2.067 18.102 2.067 18.102 L 10.701 3.148 C 11.278 2.148 12.721 2.148 13.299 3.148 Z\" opacity=\".3\"></path><path fill=\"currentColor\" d=\"M 12 8 C 11.493 8 11.066 8.38 11.007 8.883 L 11 9 L 11 13 C 11.001 13.77 11.835 14.25 12.501 13.864 C 12.773 13.707 12.956 13.43 12.993 13.117 L 13 13 L 13 9 C 13 8.448 12.552 8 12 8 Z\"></path><path fill=\"currentColor\" d=\"M 12 15 C 11.23 15 10.749 15.833 11.134 16.5 C 11.313 16.809 11.643 17 12 17 C 12.77 17 13.251 16.167 12.866 15.5 C 12.687 15.191 12.357 15 12 15 Z\"></path>",
 "moon-stars": "<path fill=\"currentColor\" d=\"M 12.477 4.546 C 12.158 3.837 12.725999999999999 3.048 13.5 3.127 C 13.525 3.129 13.549 3.133 13.574 3.137 C 20.395 4.35 23.345 12.493 18.884 17.793 C 14.422 23.094 5.896 21.577 3.536 15.063 C 3.3609999999999998 14.579 3.227 14.081 3.137 13.574 C 3.002 12.808 3.746 12.183 4.476 12.449 C 4.5 12.457 4.523 12.467 4.546 12.477 C 8.76 14.369 13.441 10.989 12.972 6.394 C 12.907 5.756 12.74 5.132 12.477 4.546 Z\" opacity=\".3\"></path><path fill=\"currentColor\" d=\"M 8.397 2.857 C 8.437 2.767 8.563 2.767 8.603 2.857 L 8.705 3.079 C 9.139 3.977 9.823 4.731 10.675 5.251 L 10.832 5.343 C 10.905 5.383 10.907 5.487 10.835 5.53 C 10.834 5.531 10.833 5.531 10.832 5.532 L 10.674 5.624 C 9.752 6.187 9.028 7.024 8.604 8.018 C 8.569 8.098 8.461 8.11 8.409 8.04 C 8.405 8.033 8.4 8.026 8.397 8.018 L 8.295 7.796 C 7.861 6.898 7.177 6.144 6.325 5.624 L 6.167 5.532 C 6.094 5.492 6.092 5.388 6.164 5.345 C 6.165 5.344 6.166 5.344 6.167 5.343 L 6.325 5.251 C 7.177 4.731 7.861 3.977 8.295 3.079 L 8.397 2.857 Z\"></path><path fill=\"currentColor\" d=\"M 5.565 7.716 L 5.629 7.856 C 5.902 8.42 6.3309999999999995 8.893 6.866 9.219 L 6.966 9.278 C 7.011 9.304 7.012 9.369 6.966 9.396 C 6.966 9.396 6.966 9.396 6.966 9.396 L 6.866 9.454 C 6.3309999999999995 9.78 5.902 10.254 5.629 10.818 L 5.565 10.958 C 5.543 11.008 5.475 11.016 5.443 10.971 C 5.44 10.967 5.437 10.963 5.4350000000000005 10.958 L 5.371 10.818 C 5.098 10.254 4.669 9.78 4.134 9.454 L 4.034 9.396 C 3.989 9.37 3.988 9.305 4.034 9.278 C 4.034 9.278 4.034 9.278 4.034 9.278 L 4.134 9.219 C 4.668 8.893 5.098 8.419 5.37 7.855 L 5.434 7.715 C 5.456 7.665 5.524 7.657 5.556 7.702 C 5.559 7.7059999999999995 5.562 7.71 5.564 7.715 L 5.565 7.716 Z\"></path>",
 "moon-2": "<path fill=\"currentColor\" d=\"M 20.15 18.125 L 5.875 3.85 C 6.591666666666667 3.1166666666666667 7.404000000000001 2.5083333333333333 8.312000000000001 2.025 C 9.220666666666668 1.5416666666666667 10.200000000000001 1.2 11.25 1 C 10.950000000000001 2.6500000000000004 11.041666666666668 4.262333333333333 11.525 5.837 C 12.008333333333333 7.412333333333333 12.841666666666667 8.791666666666666 14.025 9.975 C 15.208333333333334 11.158333333333333 16.587666666666667 11.991666666666667 18.163 12.475 C 19.737666666666666 12.958333333333332 21.349999999999998 13.049999999999999 23 12.75 C 22.816666666666666 13.799999999999999 22.479333333333333 14.779333333333334 21.988 15.688 C 21.496 16.596 20.883333333333333 17.408333333333335 20.15 18.125 Z\"></path><path fill=\"currentColor\" d=\"M 19.375 23.05 L 16.675 20.35 C 16.108333333333334 20.566666666666666 15.529333333333334 20.729 14.938 20.837 C 14.346 20.945666666666668 13.733333333333334 21 13.1 21 C 11.7 21 10.387333333333332 20.733333333333334 9.161999999999999 20.2 C 7.937333333333332 19.666666666666664 6.8709999999999996 18.945999999999998 5.962999999999999 18.038 C 5.054333333333333 17.129333333333335 4.333333333333333 16.06266666666667 3.7999999999999994 14.838000000000001 C 3.2666666666666666 13.612666666666668 3 12.3 3 10.9 C 3 10.266666666666667 3.054333333333333 9.654000000000002 3.163 9.062000000000001 C 3.271 8.470666666666668 3.433333333333333 7.8916666666666675 3.65 7.325000000000001 L 0.975 4.65 L 2.4 3.225 L 20.799999999999997 21.625 L 19.375 23.05 Z\" opacity=\".3\"></path>",
@@ -1538,12 +1698,19 @@ function parseDateToken(tok) {
 }
 function matchKnownName(name) {
   if (name.toLowerCase() === 'me') return 'Me';
-  const known = [...document.querySelectorAll('#assignee-list option')].map(o => o.value);
+  const known = [...document.querySelectorAll('#assignee-list option, #agenda-people option')].map(o => o.value);
   return known.find(k => k.toLowerCase() === name.toLowerCase()) || name.charAt(0).toUpperCase() + name.slice(1);
 }
 function parseShortcuts(text) {
   let assignee = null, due = null, hit = false;
-  let out = text.replace(/(^|\s)@([A-Za-z][\w.'-]*)/g, (all, pre, name) => { assignee = matchKnownName(name); hit = true; return pre; });
+  let out = text;
+  // Saved names with spaces (e.g. "@Alex Chen") first, longest first; then single words
+  const multi = [...document.querySelectorAll('#assignee-list option, #agenda-people option')].map(o => o.value).filter(k => /\s/.test(k)).sort((a, b) => b.length - a.length);
+  for (const k of multi) {
+    const re = new RegExp('(^|\\s)@' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?=\\s|$)', 'i');
+    if (re.test(out)) { out = out.replace(re, (all, pre) => { assignee = k; hit = true; return pre; }); break; }
+  }
+  if (!hit) out = out.replace(/(^|\s)@([A-Za-z][\w.'-]*)/g, (all, pre, name) => { assignee = matchKnownName(name); hit = true; return pre; });
   out = out.replace(/(^|\s)!([\w/+-]+)/g, (all, pre, tok) => { const d = parseDateToken(tok); if (!d) return all; due = d; hit = true; return pre; });
   if (hit) out = out.replace(/[ \t]{2,}/g, ' ').replace(/[ \t]+$/gm, '').replace(/^[ \t]+/gm, '').trim();
   return { hit, text: out, assignee, due };
@@ -1552,15 +1719,18 @@ function nextMonday() { const b = parseYmd(state.today); return ymd(addDays(b, (
 
 function buildLine(it, mode, ctx) {
   const T = mode === 'template';
+  const A = mode === 'agenda';
+  const MAXI = A ? 2 : 1;
   const s = { id: it.id || uid(), assignee: it.assignee || null, due: T ? null : it.due || null, done: !T && !!it.done, offset: T && Number.isFinite(+it.offset) && it.offset !== null && it.offset !== '' ? +it.offset : null };
   s.kind = isDivider(it) ? 'divider' : 'item';
-  s.indent = s.kind === 'item' && it.indent ? 1 : 0;
+  s.indent = s.kind === 'item' ? Math.max(0, Math.min(MAXI, +it.indent || 0)) : 0;
+  s.standing = A && !!it.standing;
   const offLabel = o => (o === 0 ? 'Start day' : `${o > 0 ? '+' : '−'}${Math.abs(o)} day${Math.abs(o) === 1 ? '' : 's'}`);
   const el = document.createElement('div');
-  el.className = 'line' + (s.done ? ' done' : '') + (s.kind === 'divider' ? ' divider' : '') + (s.indent ? ' sub' : '');
+  el.className = 'line' + (s.done ? ' done' : '') + (s.kind === 'divider' ? ' divider' : '') + (s.indent ? ' sub' : '') + (s.indent > 1 ? ' sub2' : '');
   el.innerHTML = `
     <button type="button" class="line-grip" tabindex="-1" title="Drag to reorder" aria-label="Drag to reorder">${ICONS.grip}</button>
-    ${mode === 'edit' ? '<input type="checkbox" class="check line-check" aria-label="Done">' : '<span class="line-bullet" aria-hidden="true"></span>'}
+    ${mode === 'edit' || A ? '<input type="checkbox" class="check line-check" aria-label="Done">' : '<span class="line-bullet" aria-hidden="true"></span>'}
     <div class="line-main">
       <div class="line-row">
         <textarea class="line-text" rows="1" maxlength="500" placeholder="Add an item" aria-label="Checklist item"></textarea>
@@ -1570,12 +1740,13 @@ function buildLine(it, mode, ctx) {
           <button type="button" class="tool" data-tool="due" title="Due date">${ICONS.calendar}</button>
           <button type="button" class="tool" data-tool="desc" title="Description">${ICONS.text}</button>
           <button type="button" class="tool" data-tool="link" title="Link">${ICONS.link}</button>
+          ${A ? `<button type="button" class="tool tool-txt" data-tool="standing" title="Standing item: carries over to every meeting">↻</button><button type="button" class="tool" data-tool="outcome" title="Outcome for this meeting">${duo('message')}</button><button type="button" class="tool" data-tool="maketask" title="Make a task from this item">${duo('check-circle')}</button>` : ''}
           <button type="button" class="tool tool-remove" data-tool="remove" title="Remove item">${ICONS.x}</button>
         </span>
       </div>
       <div class="det det-assignee" hidden>
         <button type="button" class="det-chip" data-assign="me">Me</button>
-        <input class="det-input as-name" list="assignee-list" placeholder="Someone else" maxlength="80" aria-label="Assignee name">
+        <input class="det-input as-name" list="${A ? 'agenda-people' : 'assignee-list'}" placeholder="${A ? 'Pick or type a name' : 'Someone else'}" maxlength="80" aria-label="Assignee name">
         <button type="button" class="det-clear" data-clear="assignee">Clear</button>
       </div>
       ${T ? `<div class="det det-due" hidden>
@@ -1593,6 +1764,7 @@ function buildLine(it, mode, ctx) {
         <button type="button" class="det-clear" data-clear="due">Clear</button>
       </div>`}
       <div class="det det-desc" hidden></div>
+      ${A ? '<div class="det det-outcome" hidden><span class="oc-label">Outcome</span><textarea class="oc-in" rows="1" maxlength="2000" placeholder="What was agreed…" aria-label="Outcome for this meeting"></textarea></div>' : ''}
       <div class="det det-link" hidden>${ICONS.link}<input class="link-in" type="url" placeholder="Paste a link" maxlength="2000" aria-label="Link"><a class="det-open" target="_blank" rel="noopener noreferrer" hidden>Open</a></div>
     </div>`;
   const ta = el.querySelector('.line-text');
@@ -1601,6 +1773,9 @@ function buildLine(it, mode, ctx) {
   const nameIn = el.querySelector('.as-name'), dueIn = el.querySelector('.due-in'), offIn = el.querySelector('.off-in');
   const linkIn = el.querySelector('.link-in'), openA = el.querySelector('.det-open');
   const check = el.querySelector('.line-check');
+  const ocBox = el.querySelector('.det-outcome'), ocIn = el.querySelector('.oc-in');
+  if (ocIn) { ocIn.value = it.outcome || ''; ocBox.hidden = !ocIn.value.trim(); }
+  const ocFit = () => { if (ocIn) { ocIn.style.height = 'auto'; ocIn.style.height = ocIn.scrollHeight + 'px'; } };
   const desc = buildRich(it.description, 'Add a description');
   P.desc.appendChild(desc.el);
 
@@ -1608,12 +1783,12 @@ function buildLine(it, mode, ctx) {
   linkIn.value = it.link || '';
   const dividerLabels = () => { ta.placeholder = s.kind === 'divider' ? 'Divider name' : 'Add an item'; ta.setAttribute('aria-label', s.kind === 'divider' ? 'Divider name' : 'Checklist item'); };
   dividerLabels();
-  const setIndent = n => { s.indent = s.kind === 'item' && n ? 1 : 0; el.classList.toggle('sub', !!s.indent); };
+  const setIndent = n => { s.indent = s.kind === 'item' ? Math.max(0, Math.min(MAXI, n | 0)) : 0; el.classList.toggle('sub', s.indent >= 1); el.classList.toggle('sub2', s.indent >= 2); };
   const setDone = v => { s.done = !!v; if (check) check.checked = s.done; el.classList.toggle('done', s.done); renderTags(); };
   const toDivider = () => {
     s.kind = 'divider'; s.indent = 0; s.done = false; s.assignee = null; s.due = null; s.offset = null;
     ta.value = '';
-    el.classList.add('divider'); el.classList.remove('sub', 'done');
+    el.classList.add('divider'); el.classList.remove('sub', 'sub2', 'done');
     Object.values(P).forEach(x => { x.hidden = true; });
     dividerLabels(); renderTags(); fit(); ctx.fixIndents(); ctx.changed();
   };
@@ -1633,12 +1808,14 @@ function buildLine(it, mode, ctx) {
       const cls = !s.done && s.due < state.today ? 'over' : (s.due === state.today && !s.done ? 'today' : '');
       h += `<button type="button" class="ltag ${cls}" data-tool="due" title="Change due date">${esc(formatDue(s.due))}</button>`;
     }
+    if (s.standing) h += '<button type="button" class="ltag standing" data-tool="standing" title="Standing item: carries over to every meeting">↻ Standing</button>';
     if (s.offset !== null) h += `<button type="button" class="ltag" data-tool="due" title="Days from the start (or the due date, if the task repeats)">${esc(offLabel(s.offset))}</button>`;
     tags.innerHTML = h;
     el.querySelector('.tool[data-tool=assignee]').classList.toggle('has', !!s.assignee);
     el.querySelector('.tool[data-tool=due]').classList.toggle('has', !!s.due || s.offset !== null);
     el.querySelector('.tool[data-tool=desc]').classList.toggle('has', descHasText());
     el.querySelector('.tool[data-tool=link]').classList.toggle('has', !!linkIn.value.trim());
+    if (A) { el.querySelector('.tool[data-tool=standing]').classList.toggle('has', s.standing); el.querySelector('.tool[data-tool=outcome]').classList.toggle('has', !!ocIn.value.trim()); }
   };
   renderTags();
 
@@ -1660,6 +1837,14 @@ function buildLine(it, mode, ctx) {
       if (P.link.hidden) { P.link.hidden = false; linkIn.focus(); }
       else if (!linkIn.value.trim()) { P.link.hidden = true; focusEnd(); }
       else linkIn.focus();
+    } else if (name === 'standing') {
+      s.standing = !s.standing; renderTags(); ctx.changed(); focusEnd();
+    } else if (name === 'outcome') {
+      if (ocBox.hidden) { ocBox.hidden = false; ocFit(); ocIn.focus(); }
+      else if (!ocIn.value.trim()) { ocBox.hidden = true; focusEnd(); }
+      else ocIn.focus();
+    } else if (name === 'maketask') {
+      if (ctx.makeTask) ctx.makeTask(api);
     } else if (name === 'remove') {
       ctx.remove(api, false);
     }
@@ -1676,7 +1861,7 @@ function buildLine(it, mode, ctx) {
     if (r.due) { if (T) s.offset = dayDiff(state.today, r.due); else s.due = r.due; }
     renderTags(); fit(); ctx.changed();
   };
-  const hasDetails = () => s.kind !== 'divider' && !!(s.assignee || s.due || s.offset !== null || descHasText() || linkIn.value.trim());
+  const hasDetails = () => s.kind !== 'divider' && !!(s.assignee || s.due || s.offset !== null || descHasText() || linkIn.value.trim() || (ocIn && ocIn.value.trim()));
 
   el.addEventListener('click', e => {
     const t = e.target.closest('[data-tool]');
@@ -1706,6 +1891,10 @@ function buildLine(it, mode, ctx) {
     dueIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); close('due', true); } });
   }
   linkIn.addEventListener('input', () => { updateOpen(); renderTags(); });
+  if (ocIn) {
+    ocIn.addEventListener('input', () => { ocFit(); renderTags(); });
+    ocIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.altKey && !e.ctrlKey && !e.metaKey) { e.preventDefault(); focusEnd(); } });
+  }
   linkIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); focusEnd(); } });
   desc.editor.addEventListener('input', () => renderTags());
   if (check) check.addEventListener('change', () => { setDone(check.checked); ctx.cascade(api); ctx.changed(); });
@@ -1724,13 +1913,15 @@ function buildLine(it, mode, ctx) {
       return;
     }
     if (e.key === 'Tab' && !e.ctrlKey && !e.altKey && !e.metaKey && s.kind === 'item') {
-      if (e.shiftKey) { if (s.indent) { e.preventDefault(); setIndent(0); ctx.changed(); } return; }
-      if (s.indent || ctx.canIndent(api)) { e.preventDefault(); if (!s.indent) { setIndent(1); ctx.changed(); } }
+      if (e.shiftKey) { if (s.indent) { e.preventDefault(); setIndent(s.indent - 1); ctx.fixIndents(); ctx.changed(); } return; }
+      const prev = ctx.prevLine(api);
+      if (prev && prev.s.kind === 'item' && s.indent < MAXI && s.indent <= prev.s.indent) { e.preventDefault(); setIndent(s.indent + 1); ctx.changed(); }
+      else if (s.indent) e.preventDefault();
       return;
     }
     if (e.key === 'Enter') {
       e.preventDefault();
-      if (s.indent && !ta.value.trim() && !hasDetails()) { setIndent(0); ctx.changed(); return; } // Enter on an empty sub-item steps back out
+      if (s.indent && !ta.value.trim() && !hasDetails()) { setIndent(s.indent - 1); ctx.changed(); return; } // Enter on an empty sub-item steps back out
       applyShortcuts(); ctx.newAfter(api, { indent: s.indent }); return;
     }
     if (e.key === 'Backspace' && !ta.value && ta.selectionStart === 0 && !hasDetails()) { e.preventDefault(); ctx.remove(api, true); return; }
@@ -1746,6 +1937,7 @@ function buildLine(it, mode, ctx) {
     applyShortcuts();
     if (!descHasText()) P.desc.hidden = true;
     if (!linkIn.value.trim()) P.link.hidden = true;
+    if (ocIn && !ocIn.value.trim()) ocBox.hidden = true;
     ctx.updateGhost();
   });
 
@@ -1767,17 +1959,28 @@ function buildLine(it, mode, ctx) {
   });
 
   const api = {
-    el, ta, fit, focusEnd, applyShortcuts, hasDetails, s, setIndent, setDone,
+    el, ta, fit: () => { fit(); ocFit(); }, focusEnd, applyShortcuts, hasDetails, s, setIndent, setDone,
     shift: days => { if (!s.due) return false; s.due = ymd(addDays(parseYmd(s.due), days)); renderTags(); return true; },
     isBlank: () => !ta.value.trim() && !hasDetails(),
     shiftable: () => s.kind === 'item',
     getData: () => (s.kind === 'divider'
       ? { id: s.id, kind: 'divider', title: ta.value, description: '', link: '', assignee: null, due: null, done: false }
-      : { id: s.id, title: ta.value, description: desc.getHTML(), link: linkIn.value, assignee: s.assignee, due: s.due, done: s.done, indent: s.indent, ...(T ? { offset: s.offset } : {}) }),
+      : { id: s.id, title: ta.value, description: desc.getHTML(), link: linkIn.value, assignee: s.assignee, due: s.due, done: s.done, indent: s.indent, ...(T ? { offset: s.offset } : {}), ...(A ? { standing: s.standing, outcome: ocIn.value.trim() } : {}) }),
   };
   return api;
 }
 
+// Lines nested under a line (anything indented deeper, until the next line at its level or a divider)
+function lineKids(ls, api) {
+  const out = [];
+  if (api.s.kind !== 'item') return out;
+  for (let j = ls.indexOf(api) + 1; j < ls.length && ls[j].s.kind === 'item' && ls[j].s.indent > api.s.indent; j++) out.push(ls[j]);
+  return out;
+}
+// A line can sit at most one level deeper than the line above it, and never under a divider
+function fixLineIndents(ls) {
+  ls.forEach((l, i) => { const p = ls[i - 1]; const max = !p || p.s.kind !== 'item' ? 0 : p.s.indent + 1; if (l.s.indent > max) l.setIndent(max); });
+}
 function buildTaskEditor(data, mode, handlers = {}) {
   data = data || {};
   const root = document.createElement('div');
@@ -1790,7 +1993,7 @@ function buildTaskEditor(data, mode, handlers = {}) {
   root.innerHTML = `
     <input class="pe-title" maxlength="200" placeholder="Task title" aria-label="Task title">
     <div class="pe-sub"></div>
-    <div class="pe-meta"><span class="pe-cats"></span><button type="button" class="pe-repeat pe-catbtn" aria-label="Choose categories" title="Categories">${ICONS.tag}<span>Category</span></button>
+    <div class="pe-meta"><button type="button" class="pe-repeat pe-client" aria-label="Client"></button><span class="pe-cats"></span><button type="button" class="pe-repeat pe-catbtn" aria-label="Choose categories" title="Categories">${ICONS.tag}<span>Category</span></button>
       <button type="button" class="pe-repeat pe-prio" aria-label="Priority"></button>
       <button type="button" class="pe-repeat pe-rep" aria-label="Repeat settings">${ICONS.repeat}<span>Repeat</span></button></div>
     <div class="pe-recur" hidden></div>
@@ -1813,6 +2016,21 @@ function buildTaskEditor(data, mode, handlers = {}) {
   const pickCats = () => openCatPicker(catBtn, cats, () => { renderCats(); root.dispatchEvent(new Event('input', { bubbles: true })); });
   catBtn.addEventListener('click', pickCats);
   catsBox.addEventListener('click', e => { if (e.target.closest('.pe-cattag')) pickCats(); });
+
+  // Client
+  let client = data.client_id || null;
+  const clientBtn = root.querySelector('.pe-client');
+  const renderClient = () => {
+    const c = findClient(client);
+    if (!c) client = null;
+    clientBtn.innerHTML = c ? `<span class="cl-badge" style="${clStyle(c)}">${esc(c.name)}</span>` : `${duo('briefcase')}<span>Client</span>`;
+    clientBtn.classList.toggle('has', !!c);
+  };
+  renderClient();
+  clientBtn.addEventListener('click', () => {
+    if (state.needsClientMigration) { toast(CLIENT_MIGRATION_MSG, true); return; }
+    openClientPicker(clientBtn, client, id => { client = id; renderClient(); root.dispatchEvent(new Event('input', { bubbles: true })); });
+  });
 
   // Priority
   let prio = prioOf(data);
@@ -1894,18 +2112,14 @@ function buildTaskEditor(data, mode, handlers = {}) {
     updateGhost() { const ls = lines(); const last = ls[ls.length - 1]; ghost.classList.toggle('gone', !!last && last.isBlank()); },
     newAfter(api, opts = {}) {
       const n = make(opts.kind === 'divider' ? { kind: 'divider' } : { indent: opts.indent || 0 });
-      if (api) { const kids = opts.kind === 'divider' || opts.indent ? [] : ctx.kidsOf(api); (kids.length ? kids[kids.length - 1].el : api.el).after(n.el); }
+      if (api) { const kids = ctx.kidsOf(api); (kids.length ? kids[kids.length - 1].el : api.el).after(n.el); }
       else box.appendChild(n.el);
       n.fit(); n.ta.focus(); ctx.fixIndents(); ctx.updateGhost(); changed();
     },
-    kidsOf(api) {
-      const ls = lines(), out = [];
-      if (api.s.kind !== 'item' || api.s.indent) return out;
-      for (let j = ls.indexOf(api) + 1; j < ls.length && ls[j].s.indent && ls[j].s.kind === 'item'; j++) out.push(ls[j]);
-      return out;
-    },
+    kidsOf(api) { return lineKids(lines(), api); },
+    prevLine(api) { const ls = lines(); return ls[ls.indexOf(api) - 1]; },
     canIndent(api) { const ls = lines(), prev = ls[ls.indexOf(api) - 1]; return !!prev && prev.s.kind === 'item'; },
-    fixIndents() { lines().forEach((l, i, ls) => { if (l.s.indent && (!ls[i - 1] || ls[i - 1].s.kind !== 'item')) l.setIndent(0); }); },
+    fixIndents() { fixLineIndents(lines()); },
     cascade(api) {
       const ls = lines(), items = ls.map(l => ({ done: l.s.done, indent: l.s.indent, kind: l.s.kind }));
       cascadeItems(items, ls.indexOf(api));
@@ -1955,8 +2169,8 @@ function buildTaskEditor(data, mode, handlers = {}) {
     el: root, titleIn, lines,
     fit: () => lines().forEach(l => l.fit()),
     applyShortcuts: () => lines().forEach(l => l.applyShortcuts()),
-    refreshCats: renderCats,
-    getData: () => ({ title: titleIn.value, subtitle: sub.getHTML(), category_ids: [...cats].filter(id => findCat(id)), priority: prio, items: lines().map(l => l.getData()), recurRule: rec.rule ? { ...rec.rule } : null, recurDue: rec.due }),
+    refreshCats: renderCats, refreshClient: renderClient,
+    getData: () => ({ title: titleIn.value, subtitle: sub.getHTML(), category_ids: [...cats].filter(id => findCat(id)), client_id: client, priority: prio, items: lines().map(l => l.getData()), recurRule: rec.rule ? { ...rec.rule } : null, recurDue: rec.due }),
     shiftDates: days => {
       let any = false;
       lines().forEach(l => { if (l.shiftable() && l.shift(days)) any = true; });
@@ -1994,7 +2208,7 @@ function normaliseFromEditor(api, opts = {}) {
   }
   if (error) return { error };
   if (!items.some(i => !isDivider(i)) && !opts.template) items.push({ id: uid(), title: 'Clarify steps', description: '', link: null, assignee: null, due: null, done: false });
-  return { task: { title, subtitle: d.subtitle, category_ids: d.category_ids, priority: prioOf(d), items, recurRule, recurDue: d.recurDue } };
+  return { task: { title, subtitle: d.subtitle, category_ids: d.category_ids, client_id: findClient(d.client_id) ? d.client_id : null, priority: prioOf(d), items, recurRule, recurDue: d.recurDue } };
 }
 
 /* ---------- Data ---------- */
@@ -2187,7 +2401,7 @@ async function spawnNext(t) {
   if (next < state.today) next = firstOccurrence(r.rule);
   const shift = dayDiff(r.due, next);
   const items = t.items.map(it => ({ ...it, id: uid(), done: false, due: it.due ? ymd(addDays(parseYmd(it.due), shift)) : null }));
-  const row = { title: t.title, subtitle: t.subtitle, category_ids: taskCatIds(t), priority: prioOf(t), items, completed_at: null, recur: { rule: r.rule, due: next, scheduled: next, series: r.series || uid() } };
+  const row = { title: t.title, subtitle: t.subtitle, category_ids: taskCatIds(t), client_id: t.client_id || null, priority: prioOf(t), items, completed_at: null, recur: { rule: r.rule, due: next, scheduled: next, series: r.series || uid() } };
   const { data, error } = await sb.from('tasks').insert(forDb(row)).select().single();
   if (error) { console.error(error); toast('Couldn’t create the next occurrence. Untick and re-tick an item to try again.', true); return; }
   state.tasks.push({ ...data, items: data.items || [] });
@@ -2363,6 +2577,126 @@ function openCatManager() {
   openAppModal('Task categories', 'small', el, () => true);
 }
 
+/* ---------- Clients ---------- */
+const CLIENT_MIGRATION_MSG = 'Run update-clients.sql in Supabase first (see the banner at the top).';
+// Searchable single-choice list: No client, each client, then add / edit
+function openClientPicker(anchor, currentId, onPick) {
+  closeMenu();
+  const m = document.createElement('div');
+  m.className = 'menu picker client-picker'; m.setAttribute('role', 'menu');
+  m.innerHTML = `<input class="input cp-search" placeholder="Find a client" aria-label="Find a client"><div class="cp-list"></div><div class="menu-sep"></div>
+    <button type="button" class="menu-item" data-act="new">+ New client…</button>${appModal ? '' : '<button type="button" class="menu-item" data-act="edit">Edit clients…</button>'}`;
+  const list = m.querySelector('.cp-list'), q = m.querySelector('.cp-search');
+  const render = () => {
+    const w = q.value.trim().toLowerCase();
+    const items = sortedClients().filter(c => !w || c.name.toLowerCase().includes(w));
+    list.innerHTML = (w ? '' : `<button type="button" class="menu-item pick ${!currentId ? 'on' : ''}" data-id="">No client</button>`)
+      + items.map(c => `<button type="button" class="menu-item pick ${c.id === currentId ? 'on' : ''}" data-id="${esc(c.id)}"><span class="cl-dot" style="background:var(--cl-${clColour(c)}-dot)"></span>${esc(c.name)}</button>`).join('')
+      + (w && !items.length ? '<div class="menu-empty">No matching client. Press Enter to add it.</div>' : '');
+  };
+  render();
+  q.addEventListener('input', render);
+  q.addEventListener('keydown', async e => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const first = list.querySelector('[data-id]');
+    if (first && q.value.trim()) { first.click(); return; }
+    if (q.value.trim()) { closeMenu(); const id = await createClient(q.value); if (id) onPick(id); }
+  });
+  m.addEventListener('click', async e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    e.stopPropagation();
+    if (b.dataset.id !== undefined) { closeMenu(); onPick(b.dataset.id || null); }
+    else if (b.dataset.act === 'new') { closeMenu(); const id = await createClient(prompt('Name for the new client', q.value.trim()) || ''); if (id) onPick(id); }
+    else if (b.dataset.act === 'edit') { closeMenu(); openClientManager(); }
+  });
+  showMenu(m, anchor);
+  q.focus();
+}
+function afterClientChange() {
+  if (state.draftEditor) state.draftEditor.refreshClient();
+  if (state.editor) state.editor.api.refreshClient();
+  if (state.tplManager && state.tplManager.editor) state.tplManager.editor.refreshClient();
+  renderAll();
+}
+async function createClient(name) {
+  if (state.needsClientMigration) { toast(CLIENT_MIGRATION_MSG, true); return null; }
+  name = String(name || '').trim().slice(0, 80);
+  if (!name) return null;
+  const existing = state.clients.find(c => c.name.toLowerCase() === name.toLowerCase());
+  if (existing) return existing.id;
+  const used = new Set(state.clients.map(c => c.color));
+  const color = CLIENT_COLOURS.find(c => !used.has(c)) || CLIENT_COLOURS[state.clients.length % CLIENT_COLOURS.length];
+  const { data, error } = await sb.from('clients').insert({ name, color }).select().single();
+  if (error) { console.error(error); toast('Couldn’t add the client. Try again.', true); return null; }
+  state.clients.push(data);
+  afterClientChange();
+  return data.id;
+}
+async function updateClient(id, patch) {
+  const c = findClient(id);
+  if (!c) return;
+  const before = { ...c };
+  Object.assign(c, patch);
+  afterClientChange();
+  const { error } = await sb.from('clients').update(patch).eq('id', id);
+  if (error) { console.error(error); Object.assign(c, before); afterClientChange(); toast('Couldn’t update the client. Try again.', true); }
+}
+async function deleteClient(id) {
+  const c = findClient(id);
+  if (!c) return false;
+  const using = state.tasks.filter(t => t.client_id === id).length;
+  if (!confirm(`Delete the client “${c.name}”?${using ? ` ${using} task${using === 1 ? '' : 's'} will be left with no client.` : ''}`)) return false;
+  const { error } = await sb.from('clients').delete().eq('id', id);
+  if (error) { console.error(error); toast('Couldn’t delete the client. Try again.', true); return false; }
+  state.clients = state.clients.filter(x => x.id !== id);
+  state.tasks.forEach(t => { if (t.client_id === id) t.client_id = null; });
+  if (state.clientFilter === id) state.clientFilter = '';
+  await Promise.all(state.templates.filter(tp => tp.data && tp.data.client_id === id).map(tp => {
+    tp.data = { ...tp.data, client_id: null };
+    return sb.from('task_templates').update({ data: tp.data }).eq('id', tp.id);
+  }));
+  afterClientChange();
+  toast('Client deleted');
+  return true;
+}
+function openClientManager() {
+  if (state.needsClientMigration) { toast(CLIENT_MIGRATION_MSG, true); return; }
+  const el = document.createElement('div');
+  el.className = 'cm-wrap';
+  const render = () => {
+    el.innerHTML = `<p class="muted small cm-intro">Rename, recolour or delete clients. Changes save straight away.</p>
+      <div class="cm-list">${sortedClients().map(c => `<div class="cm-row" data-id="${esc(c.id)}">
+        <span class="cl-badge" style="${clStyle(c)}">${esc(c.name)}</span>
+        <input class="input cm-name" maxlength="80" value="${esc(c.name)}" aria-label="Client name">
+        <span class="cm-sw" role="radiogroup" aria-label="Colour">${CLIENT_COLOURS.map(k => `<button type="button" class="csw ${c.color === k ? 'on' : ''}" data-color="${k}" style="--cat-color:var(--cl-${k}-dot)" role="radio" aria-checked="${c.color === k}" title="${CLIENT_COLOUR_NAMES[k]}" aria-label="${CLIENT_COLOUR_NAMES[k]}"></button>`).join('')}</span>
+        <button type="button" class="icon-btn cm-del" title="Delete client" aria-label="Delete ${esc(c.name)}">${ICONS.x}</button>
+      </div>`).join('') || '<div class="muted small">No clients yet.</div>'}</div>
+      <div class="cm-add"><input class="input cm-new" maxlength="80" placeholder="New client name" aria-label="New client name"><button type="button" class="btn primary cm-add-btn">Add</button></div>`;
+  };
+  render();
+  const add = async () => { const inp = el.querySelector('.cm-new'); if (await createClient(inp.value)) { render(); el.querySelector('.cm-new').focus(); } };
+  el.addEventListener('change', e => {
+    if (!e.target.matches('.cm-name')) return;
+    const id = e.target.closest('.cm-row').dataset.id, c = findClient(id), name = e.target.value.trim().slice(0, 80);
+    if (!name) { e.target.value = c.name; return; }
+    if (name !== c.name) { updateClient(id, { name }); render(); }
+  });
+  el.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    if (e.target.matches('.cm-new')) { e.preventDefault(); add(); }
+    else if (e.target.matches('.cm-name')) { e.preventDefault(); e.target.blur(); }
+  });
+  el.addEventListener('click', async e => {
+    const row = e.target.closest('.cm-row'), sw = e.target.closest('.csw');
+    if (sw && row) { await updateClient(row.dataset.id, { color: sw.dataset.color }); render(); return; }
+    if (e.target.closest('.cm-del') && row) { if (await deleteClient(row.dataset.id)) render(); return; }
+    if (e.target.closest('.cm-add-btn')) add();
+  });
+  openAppModal('Clients', 'small', el, () => true);
+}
+
 /* ---------- App-wide pop-up ---------- */
 let appModal = null;
 function openAppModal(title, size, el, beforeClose) {
@@ -2394,7 +2728,7 @@ function draftFromTemplate(tp) {
   const rule = d.recurRule || null;
   const base = parseYmd(rule ? firstOccurrence(rule) : state.today);
   return {
-    title: d.title || '', subtitle: d.subtitle || '', recurRule: rule, priority: prioOf(d),
+    title: d.title || '', subtitle: d.subtitle || '', recurRule: rule, priority: prioOf(d), client_id: findClient(d.client_id) ? d.client_id : null,
     category_ids: (d.category_ids || []).filter(id => findCat(id)),
     items: (d.items || []).map(it => (isDivider(it) ? { id: uid(), kind: 'divider', title: it.title || '' } : {
       id: uid(), title: it.title || '', description: it.description || '', link: it.link || '', assignee: it.assignee || null, done: false,
@@ -2523,6 +2857,7 @@ function selectTask(id) {
   ids.forEach(cid => state.catHidden.delete(cid));
   if (!ids.length) state.catHidden.delete('__none');
   if (isRecurring(t)) state.showRecurring = true;
+  if (state.clientFilter && (state.clientFilter === '__none' ? findClient(t.client_id) : t.client_id !== state.clientFilter)) state.clientFilter = '';
   renderAll();
   requestAnimationFrame(() => {
     if (state.editor) state.editor.api.fit();
@@ -2562,21 +2897,23 @@ function renderWeek() {
     const d = addDays(base, i), ds = ymd(d);
     const rows = [];
     state.tasks.forEach(t => realItems(t).forEach(it => { if (effDue(it, t) === ds) rows.push({ t, it }); }));
-    if (!rows.length) { empty.push(d); continue; }
+    const meets = agendaMeetingsOn(ds);
+    if (!rows.length && !meets.length) { empty.push(d); continue; }
     flushEmpty();
     rows.sort((a, b) => (a.it.done - b.it.done) || (prioOf(b.t) - prioOf(a.t)) || String(a.t.created_at).localeCompare(String(b.t.created_at)));
     const open = state.agendaOpen.has(ds);
     const shown = open ? rows : rows.slice(0, AGENDA_ROWS);
     const head = i === 0
-      ? `<div class="ag-head today"><span class="ag-day">Today</span><span class="ag-date">${dayLabel(d)}</span><span class="ag-count">${rows.length} item${rows.length === 1 ? '' : 's'}</span></div>`
-      : `<div class="ag-head"><span class="ag-day">${dayLabel(d)}</span>${i === 1 ? '<span class="ag-date">tomorrow</span>' : ''}<span class="ag-count">${rows.length}</span></div>`;
-    html += `<section class="ag-day-block" aria-label="${WD_LONG[d.getDay()]} ${ordinal(d.getDate())} of ${MON_LONG[d.getMonth()]}">${head}<ul class="ag-list">`
+      ? `<div class="ag-head today"><span class="ag-day">Today</span><span class="ag-date">${dayLabel(d)}</span><span class="ag-count">${rows.length ? `${rows.length} item${rows.length === 1 ? '' : 's'}` : `${meets.length} meeting${meets.length === 1 ? '' : 's'}`}</span></div>`
+      : `<div class="ag-head"><span class="ag-day">${dayLabel(d)}</span>${i === 1 ? '<span class="ag-date">tomorrow</span>' : ''}<span class="ag-count">${rows.length || ''}</span></div>`;
+    const meetHTML = meets.map(a => { const c = findClient(a.client_id); return `<li><button type="button" class="ag-meet" data-agenda="${esc(a.id)}">${duo('calendar')}<span class="ag-main-txt"><span class="ag-title">Meeting · ${esc(a.name)}</span><span class="ag-task">${c ? `<span class="cl-badge sm" style="${clStyle(c)}">${esc(c.name)}</span>` : ''}${esc(describeAgRule(a.rule))}</span></span></button></li>`; }).join('');
+    html += `<section class="ag-day-block" aria-label="${WD_LONG[d.getDay()]} ${ordinal(d.getDate())} of ${MON_LONG[d.getMonth()]}">${head}<ul class="ag-list">${meetHTML}`
       + shown.map(({ t, it }) => {
         const c = findCat(taskCatIds(t)[0]);
         return `<li class="ag-row ${it.done ? 'done' : ''} ${prioOf(t) === 3 ? 'prio-top' : ''}" data-id="${esc(t.id)}" data-item="${esc(it.id)}">
           <input type="checkbox" class="check ag-check" ${it.done ? 'checked' : ''} aria-label="Mark ${esc(it.title)} as done">
           <button type="button" class="ag-main"><span class="ag-title">${esc(it.title.replace(/\s*\n\s*/g, ' '))}</span>
-            <span class="ag-task"><span class="sq" style="--cat-color:${c ? catVar(c) : 'var(--cat-none)'}"></span>${isRecurring(t) ? '↻ ' : ''}${esc(t.title)}</span></button>
+            <span class="ag-task"><span class="sq" style="--cat-color:${c ? catVar(c) : 'var(--cat-none)'}"></span>${clientBadge(t, true)}${isRecurring(t) ? '↻ ' : ''}${esc(t.title)}</span></button>
         </li>`;
       }).join('') + '</ul>'
       + (rows.length > AGENDA_ROWS ? `<button type="button" class="ag-more" data-day="${ds}">${open ? 'Show less' : `+${rows.length - AGENDA_ROWS} more${i === 0 ? ' today' : ''}`}</button>` : '')
@@ -2601,8 +2938,18 @@ function renderRight() {
   const shown = k => !state.catHidden.has(k);
   const visible = state.tasks.filter(t => {
     const ids = taskCatIds(t);
-    return (ids.length ? ids.some(shown) : shown('__none')) && (state.showRecurring || !isRecurring(t));
+    const cf = state.clientFilter;
+    const clientOk = !cf || (cf === '__none' ? !findClient(t.client_id) : t.client_id === cf);
+    return clientOk && (ids.length ? ids.some(shown) : shown('__none')) && (state.showRecurring || !isRecurring(t));
   });
+  const cfSel = $('#client-filter');
+  if (state.clientFilter && state.clientFilter !== '__none' && !findClient(state.clientFilter)) state.clientFilter = '';
+  cfSel.hidden = state.needsClientMigration;
+  cfSel.innerHTML = '<option value="">All clients</option><option value="__none">No client</option>'
+    + sortedClients().map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('')
+    + '<option value="__edit">Edit clients…</option>';
+  cfSel.value = state.clientFilter;
+  cfSel.classList.toggle('active', !!state.clientFilter);
   const counts = { current: 0, upcoming: 0, overdue: 0, completed: 0 };
   visible.forEach(t => counts[taskStatus(t)]++);
   document.querySelectorAll('#tabs .tab').forEach(b => {
@@ -2720,7 +3067,7 @@ function taskCardHTML(t) {
     <div class="tc-top">${labels ? `<div class="tc-labels">${labels}</div>` : '<span class="spacer"></span>'}${prioBtn}</div>
     <div class="tc-head">
       <div class="tc-head-text">
-        <div class="tc-title">${esc(t.title)}</div>
+        <div class="tc-title">${clientBadge(t)}${esc(t.title)}</div>
         ${textOf(t.subtitle) ? `<div class="tc-sub fmt">${sanitizeHTML(t.subtitle)}</div>` : ''}
       </div>
       <div class="tc-meta"><span class="tc-progress">${done}/${n}</span>${!allDone && nextDue(t) ? `<button type="button" class="icon-btn tc-defer" data-defer="${esc(t.id)}" title="Defer" aria-label="Defer">${ICONS.clock}</button>` : ''}</div>
@@ -2738,6 +3085,12 @@ function updateAssigneeList() {
 /* ---------- Events ---------- */
 function wireEvents() {
   $('#add-task-btn').addEventListener('click', addTask);
+  $('#client-filter').addEventListener('change', e => {
+    if (e.target.value === '__edit') { e.target.value = state.clientFilter; openClientManager(); return; }
+    state.clientFilter = e.target.value;
+    renderRight();
+    $('#task-list').scrollTop = 0;
+  });
   $('#tpl-pick').addEventListener('change', e => {
     const v = e.target.value;
     e.target.value = '';
@@ -2749,7 +3102,10 @@ function wireEvents() {
   $('#am-backdrop').addEventListener('click', () => closeAppModal());
   $('#clear-draft').addEventListener('click', clearDraft);
   $('#overdue-strip').addEventListener('click', () => { state.tab = 'overdue'; renderRight(); });
+  wireAgendas();
   $('#week-days').addEventListener('click', e => {
+    const meet = e.target.closest('.ag-meet');
+    if (meet) { openAgenda(meet.dataset.agenda); return; }
     const more = e.target.closest('.ag-more');
     if (more) { const d = more.dataset.day; state.agendaOpen.has(d) ? state.agendaOpen.delete(d) : state.agendaOpen.add(d); renderWeek(); return; }
     const main = e.target.closest('.ag-main');
@@ -2858,7 +3214,10 @@ function wireEvents() {
 }
 function checkDay() {
   const t = todayStr();
-  if (t !== state.today) { state.today = t; renderAll(); }
+  if (t !== state.today) {
+    state.today = t; renderAll();
+    agRolloverAll().then(changed => { if (changed) { state.agEditorKey = ''; if (state.view === 'agendas') renderAgendas(); renderWeek(); } });
+  }
 }
 
 /* ---------- Notes ---------- */
@@ -2881,13 +3240,18 @@ async function checkMigration() {
     sb.from('tasks').select('priority').limit(1),
   ]);
   state.needsPrioMigration = !!e.error;
+  const [f, g] = await Promise.all([sb.from('tasks').select('client_id').limit(1), sb.from('clients').select('id').limit(1)]);
+  state.needsClientMigration = !!(f.error || g.error);
+  const ag = await Promise.all([sb.from('agendas').select('id').limit(1), sb.from('meetings').select('id').limit(1), sb.from('contacts').select('id').limit(1)]);
+  state.needsAgendaMigration = ag.some(r => r.error);
   state.needsMigration = !!(a.error || b.error);
   state.needsCatMigration = !!(c.error || d.error);
-  const files = [state.needsMigration && 'update-recurring-notes.sql', state.needsCatMigration && 'update-categories-templates.sql', state.needsPrioMigration && 'update-priority.sql'].filter(Boolean);
+  const files = [state.needsMigration && 'update-recurring-notes.sql', state.needsCatMigration && 'update-categories-templates.sql', state.needsPrioMigration && 'update-priority.sql', state.needsClientMigration && 'update-clients.sql', state.needsAgendaMigration && 'update-agendas.sql'].filter(Boolean);
   $('#db-banner').hidden = !files.length;
   $('#db-banner').innerHTML = `One-time database update needed: run ${files.map(f => `<code>${f}</code>`).join(' and then ')} in Supabase’s SQL Editor, then refresh this page.`;
 }
 async function loadTaskMeta() {
+  if (!state.needsClientMigration) { const cl = await sb.from('clients').select('*'); if (!cl.error) state.clients = cl.data; }
   if (state.needsCatMigration) return;
   const [c, t] = await Promise.all([sb.from('task_categories').select('*'), sb.from('task_templates').select('*')]);
   if (!c.error) state.taskCats = c.data;
@@ -3227,15 +3591,705 @@ function positionThumb() {
   t.style.width = a.offsetWidth + 'px';
 }
 function setView(v) {
-  state.view = v === 'notes' ? 'notes' : 'todo';
+  if (state.view === 'agendas' && v !== 'agendas') agFlush();
+  state.view = v === 'notes' || v === 'agendas' ? v : 'todo';
   $('#todo-view').hidden = state.view !== 'todo';
   $('#notes-view').hidden = state.view !== 'notes';
+  $('#agendas-view').hidden = state.view !== 'agendas';
   $('#templates-btn').hidden = state.view !== 'todo';
   document.querySelectorAll('.vs-opt').forEach(b => { const on = b.dataset.view === state.view; b.classList.toggle('active', on); b.setAttribute('aria-selected', on); });
   positionThumb();
   try { localStorage.setItem('todo-view', state.view); } catch (e) {}
   if (state.view === 'notes') { closeMenu(); renderNotes(); }
+  else if (state.view === 'agendas') { closeMenu(); if (state.started) { state.agEditorKey = ''; renderAgendas(); } }
   else requestAnimationFrame(() => { if (state.started) renderRight(); if (state.draftEditor) state.draftEditor.fit(); if (state.editor) state.editor.api.fit(); });
+}
+
+/* ---------- Agendas ---------- */
+const AGENDA_MIGRATION_MSG = 'Run update-agendas.sql in Supabase first (see the banner at the top).';
+const AG_FREQS = [['weekly', 'Weekly'], ['fortnightly', 'Fortnightly'], ['monthly', 'Monthly'], ['quarterly', 'Quarterly']];
+const findAgenda = id => state.agendas.find(a => a.id === id);
+const nextDay = d => ymd(addDays(parseYmd(d), 1));
+const longDate = d => { const x = parseYmd(d); return `${WD_LONG[x.getDay()]} ${x.getDate()} ${MON_LONG[x.getMonth()]}`; };
+const shortDate = d => { const x = parseYmd(d); return `${WD_SHORT[x.getDay()]} ${x.getDate()} ${MON_SHORT[x.getMonth()]}`; };
+const clientContacts = cid => state.contacts.filter(c => cid && c.client_id === cid).sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)));
+const colleagues = () => state.contacts.filter(c => !c.client_id).sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)));
+const initials = n => String(n).split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
+
+// Scheduling: weekly / fortnightly on a weekday; monthly / quarterly on a date (weekends move to the Friday before)
+function agRecur(r) {
+  if (r.freq === 'weekly') return { freq: 'weekly', weekday: +r.weekday };
+  if (r.freq === 'monthly') return { freq: 'monthly', mode: 'nth_cal', n: +r.day || 1, weekend: 'before' };
+  if (r.freq === 'quarterly') return { freq: 'quarterly', mode: 'nth_cal', n: +r.day || 1, weekend: 'before' };
+  return null;
+}
+function agNextAfter(a, after) {
+  const r = a.rule || {};
+  if (r.freq === 'fortnightly') {
+    const anc = r.anchor || state.today;
+    if (after < anc) return anc;
+    return ymd(addDays(parseYmd(anc), (Math.floor(dayDiff(anc, after) / 14) + 1) * 14));
+  }
+  const rr = agRecur(r);
+  return rr ? nextOccurrence(rr, after) : null;
+}
+const agOnOrAfter = (a, d) => agNextAfter(a, ymd(addDays(parseYmd(d), -1)));
+const agCancelledOn = (a, d) => state.meetings.find(m => m.agenda_id === a.id && m.date === d && m.status === 'cancelled');
+function agNextOpen(a, from) {
+  let d = agOnOrAfter(a, from);
+  for (let i = 0; i < 80 && d && agCancelledOn(a, d); i++) d = agNextAfter(a, d);
+  return d;
+}
+function agDates(a, from, count) {
+  const out = [];
+  let d = agOnOrAfter(a, from);
+  for (let i = 0; i < count && d; i++) { out.push(d); d = agNextAfter(a, d); }
+  return out;
+}
+function describeAgRule(r) {
+  r = r || {};
+  const wd = WD_LONG[+r.weekday] || '';
+  if (r.freq === 'weekly') return `Weekly · ${wd}`;
+  if (r.freq === 'fortnightly') return `Fortnightly · ${wd}`;
+  if (r.freq === 'monthly') return `Monthly · ${ordinal(+r.day || 1)}`;
+  if (r.freq === 'quarterly') return `Quarterly · ${ordinal(+r.day || 1)} of the quarter`;
+  return '';
+}
+
+// After a meeting: save it to the history, drop finished one-off items (and anything under them),
+// reset standing items, and start fresh outcome notes
+function agRollItems(items) {
+  const out = [];
+  let dropBelow = null;
+  (items || []).forEach(it => {
+    if (it.kind === 'divider') { dropBelow = null; out.push(it); return; }
+    const ind = +it.indent || 0;
+    if (dropBelow !== null && ind > dropBelow) return;
+    dropBelow = null;
+    if (it.done && !it.standing) { dropBelow = ind; return; }
+    out.push({ ...it, done: false });
+  });
+  return out;
+}
+async function agRollover(a, force) {
+  let changed = false, saved = false;
+  for (let i = 0; i < 80 && a.meeting_date && (force || a.meeting_date < state.today); i++) {
+    const d = a.meeting_date;
+    if (!agCancelledOn(a, d) && !saved) {
+      const row = { agenda_id: a.id, date: d, status: 'held', items: a.items || [], outcomes: a.outcomes || {} };
+      const { data, error } = await sb.from('meetings').insert(row).select().single();
+      if (!error) state.meetings.push(data); else console.error(error);
+      a.items = agRollItems(a.items);
+      a.outcomes = {};
+      saved = true;
+    }
+    a.meeting_date = agNextOpen(a, nextDay(d));
+    changed = true; force = false;
+  }
+  if (changed) {
+    const { error } = await sb.from('agendas').update({ items: a.items, outcomes: a.outcomes, meeting_date: a.meeting_date }).eq('id', a.id);
+    if (error) console.error(error);
+  }
+  return changed;
+}
+async function agRolloverAll() {
+  if (state.needsAgendaMigration) return false;
+  let any = false;
+  for (const a of state.agendas) if (await agRollover(a, false)) any = true;
+  return any;
+}
+async function loadAgendas() {
+  if (state.needsAgendaMigration) return;
+  const [a, m, c] = await Promise.all([sb.from('agendas').select('*'), sb.from('meetings').select('*'), sb.from('contacts').select('*')]);
+  if (a.error || m.error || c.error) { console.error(a.error || m.error || c.error); return; }
+  state.agendas = a.data.map(x => ({ ...x, items: Array.isArray(x.items) ? x.items : [], outcomes: x.outcomes || {} }));
+  state.meetings = m.data;
+  state.contacts = c.data;
+  await agRolloverAll();
+}
+
+// Meetings in a date range (used by the Todo List's Next 7 days)
+function agendaMeetingsOn(ds) {
+  if (state.needsAgendaMigration) return [];
+  return state.agendas.filter(a => a.meeting_date && ds >= a.meeting_date && !agCancelledOn(a, ds) && agDates(a, a.meeting_date, 10).includes(ds));
+}
+function openAgenda(id) {
+  const a = findAgenda(id);
+  if (!a) return;
+  if (state.agClient && state.agClient !== a.client_id) state.agClient = '';
+  state.agSel = id; state.agViewing = null;
+  setView('agendas');
+}
+
+/* Rendering */
+function agVisible() {
+  const list = state.agClient ? state.agendas.filter(a => a.client_id === state.agClient) : state.agendas;
+  return [...list].sort((x, y) => String((findClient(x.client_id) || {}).name || '~').localeCompare(String((findClient(y.client_id) || {}).name || '~')) || x.name.localeCompare(y.name));
+}
+function renderAgendas() {
+  const tabs = $('#agd-tabs'), side = $('#agd-side'), doc = $('#agd-doc');
+  if (state.needsAgendaMigration) {
+    tabs.innerHTML = '';
+    side.innerHTML = '';
+    doc.innerHTML = '<div class="agd-empty">Agendas need a one-time database update. Run <b>update-agendas.sql</b> in Supabase, then refresh.</div>';
+    return;
+  }
+  const withAgendas = sortedClients().filter(c => state.agendas.some(a => a.client_id === c.id));
+  if (state.agClient && !withAgendas.some(c => c.id === state.agClient)) state.agClient = '';
+  tabs.innerHTML = `<button type="button" class="agd-tab ${!state.agClient ? 'on' : ''}" data-client="">All clients</button>`
+    + withAgendas.map(c => `<button type="button" class="agd-tab cl ${state.agClient === c.id ? 'on' : ''}" data-client="${esc(c.id)}" style="${clStyle(c)}">${esc(c.name)} <span class="agd-count">${state.agendas.filter(a => a.client_id === c.id).length}</span></button>`).join('')
+    + `<span class="spacer"></span><button type="button" class="btn primary agd-new">${duo('add-circle')}New agenda</button>`;
+
+  const list = agVisible();
+  if (!list.some(a => a.id === state.agSel)) { state.agSel = list[0] ? list[0].id : null; state.agViewing = null; }
+  const card = a => {
+    const next = a.meeting_date;
+    return `<button type="button" class="agd-card ${a.id === state.agSel ? 'on' : ''}" data-agenda="${esc(a.id)}">
+      <span class="agd-card-name">${esc(a.name)}</span>
+      <span class="agd-card-sub">↻ ${esc(describeAgRule(a.rule))}${next ? ` · next ${esc(shortDate(next))}` : ''}</span></button>`;
+  };
+  let html = '';
+  if (!state.agendas.length) html = '<div class="agd-empty small">No agendas yet. Use <b>New agenda</b> to set up a regular client meeting.</div>';
+  else if (state.agClient) html = list.map(card).join('');
+  else {
+    const groups = new Map();
+    list.forEach(a => { const k = a.client_id || ''; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(a); });
+    groups.forEach((as, k) => {
+      const c = findClient(k);
+      html += `<div class="agd-group">${c ? `<span class="cl-badge" style="${clStyle(c)}">${esc(c.name)}</span>` : '<span class="agd-noclient">No client</span>'}</div>` + as.map(card).join('');
+    });
+  }
+  const a = findAgenda(state.agSel);
+  if (a) html += agTimelineHTML(a);
+  side.innerHTML = html;
+  renderAgendaDoc();
+}
+function agTimelineHTML(a) {
+  let h = '<h3 class="agd-tl-title">MEETINGS</h3><div class="agd-tl">';
+  const upcoming = a.meeting_date ? agDates(a, a.meeting_date, 4) : [];
+  upcoming.slice().reverse().forEach(d => {
+    const can = agCancelledOn(a, d);
+    const cur = d === a.meeting_date && !can;
+    h += `<div class="agd-tl-row ${cur ? 'cur' : ''} ${can ? 'can' : ''} ${cur && !state.agViewing ? 'sel' : ''}" ${cur ? 'data-current="1"' : ''}>
+      <span class="agd-tl-dot"></span><span class="agd-tl-date">${esc(shortDate(d))}</span>
+      ${cur ? `<span class="agd-chip">${d === state.today ? 'Today' : 'Next'}</span>` : can ? `<span class="agd-tl-note">Cancelled</span><button type="button" class="agd-link" data-undo="${esc(can.id)}">Undo</button>` : `<span class="agd-tl-note">upcoming</span><button type="button" class="agd-link agd-tl-cancel" data-cancel="${esc(d)}">Cancel</button>`}
+    </div>`;
+  });
+  const past = state.meetings.filter(m => m.agenda_id === a.id && (m.status === 'held' || (a.meeting_date && m.date < a.meeting_date) || m.date < state.today) && !upcoming.includes(m.date))
+    .sort((x, y) => y.date.localeCompare(x.date)).slice(0, 10);
+  past.forEach(m => {
+    const held = m.status === 'held';
+    const n = held ? (m.items || []).filter(i => i.kind !== 'divider').length : 0;
+    h += `<div class="agd-tl-row past ${held ? '' : 'can'} ${state.agViewing === m.id ? 'sel' : ''}" ${held ? `data-meeting="${esc(m.id)}"` : ''}>
+      <span class="agd-tl-dot"></span><span class="agd-tl-date">${esc(shortDate(m.date))}</span>
+      <span class="agd-tl-note">${held ? `Held · ${n} item${n === 1 ? '' : 's'}` : 'Cancelled'}</span>
+      ${!held && m.date >= state.today ? `<button type="button" class="agd-link" data-undo="${esc(m.id)}">Undo</button>` : ''}
+    </div>`;
+  });
+  if (!upcoming.length && !past.length) h += '<div class="agd-tl-note">No meetings scheduled.</div>';
+  return h + '</div>';
+}
+
+// The agenda document: header, then the live editor (Category view) or a read-only list
+function agDocData() {
+  const a = findAgenda(state.agSel);
+  if (!a) return null;
+  const m = state.agViewing ? state.meetings.find(x => x.id === state.agViewing) : null;
+  return m ? { a, m, date: m.date, items: m.items || [], outcomes: m.outcomes || {}, past: true }
+    : { a, m: null, date: a.meeting_date, items: a.items || [], outcomes: a.outcomes || {}, past: false };
+}
+function renderAgendaDoc() {
+  const doc = $('#agd-doc');
+  const D = agDocData();
+  if (!D) { doc.innerHTML = '<div class="agd-empty">Choose an agenda, or create one with <b>New agenda</b>.</div>'; state.agEditor = null; state.agEditorKey = ''; return; }
+  const { a, date, past } = D;
+  const c = findClient(a.client_id);
+  const key = `${a.id}|${state.agViewing || 'live'}|${state.agView}|${date}`;
+  const people = c ? clientContacts(c.id) : [];
+  const head = `<div class="agd-head" style="${c ? clStyle(c) : '--cl-bg:var(--panel-2);--cl-ink:var(--ink2)'}">
+    <div class="agd-head-main">
+      <div class="agd-kicker">${c ? esc(c.name) + ' · ' : ''}${esc(a.name)}</div>
+      <div class="agd-date-row"><h2>${date ? esc(longDate(date)) : 'No meeting scheduled'}</h2>
+        ${past ? '<span class="agd-chip held">Held</span><button type="button" class="agd-link agd-back">Back to the next meeting</button>' : date ? `<span class="agd-chip">${date === state.today ? 'Today' : 'Next meeting'}</span>` : ''}</div>
+      <div class="agd-sub">↻ ${esc(describeAgRule(a.rule))}</div>
+      <div class="agd-people">${people.map(p => `<span class="agd-av" title="${esc(p.name)}${p.role ? ' · ' + esc(p.role) : ''}">${esc(initials(p.name))}</span>`).join('')}<span class="agd-av me" title="Me">ME</span>${colleagues().slice(0, 4).map(p => `<span class="agd-av col" title="${esc(p.name)}${p.role ? ' · ' + esc(p.role) : ''}">${esc(initials(p.name))}</span>`).join('')}
+        <button type="button" class="agd-pill agd-people-btn">${duo('user-card')}People</button></div>
+    </div>
+    <div class="agd-actions">
+      <div class="tabs agd-views" role="tablist" aria-label="View">
+        <button type="button" class="tab ${state.agView === 'category' ? 'active' : ''}" data-agview="category" role="tab">Category</button>
+        <button type="button" class="tab ${state.agView === 'assignee' ? 'active' : ''}" data-agview="assignee" role="tab">Assignee</button>
+      </div>
+      <button type="button" class="btn primary agd-copy">${duo('file')}Copy</button>
+      ${!past && date ? '<button type="button" class="btn agd-close-mtg" title="Save this meeting to the history now and start the next one">Close meeting</button><button type="button" class="btn agd-cancel-mtg">Cancel meeting</button>' : ''}
+      <button type="button" class="icon-btn agd-more" aria-label="Agenda settings" title="Agenda settings">${duo('settings')}</button>
+    </div>
+  </div>`;
+  if (state.agEditorKey === key && doc.querySelector('.agd-head')) {
+    doc.querySelector('.agd-head').outerHTML = head;
+    return;
+  }
+  state.agEditorKey = key;
+  doc.innerHTML = head + '<div class="agd-body"><div class="agd-status muted small" id="agd-status"></div><div id="agd-content"></div></div>';
+  agPeopleList(a);
+  const content = $('#agd-content');
+  if (!past && state.agView === 'category') {
+    const api = buildAgendaEditor(D.items, D.outcomes);
+    content.appendChild(api.el);
+    state.agEditor = api;
+    api.el.addEventListener('input', agScheduleSave);
+    api.el.addEventListener('change', agScheduleSave);
+    requestAnimationFrame(() => api.fit());
+  } else {
+    state.agEditor = null;
+    content.innerHTML = state.agView === 'assignee' ? agAssigneeHTML(D) : agCategoryHTML(D);
+  }
+}
+function agPeopleList(a) {
+  const dl = $('#agenda-people');
+  const ppl = [...(a ? clientContacts(a.client_id) : []), ...colleagues()];
+  dl.innerHTML = ppl.map(p => `<option value="${esc(p.name)}">${p.role ? esc(p.role) : ''}</option>`).join('');
+}
+const agPill = (txt, cls = '') => `<span class="pill ${cls}">${esc(txt)}</span>`;
+function agRowHTML(it, outcomes, D, extra = '') {
+  const ind = Math.max(0, Math.min(2, +it.indent || 0));
+  const out = outcomes[it.id] || '';
+  return `<div class="agd-row lvl${ind} ${it.done ? 'done' : ''}" data-item="${esc(it.id)}">
+    <input type="checkbox" class="check agd-tick" ${it.done ? 'checked' : ''} ${D.past ? 'disabled' : ''} aria-label="Mark ${esc(it.title)} as done">
+    <div class="agd-row-main">
+      <div class="agd-row-top">${extra}<span class="agd-row-title">${esc(it.title)}</span>
+        ${it.standing ? agPill('↻ Standing', 'standing') : ''}${it.assignee ? agPill(it.assignee, 'who') : ''}${it.due ? agPill(formatDue(it.due), !it.done && it.due < state.today ? 'due-over' : '') : ''}
+        ${safeHref(it.link) ? `<a class="tc-link" href="${esc(safeHref(it.link))}" target="_blank" rel="noopener noreferrer">Link</a>` : ''}</div>
+      ${textOf(it.description) ? `<div class="agd-desc fmt">${sanitizeHTML(it.description)}</div>` : ''}
+      ${D.past ? `<label class="agd-outcome"><span>Outcome</span><textarea class="agd-oc-edit" data-oc="${esc(it.id)}" rows="1" placeholder="Add an outcome note">${esc(out)}</textarea></label>` : out ? `<div class="agd-outcome ro"><span>Outcome</span>${esc(out)}</div>` : ''}
+    </div></div>`;
+}
+function agCategoryHTML(D) {
+  const items = D.items;
+  if (!items.length) return '<div class="agd-empty small">No items.</div>';
+  return items.map(it => it.kind === 'divider' ? `<h3 class="agd-sec">${esc(it.title)}</h3>` : agRowHTML(it, D.outcomes, D)).join('');
+}
+// Group items by assignee: Me, this client's contacts, colleagues, anyone else, then Unassigned
+function agGroups(D) {
+  const ctx = [], ancestors = [];
+  let section = '';
+  D.items.forEach(it => {
+    if (it.kind === 'divider') { section = it.title; ancestors.length = 0; return; }
+    const ind = +it.indent || 0;
+    ancestors.length = ind;
+    ctx.push({ it, section, path: ancestors.filter(Boolean).map(x => x.title) });
+    ancestors[ind] = it;
+  });
+  const c = findClient(D.a.client_id);
+  const order = ['Me', ...(c ? clientContacts(c.id).map(p => p.name) : []), ...colleagues().map(p => p.name)];
+  const names = [...new Set(ctx.map(x => x.it.assignee).filter(Boolean))];
+  names.sort((x, y) => { const ix = order.indexOf(x), iy = order.indexOf(y); return (ix < 0 ? 999 : ix) - (iy < 0 ? 999 : iy) || x.localeCompare(y); });
+  const groups = names.map(n => ({ name: n, rows: ctx.filter(x => x.it.assignee === n) }));
+  const un = ctx.filter(x => !x.it.assignee);
+  if (un.length) groups.push({ name: '', rows: un });
+  return groups;
+}
+function agWho(name, a) {
+  if (!name) return { label: 'Unassigned', role: '' };
+  const c = findClient(a.client_id);
+  const p = state.contacts.find(x => x.name === name && (x.client_id === (c && c.id) || !x.client_id));
+  return { label: name, role: p ? [p.role, p.client_id ? (c && c.name) : 'colleague'].filter(Boolean).join(' · ') : '' };
+}
+function agAssigneeHTML(D) {
+  const groups = agGroups(D);
+  if (!groups.length) return '<div class="agd-empty small">No items.</div>';
+  return groups.map(g => {
+    const w = agWho(g.name, D.a);
+    return `<div class="agd-who"><span class="agd-av ${g.name === 'Me' ? 'me' : g.name ? '' : 'none'}">${g.name ? esc(g.name === 'Me' ? 'ME' : initials(g.name)) : '?'}</span><b>${esc(w.label)}</b>${w.role ? `<span class="muted small">${esc(w.role)}</span>` : ''}<span class="agd-count">${g.rows.length}</span><span class="ns-line"></span></div>`
+      + g.rows.map(x => agRowHTML({ ...x.it, indent: 0 }, D.outcomes, D, x.path.length ? `<span class="agd-path">${esc(x.path.join(' › '))} ›</span>` : '').replace('<div class="agd-row-main">', `<div class="agd-row-main"><span class="agd-section">${esc(x.section)}</span>`)).join('');
+  }).join('');
+}
+
+/* The agenda editor (Category view of the next meeting) */
+function buildAgendaEditor(items, outcomes) {
+  const root = document.createElement('div');
+  root.className = 'agenda-editor paper';
+  root.innerHTML = `<div class="pe-lines"></div>
+    <div class="pe-adds"><div class="line-ghost" role="button" tabindex="0">Add an item</div><button type="button" class="add-divider">+ Add section</button></div>
+    <div class="pe-hint"><span><kbd>Enter</kbd> next item</span><span><kbd>Tab</kbd> indent (3 levels)</span><span><code># </code> section</span><span><code>@name</code> assign</span><span><code>!fri</code> due date</span><span>↻ standing · outcome · make task: on each line</span></div>`;
+  const box = root.querySelector('.pe-lines'), ghost = root.querySelector('.line-ghost');
+  const map = new Map();
+  const lines = () => [...box.children].map(el => map.get(el)).filter(Boolean);
+  const changed = () => root.dispatchEvent(new Event('input', { bubbles: true }));
+  const ctx = {
+    maxIndent: 2, dragging: null, changed,
+    makeTask: api => agMakeTask(findAgenda(state.agSel), api.getData()),
+    updateGhost() { const ls = lines(); const last = ls[ls.length - 1]; ghost.classList.toggle('gone', !!last && last.isBlank()); },
+    newAfter(api, opts = {}) {
+      const n = make(opts.kind === 'divider' ? { kind: 'divider' } : { indent: opts.indent || 0 });
+      if (api) { const kids = lineKids(lines(), api); (kids.length ? kids[kids.length - 1].el : api.el).after(n.el); } else box.appendChild(n.el);
+      n.fit(); n.ta.focus(); fixLineIndents(lines()); ctx.updateGhost(); changed();
+    },
+    kidsOf(api) { return lineKids(lines(), api); },
+    prevLine(api) { const ls = lines(); return ls[ls.indexOf(api) - 1]; },
+    fixIndents() { fixLineIndents(lines()); },
+    cascade() {},
+    remove(api, focusPrev) {
+      const ls = lines(), i = ls.indexOf(api);
+      if (focusPrev && ls.length <= 1) return;
+      api.el.remove(); map.delete(api.el);
+      if (focusPrev && ls[i - 1]) ls[i - 1].focusEnd();
+      fixLineIndents(lines()); ctx.updateGhost(); changed();
+    },
+    nav(api, dir) { const ls = lines(), t = ls[ls.indexOf(api) + dir]; if (t) t.focusEnd(); },
+  };
+  const make = it => { const api = buildLine(it, 'agenda', ctx); map.set(api.el, api); return api; };
+  (items.length ? items : [{}]).forEach(it => box.appendChild(make({ ...it, outcome: (outcomes || {})[it.id] || '' }).el));
+  ctx.updateGhost();
+  const addAtEnd = () => { const ls = lines(); ctx.newAfter(ls[ls.length - 1] || null); };
+  ghost.addEventListener('click', addAtEnd);
+  ghost.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); addAtEnd(); } });
+  root.querySelector('.add-divider').addEventListener('click', () => { const ls = lines(); ctx.newAfter(ls[ls.length - 1] || null, { kind: 'divider' }); });
+  box.addEventListener('dragover', e => {
+    const drag = ctx.dragging;
+    if (!drag || drag.parentNode !== box) return;
+    e.preventDefault();
+    const after = [...box.children].find(c => c !== drag && e.clientY < c.getBoundingClientRect().top + c.offsetHeight / 2);
+    if (after) { if (drag.nextSibling !== after) box.insertBefore(drag, after); } else if (box.lastElementChild !== drag) box.appendChild(drag);
+  });
+  box.addEventListener('drop', e => e.preventDefault());
+  return {
+    el: root, lines,
+    fit: () => lines().forEach(l => l.fit()),
+    getData() {
+      lines().forEach(l => l.applyShortcuts());
+      const items = [], outcomes = {};
+      lines().forEach(l => {
+        const d = l.getData();
+        const t = d.title.replace(/[ \t]+\n/g, '\n').trim();
+        if (d.kind === 'divider') { if (t) items.push({ id: d.id, kind: 'divider', title: t.replace(/\s*\n\s*/g, ' ') }); return; }
+        if (!t && !l.hasDetails()) return;
+        const { outcome, ...rest } = d;
+        items.push({ ...rest, title: t || '(untitled)', link: normLink(rest.link) });
+        if (outcome) outcomes[d.id] = outcome;
+      });
+      items.forEach((it, i) => { if (it.kind === 'divider') return; const p = items[i - 1]; const max = !p || p.kind === 'divider' ? 0 : (+p.indent || 0) + 1; if (it.indent > max) it.indent = max; });
+      return { items, outcomes };
+    },
+  };
+}
+function setAgStatus(t) { const el = $('#agd-status'); if (el) el.textContent = t; }
+function agScheduleSave() {
+  setAgStatus('Editing…');
+  clearTimeout(state.agSaveTimer);
+  state.agSaveTimer = setTimeout(agSave, 700);
+}
+async function agSave() {
+  clearTimeout(state.agSaveTimer); state.agSaveTimer = null;
+  const a = findAgenda(state.agSel);
+  if (!a || !state.agEditor) return;
+  const { items, outcomes } = state.agEditor.getData();
+  a.items = items; a.outcomes = outcomes;
+  setAgStatus('Saving…');
+  const { error } = await sb.from('agendas').update({ items, outcomes }).eq('id', a.id);
+  if (error) { console.error(error); setAgStatus('Not saved'); toast('Couldn’t save the agenda. Check your connection.', true); return; }
+  if (!state.agSaveTimer) setAgStatus('Saved');
+}
+async function agFlush() { if (state.agSaveTimer) await agSave(); }
+
+/* Actions */
+async function agTick(itemId, done) {
+  const a = findAgenda(state.agSel);
+  const it = a && a.items.find(x => x.id === itemId);
+  if (!it) return;
+  it.done = done;
+  const { error } = await sb.from('agendas').update({ items: a.items }).eq('id', a.id);
+  if (error) { it.done = !done; toast('Couldn’t save that change. Try again.', true); }
+  state.agEditorKey = ''; renderAgendaDoc();
+}
+let agOcTimer = null;
+function agSaveOutcome(meetingId, itemId, text) {
+  const m = state.meetings.find(x => x.id === meetingId);
+  if (!m) return;
+  m.outcomes = { ...(m.outcomes || {}), [itemId]: text.trim() };
+  if (!text.trim()) delete m.outcomes[itemId];
+  clearTimeout(agOcTimer);
+  setAgStatus('Editing…');
+  agOcTimer = setTimeout(async () => {
+    const { error } = await sb.from('meetings').update({ outcomes: m.outcomes }).eq('id', m.id);
+    setAgStatus(error ? 'Not saved' : 'Saved');
+  }, 600);
+}
+async function agCloseMeeting() {
+  const a = findAgenda(state.agSel);
+  if (!a || !a.meeting_date) return;
+  if (!confirm(`Close the ${longDate(a.meeting_date)} meeting now? It will be saved to the history, finished one-off items will drop off, and standing items will reset for next time.`)) return;
+  await agFlush();
+  await agRollover(a, true);
+  state.agEditorKey = '';
+  renderAgendas(); renderWeek();
+  toast(a.meeting_date ? `Meeting saved. Next one: ${shortDate(a.meeting_date)}` : 'Meeting saved');
+}
+async function agCancelMeeting(d) {
+  const a = findAgenda(state.agSel);
+  if (!a || !d) return;
+  await agFlush();
+  const { data, error } = await sb.from('meetings').insert({ agenda_id: a.id, date: d, status: 'cancelled' }).select().single();
+  if (error) { console.error(error); toast('Couldn’t cancel the meeting. Try again.', true); return; }
+  state.meetings.push(data);
+  if (d === a.meeting_date) {
+    a.meeting_date = agNextOpen(a, nextDay(d));
+    await sb.from('agendas').update({ meeting_date: a.meeting_date }).eq('id', a.id);
+  }
+  state.agEditorKey = '';
+  renderAgendas(); renderWeek();
+  toast(`${shortDate(d)} meeting cancelled`);
+}
+async function agUndoCancel(meetingId) {
+  const m = state.meetings.find(x => x.id === meetingId);
+  const a = m && findAgenda(m.agenda_id);
+  if (!m || !a) return;
+  const { error } = await sb.from('meetings').delete().eq('id', m.id);
+  if (error) { console.error(error); toast('Couldn’t undo. Try again.', true); return; }
+  state.meetings = state.meetings.filter(x => x.id !== m.id);
+  if (m.date >= state.today && (!a.meeting_date || m.date < a.meeting_date)) {
+    a.meeting_date = m.date;
+    await sb.from('agendas').update({ meeting_date: a.meeting_date }).eq('id', a.id);
+  }
+  state.agEditorKey = '';
+  renderAgendas(); renderWeek();
+  toast('Meeting restored');
+}
+function agMakeTask(a, it) {
+  if (!a || !it) return;
+  if (state.draftEditor && draftHasContent() && !confirm('Replace your current New task draft with this item?')) return;
+  const title = (it.title || '').replace(/\s*\n\s*/g, ' ');
+  mountDraft({
+    title, client_id: a.client_id || null,
+    items: [{ id: uid(), title, assignee: it.assignee || null, due: it.due || null, description: it.description || '', link: it.link || '', done: false }],
+  });
+  saveDraft();
+  setView('todo');
+  requestAnimationFrame(() => state.draftEditor && state.draftEditor.titleIn.focus());
+  toast('Task ready in the New task panel. Adjust it, then add it to the board.');
+}
+
+/* Copy (formatted for email, with plain text as a fallback) */
+function agCopyContent() {
+  const D = agDocData();
+  if (!D) return null;
+  const c = findClient(D.a.client_id);
+  const head = `${c ? c.name + ' · ' : ''}${D.a.name}`;
+  const when = D.date ? longDate(D.date) + ' ' + parseYmd(D.date).getFullYear() : '';
+  let html = `<p><b>${esc(head)}</b><br>${esc(when)}</p>`, text = `${head}\n${when}\n`;
+  const meta = it => [it.assignee, it.due ? 'due ' + formatDue(it.due) : ''].filter(Boolean).join(', ');
+  const liHTML = it => `${it.done ? '✓ ' : ''}${esc(it.title)}${meta(it) ? ` <i>(${esc(meta(it))})</i>` : ''}${it.standing ? ' ↻' : ''}`
+    + (textOf(it.description) ? `<br><span style="color:#555">${sanitizeHTML(it.description)}</span>` : '')
+    + (safeHref(it.link) ? `<br><a href="${esc(safeHref(it.link))}">${esc(it.link)}</a>` : '')
+    + (D.outcomes[it.id] ? `<br><b>Outcome:</b> ${esc(D.outcomes[it.id])}` : '');
+  const liText = (it, ind) => `${'    '.repeat(ind)}- ${it.done ? '✓ ' : ''}${it.title.replace(/\n/g, ' ')}${meta(it) ? ` (${meta(it)})` : ''}`
+    + (textOf(it.description) ? `\n${'    '.repeat(ind + 1)}${textOf(it.description)}` : '')
+    + (D.outcomes[it.id] ? `\n${'    '.repeat(ind + 1)}Outcome: ${D.outcomes[it.id]}` : '') + '\n';
+  if (state.agView === 'assignee') {
+    agGroups(D).forEach(g => {
+      const w = agWho(g.name, D.a);
+      html += `<p><b>${esc(w.label)}</b></p><ul>` + g.rows.map(x => `<li>${x.path.length ? esc(x.path.join(' › ')) + ' › ' : ''}${liHTML(x.it)}</li>`).join('') + '</ul>';
+      text += `\n${w.label}\n` + g.rows.map(x => liText({ ...x.it, title: (x.path.length ? x.path.join(' › ') + ' › ' : '') + x.it.title }, 0)).join('');
+    });
+  } else {
+    let depth = -1;
+    const close = to => { while (depth > to) { html += '</li></ul>'; depth--; } };
+    D.items.forEach(it => {
+      if (it.kind === 'divider') { close(-1); html += `<p><b>${esc(it.title)}</b></p>`; text += `\n${it.title}\n`; return; }
+      const ind = Math.min(+it.indent || 0, depth + 1);
+      if (ind > depth) { html += '<ul><li>'; depth = ind; } else { close(ind); html += '</li><li>'; }
+      html += liHTML(it);
+      text += liText(it, ind);
+    });
+    close(-1);
+  }
+  return { html, text };
+}
+async function writeClipboard(html, text) {
+  try {
+    await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([text], { type: 'text/plain' }) })]);
+    return true;
+  } catch (e) {
+    try {
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      Object.assign(div.style, { position: 'fixed', left: '-9999px', top: '0' });
+      document.body.appendChild(div);
+      const r = document.createRange(); r.selectNodeContents(div);
+      const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      const ok = document.execCommand('copy');
+      sel.removeAllRanges(); div.remove();
+      return ok;
+    } catch (e2) { return false; }
+  }
+}
+async function agCopy() {
+  await agFlush();
+  const c = agCopyContent();
+  if (!c) return;
+  toast(await writeClipboard(c.html, c.text) ? 'Agenda copied. Paste it into an email or document.' : 'Couldn’t copy. Try again.', false);
+}
+
+/* Pop-ups: new agenda / settings, and people */
+function openAgendaForm(a) {
+  if (state.needsAgendaMigration) { toast(AGENDA_MIGRATION_MSG, true); return; }
+  if (state.needsClientMigration) { toast(CLIENT_MIGRATION_MSG, true); return; }
+  const r = a ? { ...a.rule } : { freq: 'weekly', weekday: 2, day: 5 };
+  let clientId = a ? a.client_id : (state.agClient || null);
+  const el = document.createElement('div');
+  el.className = 'agf';
+  const render = () => {
+    const c = findClient(clientId);
+    const preview = (() => { const fake = { id: 'x', rule: r }; const d = agOnOrAfter(fake, state.today); return d ? longDate(d) : ''; })();
+    el.innerHTML = `
+      <label class="field"><span class="field-label">Client</span><button type="button" class="pe-repeat pe-client agf-client ${c ? 'has' : ''}">${c ? `<span class="cl-badge" style="${clStyle(c)}">${esc(c.name)}</span>` : `${duo('briefcase')}<span>Choose a client</span>`}</button></label>
+      <label class="field"><span class="field-label">Meeting name</span><input class="input agf-name" maxlength="120" placeholder="e.g. Weekly compliance check-in" value="${esc(a ? a.name : el.dataset.name || '')}"></label>
+      <div class="agf-row">
+        <label class="field"><span class="field-label">How often</span><select class="input agf-freq">${AG_FREQS.map(([v, l]) => `<option value="${v}" ${r.freq === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+        ${r.freq === 'weekly' || r.freq === 'fortnightly'
+          ? `<label class="field"><span class="field-label">Day</span><select class="input agf-wd">${[1, 2, 3, 4, 5].map(d => `<option value="${d}" ${+r.weekday === d ? 'selected' : ''}>${WD_LONG[d]}</option>`).join('')}</select></label>`
+          : `<label class="field"><span class="field-label">${r.freq === 'quarterly' ? 'Date (first month of each quarter)' : 'Date each month'}</span><select class="input agf-day">${Array.from({ length: 31 }, (_, i) => i + 1).map(d => `<option value="${d}" ${+r.day === d ? 'selected' : ''}>${ordinal(d)}</option>`).join('')}</select></label>`}
+      </div>
+      ${r.freq === 'fortnightly' ? `<label class="field"><span class="field-label">First meeting</span><input class="input agf-anchor" type="date" value="${esc(r.anchor || '')}"></label>` : ''}
+      <p class="muted small agf-preview">${preview ? `Next meeting: <b>${esc(preview)}</b>` : 'Choose the first meeting date.'}${r.freq === 'monthly' || r.freq === 'quarterly' ? ' (weekends move to the Friday before)' : ''}</p>
+      <div class="agf-foot">${a ? '<button type="button" class="btn ghost danger agf-del">Delete agenda</button>' : ''}<span class="spacer"></span><button type="button" class="btn agf-cancel">Cancel</button><button type="button" class="btn primary agf-save">${a ? 'Save changes' : 'Create agenda'}</button></div>`;
+  };
+  render();
+  el.addEventListener('input', e => { if (e.target.matches('.agf-name')) el.dataset.name = e.target.value; });
+  el.addEventListener('change', e => {
+    const t = e.target;
+    if (t.matches('.agf-freq')) { r.freq = t.value; if ((r.freq === 'weekly' || r.freq === 'fortnightly') && !r.weekday) r.weekday = 2; if (!r.day) r.day = 5; if (r.freq === 'fortnightly' && !r.anchor) r.anchor = agOnOrAfter({ rule: { freq: 'weekly', weekday: +r.weekday } }, state.today); }
+    else if (t.matches('.agf-wd')) { r.weekday = +t.value; if (r.freq === 'fortnightly') r.anchor = agOnOrAfter({ rule: { freq: 'weekly', weekday: r.weekday } }, r.anchor && r.anchor > state.today ? r.anchor : state.today); }
+    else if (t.matches('.agf-day')) r.day = +t.value;
+    else if (t.matches('.agf-anchor')) { r.anchor = t.value; if (t.value) r.weekday = parseYmd(t.value).getDay(); }
+    else return;
+    render();
+  });
+  el.addEventListener('click', async e => {
+    if (e.target.closest('.agf-client')) {
+      const btn = e.target.closest('.agf-client');
+      openClientPicker(btn, clientId, id => { clientId = id; render(); });
+      return;
+    }
+    if (e.target.closest('.agf-cancel')) { closeAppModal(true); return; }
+    if (e.target.closest('.agf-del')) {
+      if (!confirm(`Delete the agenda “${a.name}” and its meeting history? This can’t be undone.`)) return;
+      const { error } = await sb.from('agendas').delete().eq('id', a.id);
+      if (error) { toast('Couldn’t delete the agenda. Try again.', true); return; }
+      state.agendas = state.agendas.filter(x => x.id !== a.id);
+      state.meetings = state.meetings.filter(m => m.agenda_id !== a.id);
+      closeAppModal(true); state.agEditorKey = ''; renderAgendas(); renderWeek(); toast('Agenda deleted');
+      return;
+    }
+    if (e.target.closest('.agf-save')) {
+      const name = el.querySelector('.agf-name').value.trim().slice(0, 120);
+      if (!clientId) { toast('Choose a client for this agenda.', true); return; }
+      if (!name) { toast('Give the meeting a name.', true); el.querySelector('.agf-name').focus(); return; }
+      if (r.freq === 'fortnightly' && !r.anchor) { toast('Choose the first meeting date.', true); return; }
+      const rule = r.freq === 'weekly' ? { freq: 'weekly', weekday: +r.weekday } : r.freq === 'fortnightly' ? { freq: 'fortnightly', weekday: +r.weekday, anchor: r.anchor } : { freq: r.freq, day: +r.day };
+      if (a) {
+        const ruleChanged = JSON.stringify(rule) !== JSON.stringify(a.rule);
+        Object.assign(a, { name, client_id: clientId, rule });
+        if (ruleChanged) a.meeting_date = agNextOpen(a, state.today);
+        const { error } = await sb.from('agendas').update({ name, client_id: clientId, rule, meeting_date: a.meeting_date }).eq('id', a.id);
+        if (error) { console.error(error); toast('Couldn’t save the agenda. Try again.', true); return; }
+        toast('Agenda updated');
+      } else {
+        const tmp = { rule };
+        const meeting_date = agOnOrAfter(tmp, state.today);
+        const { data, error } = await sb.from('agendas').insert({ name, client_id: clientId, rule, meeting_date, items: [], outcomes: {} }).select().single();
+        if (error) { console.error(error); toast('Couldn’t create the agenda. Try again.', true); return; }
+        state.agendas.push({ ...data, items: [], outcomes: {} });
+        state.agSel = data.id; state.agViewing = null;
+        if (state.agClient && state.agClient !== clientId) state.agClient = '';
+        toast('Agenda created. Add your standing items.');
+      }
+      closeAppModal(true); state.agEditorKey = ''; renderAgendas(); renderWeek();
+    }
+  });
+  openAppModal(a ? 'Agenda settings' : 'New agenda', 'small', el, () => true);
+}
+function openPeople(clientId) {
+  if (state.needsAgendaMigration) { toast(AGENDA_MIGRATION_MSG, true); return; }
+  const c = findClient(clientId);
+  const el = document.createElement('div');
+  el.className = 'cm-wrap ppl';
+  const section = (title, list, cid) => `<h3 class="ppl-title">${esc(title)}</h3>
+    <div class="cm-list">${list.map(p => `<div class="cm-row" data-id="${esc(p.id)}"><span class="agd-av ${cid ? '' : 'col'}">${esc(initials(p.name))}</span>
+      <input class="input ppl-name" maxlength="80" value="${esc(p.name)}" aria-label="Name"><input class="input ppl-role" maxlength="80" value="${esc(p.role || '')}" placeholder="Role" aria-label="Role">
+      <button type="button" class="icon-btn cm-del" aria-label="Remove ${esc(p.name)}" title="Remove">${ICONS.x}</button></div>`).join('') || '<div class="muted small">None yet.</div>'}</div>
+    <div class="cm-add" data-client="${esc(cid || '')}"><input class="input ppl-new-name" maxlength="80" placeholder="Name" aria-label="New name"><input class="input ppl-new-role" maxlength="80" placeholder="Role (optional)" aria-label="New role"><button type="button" class="btn primary ppl-add">Add</button></div>`;
+  const render = () => {
+    el.innerHTML = `<p class="muted small cm-intro">People you can assign agenda items to. “Me” is always available.</p>`
+      + (c ? section(`${c.name} contacts`, clientContacts(c.id), c.id) : '')
+      + section('Colleagues (in every agenda)', colleagues(), null);
+  };
+  render();
+  const add = async row => {
+    const name = row.querySelector('.ppl-new-name').value.trim().slice(0, 80), role = row.querySelector('.ppl-new-role').value.trim().slice(0, 80);
+    if (!name) return;
+    const { data, error } = await sb.from('contacts').insert({ name, role: role || null, client_id: row.dataset.client || null }).select().single();
+    if (error) { console.error(error); toast('Couldn’t add that person. Try again.', true); return; }
+    state.contacts.push(data); render(); state.agEditorKey = ''; renderAgendaDoc();
+  };
+  el.addEventListener('click', async e => {
+    const addBtn = e.target.closest('.ppl-add');
+    if (addBtn) { add(addBtn.closest('.cm-add')); return; }
+    const del = e.target.closest('.cm-del');
+    if (del) {
+      const id = del.closest('.cm-row').dataset.id;
+      const { error } = await sb.from('contacts').delete().eq('id', id);
+      if (error) { toast('Couldn’t remove that person. Try again.', true); return; }
+      state.contacts = state.contacts.filter(x => x.id !== id); render(); state.agEditorKey = ''; renderAgendaDoc();
+    }
+  });
+  el.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.closest('.cm-add')) { e.preventDefault(); add(e.target.closest('.cm-add')); } });
+  el.addEventListener('change', async e => {
+    const row = e.target.closest('.cm-row');
+    if (!row || !e.target.matches('.ppl-name, .ppl-role')) return;
+    const p = state.contacts.find(x => x.id === row.dataset.id);
+    const name = row.querySelector('.ppl-name').value.trim().slice(0, 80) || p.name, role = row.querySelector('.ppl-role').value.trim().slice(0, 80);
+    Object.assign(p, { name, role: role || null });
+    const { error } = await sb.from('contacts').update({ name, role: role || null }).eq('id', p.id);
+    if (error) toast('Couldn’t save that change. Try again.', true);
+    state.agEditorKey = ''; renderAgendaDoc();
+  });
+  openAppModal(c ? `People · ${c.name}` : 'People', 'small', el, () => true);
+}
+function wireAgendas() {
+  $('#agd-tabs').addEventListener('click', e => {
+    if (e.target.closest('.agd-new')) { openAgendaForm(null); return; }
+    const t = e.target.closest('.agd-tab');
+    if (!t) return;
+    agFlush(); state.agClient = t.dataset.client; state.agViewing = null; state.agEditorKey = ''; renderAgendas();
+  });
+  $('#agd-side').addEventListener('click', e => {
+    const undo = e.target.closest('[data-undo]');
+    if (undo) { agUndoCancel(undo.dataset.undo); return; }
+    const can = e.target.closest('[data-cancel]');
+    if (can) { if (confirm(`Cancel the ${longDate(can.dataset.cancel)} meeting?`)) agCancelMeeting(can.dataset.cancel); return; }
+    const card = e.target.closest('.agd-card');
+    if (card) { agFlush(); state.agSel = card.dataset.agenda; state.agViewing = null; state.agEditorKey = ''; renderAgendas(); return; }
+    const mt = e.target.closest('[data-meeting]');
+    if (mt) { agFlush(); state.agViewing = mt.dataset.meeting; state.agEditorKey = ''; renderAgendas(); return; }
+    if (e.target.closest('[data-current]')) { state.agViewing = null; state.agEditorKey = ''; renderAgendas(); }
+  });
+  const doc = $('#agd-doc');
+  doc.addEventListener('click', async e => {
+    const D = agDocData();
+    if (e.target.closest('.agd-back')) { state.agViewing = null; state.agEditorKey = ''; renderAgendas(); return; }
+    const v = e.target.closest('[data-agview]');
+    if (v) { await agFlush(); state.agView = v.dataset.agview; state.agEditorKey = ''; renderAgendaDoc(); return; }
+    if (e.target.closest('.agd-copy')) { agCopy(); return; }
+    if (e.target.closest('.agd-close-mtg')) { agCloseMeeting(); return; }
+    if (e.target.closest('.agd-cancel-mtg')) { if (D && confirm(`Cancel the ${longDate(D.date)} meeting? Its items carry over to the next meeting.`)) agCancelMeeting(D.date); return; }
+    if (e.target.closest('.agd-more')) { if (D) openAgendaForm(D.a); return; }
+    if (e.target.closest('.agd-people-btn')) { if (D) openPeople(D.a.client_id); return; }
+  });
+  doc.addEventListener('change', e => { if (e.target.matches('.agd-tick')) agTick(e.target.closest('.agd-row').dataset.item, e.target.checked); });
+  doc.addEventListener('input', e => {
+    if (e.target.matches('.agd-oc-edit')) { e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; agSaveOutcome(state.agViewing, e.target.dataset.oc, e.target.value); }
+  });
 }
 
 /* ---------- Top bar toggles (saved in this browser) ---------- */
@@ -3285,6 +4339,7 @@ async function start(user) {
   renderNotes();
   const [, drafts] = await Promise.all([loadTasks(), loadDraft(), checkMigration()]);
   await Promise.all([state.needsMigration ? null : loadNotes(), loadTaskMeta()]);
+  await loadAgendas();
   renderTemplatePicker();
   mountDraft(drafts.data && Object.keys(drafts.data).length ? drafts.data : null);
   mountNoteDraft(drafts.note_data || null);
@@ -3298,6 +4353,9 @@ function resetState() {
   Object.assign(state, { user: null, started: false, tasks: [], tab: 'current', selectedId: null, editor: null, draftEditor: null, showRecurring: true,
     notes: [], noteCats: [], notesReady: false, noteSearch: '', noteDraft: null, dragNoteEl: null });
   state.catHidden = new Set(); state.taskCats = []; state.templates = [];
+  state.clients = []; state.clientFilter = ''; state.agendaOpen = new Set();
+  clearTimeout(state.agSaveTimer);
+  Object.assign(state, { agendas: [], meetings: [], contacts: [], agClient: '', agSel: null, agViewing: null, agEditor: null, agEditorKey: '', agSaveTimer: null });
   closeAppModal(true);
   state.noteHidden = new Set();
   clearTimeout(state.draftTimer); state.draftTimer = null;
