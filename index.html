@@ -1080,6 +1080,89 @@ body{font:13.5px/1.45 "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-syst
 .ppl .cm-row .input{flex:1;min-width:0}
 .ppl .cm-add{display:flex;gap:8px;margin-top:8px}
 .ppl .cm-add .input{flex:1;min-width:0}
+
+/* Client badge at title size on task cards, a little lighter than the title */
+.tc-title .cl-badge{height:auto;max-width:none;padding:2px 10px;margin-right:6px;font-size:inherit;font-weight:600;line-height:1.25;letter-spacing:-.01em;vertical-align:baseline}
+/* Priority bars beside the count when a card has no category labels */
+.tc-meta .tc-prio{margin:-3px 0 0}
+/* Agenda: add an item at the end of each section */
+.sec-ghost{margin:2px 0 6px;padding:7px 0 7px 27px;font-size:13.5px;color:var(--faint);cursor:text;border-radius:10px}
+.sec-ghost:hover,.sec-ghost:focus{color:var(--muted);background:var(--panel-2);outline:none}
+
+/* ===== Compact layout ===== */
+#todo-view{grid-template-columns:clamp(280px,27vw,390px) minmax(0,1fr) clamp(260px,23vw,330px)}
+.columns.notes-cols{grid-template-columns:clamp(280px,27vw,390px) minmax(0,1fr)}
+.col-head{padding:14px 0 12px;flex-wrap:nowrap;gap:10px}
+.col-head h2{white-space:nowrap}
+.col-head:has(.tabs){padding-bottom:12px}
+.tabs{flex:none;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.tab,.tab.active{padding:0 10px;white-space:nowrap}
+.filter-row{display:flex;align-items:center;gap:8px;margin:0 22px;padding:10px 0 2px}
+.filter-row .client-filter{flex:none;height:28px;max-width:160px;border-radius:9px;font-size:12px}
+.filter-row .filters{flex:1;min-width:0;margin:0;padding:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.filter-row .filters::-webkit-scrollbar,.tabs::-webkit-scrollbar{display:none}
+.filter-row .filters > *{flex:none;white-space:nowrap}
+.filter-row .filters > .field-label{display:none}
+.filter-row .filters{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);padding-right:24px}
+.col-scroll{padding:12px 22px 18px}
+.overdue-strip,.overdue-strip.none{margin-top:10px;height:36px}
+/* Collapsible New task / New note column */
+.col-collapse{width:28px;height:28px;margin-left:-6px;border-radius:9px;color:var(--muted)}
+.col-collapse:hover{background:var(--panel-2);color:var(--ink)}
+.col-collapse .ic{width:14px;height:14px}
+.col-strip{display:none}
+body.composer-closed #todo-view{grid-template-columns:52px minmax(0,1fr) clamp(260px,23vw,330px)}
+body.composer-closed .columns.notes-cols{grid-template-columns:52px minmax(0,1fr)}
+body.composer-closed .columns > .col:first-child > *:not(.col-strip){display:none}
+body.composer-closed .columns > .col:first-child .col-strip{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;height:100%;padding:16px 0;border:0;border-radius:22px;background:transparent;font:inherit;font-weight:800;color:var(--ink);cursor:pointer}
+body.composer-closed .col-strip:hover{background:var(--panel-2)}
+.col-strip .ic.duo{width:22px;height:22px}
+.col-strip span{writing-mode:vertical-rl;letter-spacing:.02em}
+/* Shortcut hints behind "?" */
+.pe-hint{display:none}
+body.hints-on .pe-hint{display:flex}
+.hint-toggle{flex:none;width:22px;height:22px;margin-left:8px;padding:0;border:0;border-radius:50%;background:var(--panel-2);font:inherit;font-size:12px;font-weight:800;color:var(--muted);cursor:pointer}
+.hint-toggle:hover,body.hints-on .hint-toggle{background:var(--ink);color:var(--panel)}
+.ne-hintbar{display:flex;justify-content:flex-end;margin-top:8px}
+/* Agendas: slimmer */
+.agendas-view{gap:0}
+.agd-side-head{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.agd-side-head .client-filter{flex:1;min-width:0;max-width:none;height:34px}
+.agd-side-head .btn.primary{flex:none;height:34px;padding:0 12px;font-size:12.5px}
+.agd-head{gap:10px 14px;padding:14px 22px 12px}
+.agd-kicker{font-size:11px}
+.agd-date-row{margin-top:2px}
+.agd-date-row h2{font-size:22px}
+.agd-people{margin-top:6px}
+.agd-people .agd-sub{margin:0 6px 0 0}
+.agd-av{width:24px;height:24px;font-size:9.5px}
+.agd-pill{height:24px}
+.agd-actions .btn{height:34px;padding:0 12px;font-size:12.5px}
+.agd-actions .tab,.agd-actions .tab.active{height:28px}
+.agd-more{width:34px;height:34px}
+.agd-body{padding:0 22px 20px}
+.agenda-editor .pe-adds .line-ghost{padding-left:27px}
+.sec-ghost{margin:0 0 4px;padding:6px 0 6px 27px}
+/* ===== Dialogs and aligned pop-ups ===== */
+.dlg{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:20px}
+.dlg[hidden]{display:none}
+.dlg-backdrop{position:absolute;inset:0;background:rgba(20,18,32,.38);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.dlg-card{position:relative;width:min(420px,100%);padding:22px 22px 18px;border-radius:22px;border:1px solid var(--glass-border);background:var(--panel);box-shadow:0 30px 70px rgba(20,20,40,.3)}
+.dlg-msg{margin:0 0 16px;font-size:15px;font-weight:700;line-height:1.45}
+.dlg-card .input{width:100%;height:38px;margin-bottom:16px}
+.dlg-foot{display:flex;justify-content:flex-end;gap:8px}
+.dlg-foot .btn{height:38px;padding:0 16px}
+.btn.primary.danger-solid{background:var(--danger);color:#ffffff}
+.am-card .input{height:36px}
+.am-card textarea.input{height:auto}
+.agf .input{height:36px}
+.am-foot,.agf-foot{display:flex;align-items:center;gap:8px;padding-top:14px;border-top:1px solid var(--line)}
+.am-foot{margin:0 20px;padding-bottom:18px}
+.am-foot .spacer{flex:1}
+.am-foot .btn,.agf-foot .btn{height:36px}
+.cm-wrap{padding-bottom:14px}
+.ppl .agd-av,.cm-row .agd-av{background:var(--panel-2);color:var(--ink)}
+select.input{appearance:none;-webkit-appearance:none;padding-right:30px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 12px) 50%;background-size:4px 4px;background-repeat:no-repeat}
 </style>
 </head>
 <body>
@@ -1126,7 +1209,8 @@ body{font:13.5px/1.45 "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-syst
   <div class="columns" id="todo-view">
     <!-- Left: new task -->
     <section class="col" aria-label="New task">
-      <div class="col-head"><h2>New task</h2><span class="spacer"></span><span class="muted small" id="draft-status"></span><select class="pe-cat cat-none tpl-pick" id="tpl-pick" aria-label="Start from a template"></select></div>
+      <button type="button" class="col-strip" data-composer="open" aria-label="Open the New task panel" title="New task"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M 12 2 C 17.523 2 22 6.477 22 12 C 22 17.523 17.523 22 12 22 C 6.477 22 2 17.523 2 12 C 2 6.477 6.477 2 12 2 Z" opacity=".3"></path><path fill="currentColor" d="M 12 7 C 11.493 7 11.066 7.38 11.007 7.883 L 11 8 L 11 11 L 8 11 C 7.23 11.001 6.75 11.835 7.136 12.501 C 7.293 12.773 7.57 12.956 7.883 12.993 L 8 13 L 11 13 L 11 16 C 11.001 16.77 11.835 17.25 12.501 16.864 C 12.773 16.707 12.956 16.43 12.993 16.117 L 13 16 L 13 13 L 16 13 C 16.77 12.999 17.25 12.165 16.864 11.499 C 16.707 11.227 16.43 11.044 16.117 11.007 L 16 11 L 13 11 L 13 8 C 13 7.448 12.552 7 12 7 Z"></path></svg><span>New task</span></button>
+      <div class="col-head"><button type="button" class="icon-btn col-collapse" data-composer="close" aria-label="Collapse the New task panel" title="Collapse"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3.5L5 8l4.5 4.5"/></svg></button><h2>New task</h2><span class="spacer"></span><span class="muted small" id="draft-status"></span><select class="pe-cat cat-none tpl-pick" id="tpl-pick" aria-label="Start from a template"></select></div>
       <div class="col-scroll" id="new-form"></div>
       <div class="col-foot">
         <button class="btn ghost" id="clear-draft" type="button">Clear</button>
@@ -1139,7 +1223,6 @@ body{font:13.5px/1.45 "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-syst
     <section class="col" aria-label="All tasks">
       <div class="col-head">
         <h2>Tasks</h2>
-        <select class="client-filter" id="client-filter" aria-label="Filter by client"></select>
         <div class="tabs" role="tablist" id="tabs">
           <button class="tab active" data-tab="current" role="tab" type="button">Current <span class="tab-count">0</span></button>
           <button class="tab" data-tab="upcoming" role="tab" type="button">Upcoming <span class="tab-count">0</span></button>
@@ -1147,7 +1230,7 @@ body{font:13.5px/1.45 "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-syst
           <button class="tab" data-tab="completed" role="tab" type="button">Completed <span class="tab-count">0</span></button>
         </div>
       </div>
-      <div class="filters" id="filters"></div>
+      <div class="filter-row"><select class="client-filter" id="client-filter" aria-label="Filter by client"></select><div class="filters" id="filters"></div></div>
       <div class="col-scroll" id="task-list"></div>
     </section>
     <!-- Middle: next 7 days -->
@@ -1161,7 +1244,8 @@ body{font:13.5px/1.45 "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-syst
   <div class="columns notes-cols" id="notes-view" hidden>
     <!-- Left: new note -->
     <section class="col" aria-label="New note">
-      <div class="col-head"><h2>New note</h2><span class="muted small" id="note-draft-status"></span></div>
+      <button type="button" class="col-strip" data-composer="open" aria-label="Open the New note panel" title="New note"><svg class="ic duo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M 12 2 C 17.523 2 22 6.477 22 12 C 22 17.523 17.523 22 12 22 C 6.477 22 2 17.523 2 12 C 2 6.477 6.477 2 12 2 Z" opacity=".3"></path><path fill="currentColor" d="M 12 7 C 11.493 7 11.066 7.38 11.007 7.883 L 11 8 L 11 11 L 8 11 C 7.23 11.001 6.75 11.835 7.136 12.501 C 7.293 12.773 7.57 12.956 7.883 12.993 L 8 13 L 11 13 L 11 16 C 11.001 16.77 11.835 17.25 12.501 16.864 C 12.773 16.707 12.956 16.43 12.993 16.117 L 13 16 L 13 13 L 16 13 C 16.77 12.999 17.25 12.165 16.864 11.499 C 16.707 11.227 16.43 11.044 16.117 11.007 L 16 11 L 13 11 L 13 8 C 13 7.448 12.552 7 12 7 Z"></path></svg><span>New note</span></button>
+      <div class="col-head"><button type="button" class="icon-btn col-collapse" data-composer="close" aria-label="Collapse the New note panel" title="Collapse"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3.5L5 8l4.5 4.5"/></svg></button><h2>New note</h2><span class="spacer"></span><span class="muted small" id="note-draft-status"></span></div>
       <div class="col-scroll" id="note-form"></div>
       <div class="col-foot">
         <button class="btn ghost" id="clear-note" type="button">Clear</button>
@@ -1205,6 +1289,14 @@ body{font:13.5px/1.45 "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-syst
   <datalist id="agenda-people"></datalist>
 </div>
 
+<div class="dlg" id="dlg" hidden>
+  <div class="dlg-backdrop" id="dlg-backdrop"></div>
+  <div class="dlg-card" role="alertdialog" aria-modal="true" aria-labelledby="dlg-msg">
+    <p class="dlg-msg" id="dlg-msg"></p>
+    <input class="input" id="dlg-input" maxlength="120" aria-labelledby="dlg-msg" hidden>
+    <div class="dlg-foot"><button type="button" class="btn" id="dlg-cancel">Cancel</button><button type="button" class="btn primary" id="dlg-ok">OK</button></div>
+  </div>
+</div>
 <div class="app-modal" id="app-modal" hidden>
   <div class="am-backdrop" id="am-backdrop"></div>
   <div class="am-card" role="dialog" aria-modal="true" aria-labelledby="am-title">
@@ -2000,7 +2092,7 @@ function buildTaskEditor(data, mode, handlers = {}) {
       <button type="button" class="pe-repeat pe-rep" aria-label="Repeat settings">${ICONS.repeat}<span>Repeat</span></button></div>
     <div class="pe-recur" hidden></div>
     <div class="pe-lines"></div>
-    <div class="pe-adds"><div class="line-ghost" role="button" tabindex="0">Add an item</div><button type="button" class="add-divider">+ Add divider</button></div>
+    <div class="pe-adds"><div class="line-ghost" role="button" tabindex="0">Add an item</div><button type="button" class="add-divider">+ Add divider</button><button type="button" class="hint-toggle" aria-label="Show or hide keyboard shortcuts" title="Keyboard shortcuts">?</button></div>
     <div class="pe-hint">${hint}</div>`;
   const titleIn = root.querySelector('.pe-title');
   titleIn.value = data.title || '';
@@ -2265,7 +2357,7 @@ function draftHasContent() {
   return !!(d.title.trim() || textOf(d.subtitle) || d.items.some(i => i.title.trim() || textOf(i.description) || i.link.trim() || i.assignee || i.due));
 }
 async function clearDraft() {
-  if (draftHasContent() && !confirm('Clear this draft?')) return;
+  if (draftHasContent() && !(await askConfirm('Clear this draft?'))) return;
   mountDraft(null);
   await saveDraft();
   setDraftStatus('');
@@ -2298,7 +2390,6 @@ async function addTask() {
 /* ---------- Editing (right column) ---------- */
 function openEditor(id) {
   if (state.editor && state.editor.taskId === id) return true;
-  if (state.editor && state.editor.dirty && !confirm('Discard your unsaved changes to the open task?')) return false;
   const t = findTask(id);
   if (!t) return false;
   const card = document.createElement('article');
@@ -2329,9 +2420,9 @@ function openEditor(id) {
   state.editor = ed;
   return true;
 }
-function closeEditor(force) {
+async function closeEditor(force) {
   if (!state.editor) return;
-  if (!force && state.editor.dirty && !confirm('Discard your unsaved changes?')) return;
+  if (!force && state.editor.dirty && !(await askConfirm('Discard your unsaved changes?'))) return;
   state.editor = null;
   state.selectedId = null;
   renderAll();
@@ -2369,7 +2460,7 @@ async function saveEdit() {
 }
 async function deleteTask(id) {
   const t = findTask(id);
-  if (!t || !confirm(`Delete “${t.title}”? This can’t be undone.`)) return;
+  if (!t || !(await askConfirm(`Delete “${t.title}”? This can’t be undone.`))) return;
   const { error } = await sb.from('tasks').delete().eq('id', id);
   if (error) { console.error(error); toast('Couldn’t delete the task. Try again.', true); return; }
   state.tasks = state.tasks.filter(x => x.id !== id);
@@ -2509,7 +2600,7 @@ async function createTaskCategory(name) {
   afterCatChange();
   return data.id;
 }
-const promptNewTaskCategory = () => createTaskCategory(prompt('Name for the new category') || '');
+const promptNewTaskCategory = async () => createTaskCategory((await askText('Name for the new category')) || '');
 function afterCatChange() {
   if (state.draftEditor) state.draftEditor.refreshCats();
   if (state.editor) state.editor.api.refreshCats();
@@ -2529,7 +2620,7 @@ async function deleteTaskCategory(id) {
   const c = findCat(id);
   if (!c) return false;
   const using = state.tasks.filter(t => (t.category_ids || []).includes(id));
-  if (!confirm(`Delete the category “${c.name}”?${using.length ? ` It will be removed from ${using.length} task${using.length === 1 ? '' : 's'}.` : ''}`)) return false;
+  if (!(await askConfirm(`Delete the category “${c.name}”?${using.length ? ` It will be removed from ${using.length} task${using.length === 1 ? '' : 's'}.` : ''}`))) return false;
   const { error } = await sb.from('task_categories').delete().eq('id', id);
   if (error) { console.error(error); toast('Couldn’t delete the category. Try again.', true); return false; }
   state.taskCats = state.taskCats.filter(x => x.id !== id);
@@ -2610,7 +2701,7 @@ function openClientPicker(anchor, currentId, onPick) {
     if (!b) return;
     e.stopPropagation();
     if (b.dataset.id !== undefined) { closeMenu(); onPick(b.dataset.id || null); }
-    else if (b.dataset.act === 'new') { closeMenu(); const id = await createClient(prompt('Name for the new client', q.value.trim()) || ''); if (id) onPick(id); }
+    else if (b.dataset.act === 'new') { closeMenu(); const id = await createClient((await askText('Name for the new client', q.value.trim())) || ''); if (id) onPick(id); }
     else if (b.dataset.act === 'edit') { closeMenu(); openClientManager(); }
   });
   showMenu(m, anchor);
@@ -2649,7 +2740,7 @@ async function deleteClient(id) {
   const c = findClient(id);
   if (!c) return false;
   const using = state.tasks.filter(t => t.client_id === id).length;
-  if (!confirm(`Delete the client “${c.name}”?${using ? ` ${using} task${using === 1 ? '' : 's'} will be left with no client.` : ''}`)) return false;
+  if (!(await askConfirm(`Delete the client “${c.name}”?${using ? ` ${using} task${using === 1 ? '' : 's'} will be left with no client.` : ''}`))) return false;
   const { error } = await sb.from('clients').delete().eq('id', id);
   if (error) { console.error(error); toast('Couldn’t delete the client. Try again.', true); return false; }
   state.clients = state.clients.filter(x => x.id !== id);
@@ -2699,22 +2790,86 @@ function openClientManager() {
   openAppModal('Clients', 'small', el, () => true);
 }
 
+/* ---------- In-app dialogs (instead of the browser's confirm / prompt boxes) ---------- */
+let dlgResolve = null;
+function showDialog({ message, input, value, okLabel, cancelLabel, danger }) {
+  return new Promise(res => {
+    if (dlgResolve) dlgResolve(null);
+    closeMenu();
+    $('#dlg-msg').textContent = message;
+    const inp = $('#dlg-input');
+    inp.hidden = !input; inp.value = value || '';
+    const ok = $('#dlg-ok');
+    ok.textContent = okLabel || 'OK'; ok.classList.toggle('danger-solid', !!danger);
+    $('#dlg-cancel').textContent = cancelLabel || 'Cancel';
+    $('#dlg').hidden = false;
+    dlgResolve = res;
+    if (input) { inp.focus(); inp.select(); } else ok.focus();
+  });
+}
+function closeDialog(val) {
+  const r = dlgResolve;
+  dlgResolve = null;
+  $('#dlg').hidden = true;
+  if (r) r(val);
+}
+// Button wording follows what's being confirmed
+async function askConfirm(message) {
+  const m = String(message);
+  const o = /^Delete/.test(m) ? { okLabel: 'Delete', danger: true }
+    : /^Discard/.test(m) ? { okLabel: 'Discard', danger: true, cancelLabel: 'Keep editing' }
+    : /^Clear/.test(m) ? { okLabel: 'Clear', danger: true }
+    : /^Cancel the/.test(m) ? { okLabel: 'Cancel meeting', danger: true, cancelLabel: 'Keep meeting' }
+    : /^Close the/.test(m) ? { okLabel: 'Close meeting' }
+    : /^Replace/.test(m) ? { okLabel: 'Replace' } : { okLabel: 'OK' };
+  return (await showDialog({ message: m, ...o })) === true;
+}
+async function askText(message, value) {
+  const v = await showDialog({ message, input: true, value, okLabel: /^Rename/.test(message) ? 'Rename' : 'Add' });
+  return typeof v === 'string' ? v : null;
+}
+function wireDialog() {
+  const done = () => closeDialog($('#dlg-input').hidden ? true : $('#dlg-input').value);
+  $('#dlg-ok').addEventListener('click', done);
+  $('#dlg-cancel').addEventListener('click', () => closeDialog(null));
+  $('#dlg-backdrop').addEventListener('click', () => closeDialog(null));
+  window.addEventListener('keydown', e => {
+    if ($('#dlg').hidden) return;
+    if (e.key === 'Escape') { e.preventDefault(); e.stopImmediatePropagation(); closeDialog(null); }
+    else if (e.key === 'Enter' && e.target === $('#dlg-input')) { e.preventDefault(); e.stopImmediatePropagation(); done(); }
+    else if (e.key === 'Tab') {
+      const els = [$('#dlg-input'), $('#dlg-cancel'), $('#dlg-ok')].filter(x => !x.hidden);
+      const i = els.indexOf(document.activeElement);
+      e.preventDefault();
+      els[(i + (e.shiftKey ? -1 : 1) + els.length) % els.length].focus();
+    }
+  }, true);
+}
+
 /* ---------- App-wide pop-up ---------- */
 let appModal = null;
 function openAppModal(title, size, el, beforeClose) {
   closeMenu();
-  if (appModal && !closeAppModal()) return;
+  if (appModal) { closeAppModal().then(ok => { if (ok) openAppModal(title, size, el, beforeClose); }); return; }
   $('#am-title').textContent = title;
   $('#app-modal .am-card').className = 'am-card ' + size;
   const body = $('#am-body');
   body.innerHTML = '';
   body.appendChild(el);
+  if (el.classList.contains('cm-wrap')) {
+    const foot = document.createElement('div');
+    foot.className = 'am-foot';
+    foot.innerHTML = '<span class="muted small">Changes save as you make them</span><span class="spacer"></span><button type="button" class="btn primary">Done</button>';
+    foot.querySelector('button').addEventListener('click', () => closeAppModal());
+    body.appendChild(foot);
+  }
   $('#app-modal').hidden = false;
   appModal = { beforeClose };
 }
-function closeAppModal(force) {
+async function closeAppModal(force) {
   if (!appModal) return true;
-  if (!force && appModal.beforeClose && !appModal.beforeClose()) return false;
+  if (!force && appModal.beforeClose && !(await appModal.beforeClose())) return false;
+  if (!appModal) return true;
   appModal = null;
   state.tplManager = null;
   $('#app-modal').hidden = true;
@@ -2748,7 +2903,7 @@ function renderTemplatePicker() {
 async function applyTemplate(id) {
   const tp = state.templates.find(t => t.id === id);
   if (!tp) return;
-  if (draftHasContent() && !confirm(`Replace your current draft with “${tp.name}”?`)) return;
+  if (draftHasContent() && !(await askConfirm(`Replace your current draft with “${tp.name}”?`))) return;
   mountDraft(draftFromTemplate(tp));
   await saveDraft();
   requestAnimationFrame(() => state.draftEditor.titleIn.focus());
@@ -2756,7 +2911,7 @@ async function applyTemplate(id) {
 }
 async function saveAsTemplate(t, api) {
   if (state.needsCatMigration) { toast(CAT_MIGRATION_MSG, true); return; }
-  const name = (prompt('Name for the new template', t.title) || '').trim().slice(0, 80);
+  const name = ((await askText('Name for the new template', t.title)) || '').trim().slice(0, 80);
   if (!name) return;
   const res = normaliseFromEditor(api, { template: true });
   if (res.error) { toast(res.error, true); return; }
@@ -2779,7 +2934,7 @@ function openTemplates(selectId) {
   el.innerHTML = `<aside class="tm-side"><button class="btn small primary tm-new" type="button">+ New template</button><div class="tm-list"></div></aside><section class="tm-main"></section>`;
   const list = el.querySelector('.tm-list'), main = el.querySelector('.tm-main');
   const tm = { current: null, editor: null, nameIn: null, dirty: false };
-  const confirmLeave = () => !tm.dirty || confirm('Discard your unsaved changes to this template?');
+  const confirmLeave = async () => !tm.dirty || (await askConfirm('Discard your unsaved changes to this template?'));
   const renderList = () => {
     list.innerHTML = state.templates.length
       ? sortedTemplates().map(t => `<button type="button" class="tm-item ${tm.current && tm.current.id === t.id ? 'on' : ''}" data-id="${esc(t.id)}">${esc(t.name)}</button>`).join('')
@@ -2803,7 +2958,7 @@ function openTemplates(selectId) {
     api.el.addEventListener('input', mark); api.el.addEventListener('change', mark); nameIn.addEventListener('input', mark);
     main.querySelector('.tm-del').hidden = !tp.id;
     main.querySelector('.tm-del').addEventListener('click', del);
-    main.querySelector('.tm-cancel').addEventListener('click', () => { if (confirmLeave()) show(null); });
+    main.querySelector('.tm-cancel').addEventListener('click', async () => { if (await confirmLeave()) show(null); });
     main.querySelector('.tm-save').addEventListener('click', save);
     renderList();
     requestAnimationFrame(() => { api.fit(); (tp.id ? api.titleIn : nameIn).focus(); });
@@ -2829,7 +2984,7 @@ function openTemplates(selectId) {
   }
   async function del() {
     const tp = tm.current;
-    if (!tp || !tp.id || !confirm(`Delete the template “${tp.name}”? Tasks already created from it won’t change.`)) return;
+    if (!tp || !tp.id || !(await askConfirm(`Delete the template “${tp.name}”? Tasks already created from it won’t change.`))) return;
     const { error } = await sb.from('task_templates').delete().eq('id', tp.id);
     if (error) { console.error(error); toast('Couldn’t delete the template. Try again.', true); return; }
     state.templates = state.templates.filter(t => t.id !== tp.id);
@@ -2837,11 +2992,11 @@ function openTemplates(selectId) {
     show(null);
     toast('Template deleted');
   }
-  el.querySelector('.tm-new').addEventListener('click', () => { if (confirmLeave()) show({ name: '', data: {} }); });
+  el.querySelector('.tm-new').addEventListener('click', async () => { if (await confirmLeave()) show({ name: '', data: {} }); });
   list.addEventListener('click', e => {
     const b = e.target.closest('.tm-item');
     if (!b || (tm.current && tm.current.id === b.dataset.id)) return;
-    if (confirmLeave()) show(state.templates.find(t => t.id === b.dataset.id));
+    confirmLeave().then(ok => { if (ok) show(state.templates.find(t => t.id === b.dataset.id)); });
   });
   openAppModal('Templates', 'large', el, confirmLeave);
   state.tplManager = tm;
@@ -2850,9 +3005,11 @@ function openTemplates(selectId) {
 }
 
 // Highlight a task, open it on the right (switching tab / filter if needed) and scroll to it.
-function selectTask(id) {
+async function selectTask(id) {
   const t = findTask(id);
-  if (!t || !openEditor(id)) return;
+  if (!t) return;
+  if (state.editor && state.editor.taskId !== id && state.editor.dirty && !(await askConfirm('Discard your unsaved changes to the open task?'))) return;
+  if (!openEditor(id)) return;
   state.selectedId = id;
   state.tab = taskStatus(t);
   const ids = taskCatIds(t);
@@ -2960,6 +3117,7 @@ function renderRight() {
     b.setAttribute('aria-selected', tab === state.tab);
     const c = b.querySelector('.tab-count');
     c.textContent = counts[tab];
+    c.hidden = !counts[tab];
     c.classList.toggle('has', counts[tab] > 0);
   });
 
@@ -2999,7 +3157,7 @@ function renderRight() {
     target.appendChild(card);
   });
 }
-const TASK_COL_MIN = 440;
+const TASK_COL_MIN = 400;
 function taskColumnCount() {
   const list = $('#task-list');
   const w = list.clientWidth - 44; // minus the column's side padding
@@ -3066,13 +3224,13 @@ function taskCardHTML(t) {
   const firstCat = findCat(taskCatIds(t)[0]);
   const pct = n ? Math.round(done / n * 100) : 0;
   return `<article class="task-card ${pr === 3 && !allDone ? 'prio-top' : ''} ${state.selectedId === t.id ? 'selected' : ''}" data-id="${esc(t.id)}" tabindex="0">
-    <div class="tc-top">${labels ? `<div class="tc-labels">${labels}</div>` : '<span class="spacer"></span>'}${prioBtn}</div>
+    ${labels ? `<div class="tc-top"><div class="tc-labels">${labels}</div>${prioBtn}</div>` : ''}
     <div class="tc-head">
       <div class="tc-head-text">
         <div class="tc-title">${clientBadge(t)}${esc(t.title)}</div>
         ${textOf(t.subtitle) ? `<div class="tc-sub fmt">${sanitizeHTML(t.subtitle)}</div>` : ''}
       </div>
-      <div class="tc-meta"><span class="tc-progress">${done}/${n}</span>${!allDone && nextDue(t) ? `<button type="button" class="icon-btn tc-defer" data-defer="${esc(t.id)}" title="Defer" aria-label="Defer">${ICONS.clock}</button>` : ''}</div>
+      <div class="tc-meta">${labels ? '' : prioBtn}<span class="tc-progress">${done}/${n}</span>${!allDone && nextDue(t) ? `<button type="button" class="icon-btn tc-defer" data-defer="${esc(t.id)}" title="Defer" aria-label="Defer">${ICONS.clock}</button>` : ''}</div>
     </div>
     <div class="tc-bar" aria-hidden="true"><span style="width: ${pct}%; ${firstCat ? `background: ${catVar(firstCat)}` : ''}"></span></div>
     <ul class="tc-items">${rows}</ul>
@@ -3105,6 +3263,29 @@ function wireEvents() {
   $('#clear-draft').addEventListener('click', clearDraft);
   $('#overdue-strip').addEventListener('click', () => { state.tab = 'overdue'; renderRight(); });
   wireAgendas();
+  wireDialog();
+  // Collapse / open the New task and New note column (remembered in this browser)
+  const setComposer = open => {
+    document.body.classList.toggle('composer-closed', !open);
+    try { localStorage.setItem('todo-composer', open ? 'open' : 'closed'); } catch (e) {}
+    requestAnimationFrame(() => { if (state.started && state.view === 'todo') renderRight(); if (open && state.draftEditor) state.draftEditor.fit(); });
+  };
+  window.openComposer = () => { if (document.body.classList.contains('composer-closed')) setComposer(true); };
+  try { if (localStorage.getItem('todo-composer') === 'closed') document.body.classList.add('composer-closed'); } catch (e) {}
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-composer]');
+    if (b) {
+      setComposer(b.dataset.composer === 'open');
+      if (b.dataset.composer === 'open') requestAnimationFrame(() => { const t = state.view === 'notes' ? document.querySelector('#note-form .ne-title') : state.draftEditor && state.draftEditor.titleIn; if (t) t.focus(); });
+      return;
+    }
+    if (e.target.closest('.hint-toggle')) {
+      const on = !document.body.classList.contains('hints-on');
+      document.body.classList.toggle('hints-on', on);
+      try { localStorage.setItem('todo-hints', on ? 'on' : 'off'); } catch (e2) {}
+    }
+  });
+  try { if (localStorage.getItem('todo-hints') === 'on') document.body.classList.add('hints-on'); } catch (e) {}
   $('#week-days').addEventListener('click', e => {
     const meet = e.target.closest('.ag-meet');
     if (meet) { openAgenda(meet.dataset.agenda); return; }
@@ -3159,7 +3340,7 @@ function wireEvents() {
     selectTask(e.target.dataset.id);
   });
   $('#signout-btn').addEventListener('click', async () => {
-    if (state.editor && state.editor.dirty && !confirm('Discard your unsaved changes and sign out?')) return;
+    if (state.editor && state.editor.dirty && !(await askConfirm('Discard your unsaved changes and sign out?'))) return;
     if (state.draftTimer) await saveDraft();
     if (state.noteDraftTimer) await saveNoteDraft();
     if (state.noteModal) closeNote();
@@ -3173,10 +3354,18 @@ function wireEvents() {
       if (state.draftTimer) saveDraft();
       if (state.noteDraftTimer) saveNoteDraft();
       if (state.noteModal && state.noteModal.timer) saveModal(state.noteModal);
+      if (state.agSaveTimer) agSave();
       return;
     }
     checkDay();
     if (!state.noteModal && !state.dragNoteEl && !state.needsMigration && await loadNotes()) renderNotes();
+    // Pick up agenda changes made on another device (not while this one is being edited)
+    if (!state.needsAgendaMigration && !state.agSaveTimer && !(state.view === 'agendas' && state.agEditor && state.agEditor.el.contains(document.activeElement)) && !appModal) {
+      await loadAgendas();
+      state.agEditorKey = '';
+      if (state.view === 'agendas') renderAgendas();
+      renderWeek();
+    }
     if (state.editor || appModal) return; // don't disturb an open edit
     await loadTaskMeta();
     renderTemplatePicker();
@@ -3278,7 +3467,7 @@ function buildNoteEditor(data, mode, handlers = {}) {
     </div>
     <div class="ne-swatches" role="radiogroup" aria-label="Note colour"></div>
     <div class="ne-body"></div>
-    ${mode === 'draft' ? `<div class="pe-hint"><span><kbd>${MOD}+Enter</kbd> add note</span><span><code>- </code> or <code>1. </code> starts a list</span></div>` : ''}`;
+    ${mode === 'draft' ? `<div class="ne-hintbar"><button type="button" class="hint-toggle" aria-label="Show or hide keyboard shortcuts" title="Keyboard shortcuts">?</button></div><div class="pe-hint"><span><kbd>${MOD}+Enter</kbd> add note</span><span><code>- </code> or <code>1. </code> starts a list</span></div>` : ''}`;
   const titleIn = root.querySelector('.ne-title');
   titleIn.value = data.title || '';
   const body = buildRich(data.body, 'Write your note…');
@@ -3323,7 +3512,7 @@ function refreshCatEditors() {
 }
 async function promptNewCategory() {
   if (state.needsMigration) { toast(MIGRATION_MSG, true); return null; }
-  const name = (prompt('Name for the new category') || '').trim().slice(0, 60);
+  const name = ((await askText('Name for the new category')) || '').trim().slice(0, 60);
   if (!name) return null;
   const position = state.noteCats.reduce((m, c) => Math.max(m, c.position), 0) + 1;
   const { data, error } = await sb.from('note_categories').insert({ name, position }).select().single();
@@ -3335,7 +3524,7 @@ async function promptNewCategory() {
 async function renameNoteCategory(id) {
   const c = state.noteCats.find(x => x.id === id);
   if (!c) return;
-  const name = (prompt('Rename category', c.name) || '').trim().slice(0, 60);
+  const name = ((await askText('Rename category', c.name)) || '').trim().slice(0, 60);
   if (!name || name === c.name) return;
   const { error } = await sb.from('note_categories').update({ name }).eq('id', id);
   if (error) { console.error(error); toast('Couldn’t rename the category. Try again.', true); return; }
@@ -3343,7 +3532,7 @@ async function renameNoteCategory(id) {
 }
 async function deleteNoteCategory(id) {
   const c = state.noteCats.find(x => x.id === id);
-  if (!c || !confirm(`Delete the category “${c.name}”? Its notes will move to Uncategorised.`)) return;
+  if (!c || !(await askConfirm(`Delete the category “${c.name}”? Its notes will move to Uncategorised.`))) return;
   const { error } = await sb.from('note_categories').delete().eq('id', id);
   if (error) { console.error(error); toast('Couldn’t delete the category. Try again.', true); return; }
   state.noteCats = state.noteCats.filter(x => x.id !== id);
@@ -3383,7 +3572,7 @@ function saveNoteDraft() {
 }
 async function clearNoteDraft() {
   const d = state.noteDraft.getData();
-  if ((d.title.trim() || textOf(d.body)) && !confirm('Clear this note draft?')) return;
+  if ((d.title.trim() || textOf(d.body)) && !(await askConfirm('Clear this note draft?'))) return;
   mountNoteDraft(null);
   await saveNoteDraft();
   setNoteDraftStatus('');
@@ -3519,7 +3708,7 @@ function closeNote() {
 }
 async function deleteNote(id) {
   const n = findNote(id);
-  if (!n || !confirm(`Delete “${n.title || 'Untitled'}”? This can’t be undone.`)) return;
+  if (!n || !(await askConfirm(`Delete “${n.title || 'Untitled'}”? This can’t be undone.`))) return;
   if (state.noteModal && state.noteModal.id === id) { clearTimeout(state.noteModal.timer); state.noteModal.timer = null; }
   await state.noteChain;
   const { error } = await sb.from('notes').delete().eq('id', id);
@@ -3732,15 +3921,17 @@ function renderAgendas() {
   const tabs = $('#agd-tabs'), side = $('#agd-side'), doc = $('#agd-doc');
   if (state.needsAgendaMigration) {
     tabs.innerHTML = '';
+    tabs.hidden = true;
     side.innerHTML = '';
     doc.innerHTML = '<div class="agd-empty">Agendas need a one-time database update. Run <b>update-agendas.sql</b> in Supabase, then refresh.</div>';
     return;
   }
   const withAgendas = sortedClients().filter(c => state.agendas.some(a => a.client_id === c.id));
   if (state.agClient && !withAgendas.some(c => c.id === state.agClient)) state.agClient = '';
-  tabs.innerHTML = `<button type="button" class="agd-tab ${!state.agClient ? 'on' : ''}" data-client="">All clients</button>`
-    + withAgendas.map(c => `<button type="button" class="agd-tab cl ${state.agClient === c.id ? 'on' : ''}" data-client="${esc(c.id)}" style="${clStyle(c)}">${esc(c.name)} <span class="agd-count">${state.agendas.filter(a => a.client_id === c.id).length}</span></button>`).join('')
-    + `<span class="spacer"></span><button type="button" class="btn primary agd-new">${duo('add-circle')}New agenda</button>`;
+  tabs.hidden = true;
+  const sideHead = `<div class="agd-side-head"><select class="client-filter ${state.agClient ? 'active' : ''}" id="agd-client" aria-label="Show agendas for">
+      <option value="">All clients</option>${withAgendas.map(c => `<option value="${esc(c.id)}" ${state.agClient === c.id ? 'selected' : ''}>${esc(c.name)} (${state.agendas.filter(a => a.client_id === c.id).length})</option>`).join('')}</select>
+    <button type="button" class="btn primary agd-new">${duo('add-circle')}New agenda</button></div>`;
 
   const list = agVisible();
   if (!list.some(a => a.id === state.agSel)) { state.agSel = list[0] ? list[0].id : null; state.agViewing = null; }
@@ -3763,7 +3954,7 @@ function renderAgendas() {
   }
   const a = findAgenda(state.agSel);
   if (a) html += agTimelineHTML(a);
-  side.innerHTML = html;
+  side.innerHTML = sideHead + html;
   renderAgendaDoc();
 }
 function agTimelineHTML(a) {
@@ -3813,8 +4004,7 @@ function renderAgendaDoc() {
       <div class="agd-kicker">${c ? esc(c.name) + ' · ' : ''}${esc(a.name)}</div>
       <div class="agd-date-row"><h2>${date ? esc(longDate(date)) : 'No meeting scheduled'}</h2>
         ${past ? '<span class="agd-chip held">Held</span><button type="button" class="agd-link agd-back">Back to the next meeting</button>' : date ? `<span class="agd-chip">${date === state.today ? 'Today' : 'Next meeting'}</span>` : ''}</div>
-      <div class="agd-sub">↻ ${esc(describeAgRule(a.rule))}</div>
-      <div class="agd-people">${people.map(p => `<span class="agd-av" title="${esc(p.name)}${p.role ? ' · ' + esc(p.role) : ''}">${esc(initials(p.name))}</span>`).join('')}<span class="agd-av me" title="Me">ME</span>${colleagues().slice(0, 4).map(p => `<span class="agd-av col" title="${esc(p.name)}${p.role ? ' · ' + esc(p.role) : ''}">${esc(initials(p.name))}</span>`).join('')}
+      <div class="agd-people"><span class="agd-sub">↻ ${esc(describeAgRule(a.rule))}</span>${people.map(p => `<span class="agd-av" title="${esc(p.name)}${p.role ? ' · ' + esc(p.role) : ''}">${esc(initials(p.name))}</span>`).join('')}<span class="agd-av me" title="Me">ME</span>${colleagues().slice(0, 4).map(p => `<span class="agd-av col" title="${esc(p.name)}${p.role ? ' · ' + esc(p.role) : ''}">${esc(initials(p.name))}</span>`).join('')}
         <button type="button" class="agd-pill agd-people-btn">${duo('user-card')}People</button></div>
     </div>
     <div class="agd-actions">
@@ -3912,20 +4102,45 @@ function buildAgendaEditor(items, outcomes) {
   const root = document.createElement('div');
   root.className = 'agenda-editor paper';
   root.innerHTML = `<div class="pe-lines"></div>
-    <div class="pe-adds"><div class="line-ghost" role="button" tabindex="0">Add an item</div><button type="button" class="add-divider">+ Add section</button></div>
+    <div class="pe-adds"><div class="line-ghost" role="button" tabindex="0">Add an item</div><button type="button" class="add-divider">+ Add section</button><button type="button" class="hint-toggle" aria-label="Show or hide keyboard shortcuts" title="Keyboard shortcuts">?</button></div>
     <div class="pe-hint"><span><kbd>Enter</kbd> next item</span><span><kbd>Tab</kbd> indent (3 levels)</span><span><code># </code> section</span><span><code>@name</code> assign</span><span><code>!fri</code> due date</span><span>↻ standing · outcome · make task: on each line</span></div>`;
   const box = root.querySelector('.pe-lines'), ghost = root.querySelector('.line-ghost');
   const map = new Map();
   const lines = () => [...box.children].map(el => map.get(el)).filter(Boolean);
-  const changed = () => root.dispatchEvent(new Event('input', { bubbles: true }));
+  // A quiet "Add an item" row closes every section except the last (which uses the one at the bottom)
+  const placeGhosts = () => {
+    box.querySelectorAll(':scope > .sec-ghost').forEach(g => g.remove());
+    [...box.children].forEach((el, i) => {
+      const api = map.get(el);
+      if (!api || api.s.kind !== 'divider' || i === 0) return;
+      const prev = map.get(el.previousElementSibling);
+      if (prev && prev.s.kind === 'item' && prev.isBlank()) return;
+      const g = document.createElement('div');
+      g.className = 'sec-ghost';
+      g.setAttribute('role', 'button'); g.tabIndex = 0;
+      g.textContent = 'Add an item';
+      el.before(g);
+    });
+  };
+  const changed = () => { placeGhosts(); root.dispatchEvent(new Event('input', { bubbles: true })); };
+  const addInSection = g => {
+    let prevEl = g.previousElementSibling;
+    while (prevEl && !map.get(prevEl)) prevEl = prevEl.previousElementSibling;
+    ctx.newAfter(prevEl ? map.get(prevEl) : null);
+  };
+  let ghostRaf = 0;
+  root.addEventListener('input', () => { cancelAnimationFrame(ghostRaf); ghostRaf = requestAnimationFrame(placeGhosts); });
+  root.addEventListener('focusout', () => { cancelAnimationFrame(ghostRaf); ghostRaf = requestAnimationFrame(placeGhosts); });
+  box.addEventListener('click', e => { const g = e.target.closest('.sec-ghost'); if (g) addInSection(g); });
+  box.addEventListener('keydown', e => { const g = e.target.closest('.sec-ghost'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); addInSection(g); } });
   const ctx = {
     maxIndent: 2, dragging: null, changed,
     makeTask: api => agMakeTask(findAgenda(state.agSel), api.getData()),
     updateGhost() { const ls = lines(); const last = ls[ls.length - 1]; ghost.classList.toggle('gone', !!last && last.isBlank()); },
     newAfter(api, opts = {}) {
       const n = make(opts.kind === 'divider' ? { kind: 'divider' } : { indent: opts.indent || 0 });
-      if (api) { const kids = lineKids(lines(), api); (kids.length ? kids[kids.length - 1].el : api.el).after(n.el); } else box.appendChild(n.el);
-      n.fit(); n.ta.focus(); fixLineIndents(lines()); ctx.updateGhost(); changed();
+      if (api) { const kids = lineKids(lines(), api); (kids.length ? kids[kids.length - 1].el : api.el).after(n.el); } else box.prepend(n.el);
+      n.fit(); fixLineIndents(lines()); ctx.updateGhost(); changed(); n.ta.focus();
     },
     kidsOf(api) { return lineKids(lines(), api); },
     prevLine(api) { const ls = lines(); return ls[ls.indexOf(api) - 1]; },
@@ -3943,7 +4158,8 @@ function buildAgendaEditor(items, outcomes) {
   const make = it => { const api = buildLine(it, 'agenda', ctx); map.set(api.el, api); return api; };
   (items.length ? items : [{}]).forEach(it => box.appendChild(make({ ...it, outcome: (outcomes || {})[it.id] || '' }).el));
   ctx.updateGhost();
-  const addAtEnd = () => { const ls = lines(); ctx.newAfter(ls[ls.length - 1] || null); };
+  placeGhosts();
+  const addAtEnd = () => { const ls = lines(); const last = ls[ls.length - 1]; if (last) ctx.newAfter(last); else { const n = make({}); box.appendChild(n.el); n.ta.focus(); changed(); } };
   ghost.addEventListener('click', addAtEnd);
   ghost.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); addAtEnd(); } });
   root.querySelector('.add-divider').addEventListener('click', () => { const ls = lines(); ctx.newAfter(ls[ls.length - 1] || null, { kind: 'divider' }); });
@@ -4020,7 +4236,7 @@ function agSaveOutcome(meetingId, itemId, text) {
 async function agCloseMeeting() {
   const a = findAgenda(state.agSel);
   if (!a || !a.meeting_date) return;
-  if (!confirm(`Close the ${longDate(a.meeting_date)} meeting now? It will be saved to the history, finished one-off items will drop off, and standing items will reset for next time.`)) return;
+  if (!(await askConfirm(`Close the ${longDate(a.meeting_date)} meeting now? It will be saved to the history, finished one-off items will drop off, and standing items will reset for next time.`))) return;
   await agFlush();
   await agRollover(a, true);
   state.agEditorKey = '';
@@ -4057,9 +4273,9 @@ async function agUndoCancel(meetingId) {
   renderAgendas(); renderWeek();
   toast('Meeting restored');
 }
-function agMakeTask(a, it) {
+async function agMakeTask(a, it) {
   if (!a || !it) return;
-  if (state.draftEditor && draftHasContent() && !confirm('Replace your current New task draft with this item?')) return;
+  if (state.draftEditor && draftHasContent() && !(await askConfirm('Replace your current New task draft with this item?'))) return;
   const title = (it.title || '').replace(/\s*\n\s*/g, ' ');
   mountDraft({
     title, client_id: a.client_id || null,
@@ -4067,6 +4283,7 @@ function agMakeTask(a, it) {
   });
   saveDraft();
   setView('todo');
+  window.openComposer();
   requestAnimationFrame(() => state.draftEditor && state.draftEditor.titleIn.focus());
   toast('Task ready in the New task panel. Adjust it, then add it to the board.');
 }
@@ -4175,7 +4392,7 @@ function openAgendaForm(a) {
     }
     if (e.target.closest('.agf-cancel')) { closeAppModal(true); return; }
     if (e.target.closest('.agf-del')) {
-      if (!confirm(`Delete the agenda “${a.name}” and its meeting history? This can’t be undone.`)) return;
+      if (!(await askConfirm(`Delete the agenda “${a.name}” and its meeting history? This can’t be undone.`))) return;
       const { error } = await sb.from('agendas').delete().eq('id', a.id);
       if (error) { toast('Couldn’t delete the agenda. Try again.', true); return; }
       state.agendas = state.agendas.filter(x => x.id !== a.id);
@@ -4265,11 +4482,16 @@ function wireAgendas() {
     if (!t) return;
     agFlush(); state.agClient = t.dataset.client; state.agViewing = null; state.agEditorKey = ''; renderAgendas();
   });
-  $('#agd-side').addEventListener('click', e => {
+  $('#agd-side').addEventListener('change', e => {
+    if (!e.target.matches('#agd-client')) return;
+    agFlush(); state.agClient = e.target.value; state.agViewing = null; state.agEditorKey = ''; renderAgendas();
+  });
+  $('#agd-side').addEventListener('click', async e => {
+    if (e.target.closest('.agd-new')) { openAgendaForm(null); return; }
     const undo = e.target.closest('[data-undo]');
     if (undo) { agUndoCancel(undo.dataset.undo); return; }
     const can = e.target.closest('[data-cancel]');
-    if (can) { if (confirm(`Cancel the ${longDate(can.dataset.cancel)} meeting?`)) agCancelMeeting(can.dataset.cancel); return; }
+    if (can) { if ((await askConfirm(`Cancel the ${longDate(can.dataset.cancel)} meeting?`))) agCancelMeeting(can.dataset.cancel); return; }
     const card = e.target.closest('.agd-card');
     if (card) { agFlush(); state.agSel = card.dataset.agenda; state.agViewing = null; state.agEditorKey = ''; renderAgendas(); return; }
     const mt = e.target.closest('[data-meeting]');
@@ -4284,7 +4506,7 @@ function wireAgendas() {
     if (v) { await agFlush(); state.agView = v.dataset.agview; state.agEditorKey = ''; renderAgendaDoc(); return; }
     if (e.target.closest('.agd-copy')) { agCopy(); return; }
     if (e.target.closest('.agd-close-mtg')) { agCloseMeeting(); return; }
-    if (e.target.closest('.agd-cancel-mtg')) { if (D && confirm(`Cancel the ${longDate(D.date)} meeting? Its items carry over to the next meeting.`)) agCancelMeeting(D.date); return; }
+    if (e.target.closest('.agd-cancel-mtg')) { if (D && (await askConfirm(`Cancel the ${longDate(D.date)} meeting? Its items carry over to the next meeting.`))) agCancelMeeting(D.date); return; }
     if (e.target.closest('.agd-more')) { if (D) openAgendaForm(D.a); return; }
     if (e.target.closest('.agd-people-btn')) { if (D) openPeople(D.a.client_id); return; }
   });
@@ -4408,6 +4630,8 @@ function keepScroll(sel, fn) {
 renderRight = keepScroll('#task-list', renderRight);
 renderWeek = keepScroll('#week-days', renderWeek);
 renderNotes = keepScroll('#notes-board', renderNotes);
+
+window.addEventListener('pagehide', () => { if (state.agSaveTimer) agSave(); });
 
 init();
 </script>
