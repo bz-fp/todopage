@@ -1072,6 +1072,7 @@ body{font:13.5px/1.45 "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-syst
 .agf .input{height:40px}
 .agf .agf-client{align-self:flex-start}
 .agf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.agf-row:has(> :only-child){grid-template-columns:1fr}
 .agf-preview{margin:-4px 0 18px}
 .agf-foot{display:flex;align-items:center;gap:8px;padding-top:16px;border-top:1px solid var(--line)}
 .agf-foot .spacer{flex:1}
@@ -1163,6 +1164,24 @@ body.hints-on .pe-hint{display:flex}
 .cm-wrap{padding-bottom:14px}
 .ppl .agd-av,.cm-row .agd-av{background:var(--panel-2);color:var(--ink)}
 select.input{appearance:none;-webkit-appearance:none;padding-right:30px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 12px) 50%;background-size:4px 4px;background-repeat:no-repeat}
+
+/* Edit-task buttons wrap instead of spilling out of a narrow card */
+.tc-edit-foot{flex-wrap:wrap;row-gap:8px}
+.tc-edit-foot .btn{flex:none;white-space:nowrap}
+.tc-edit-foot .spacer{flex:1 1 0;min-width:0}
+/* Item tools sit on their own row while you edit, so the item text keeps its full width */
+.line-row{flex-wrap:wrap}
+.line-text{flex:1 1 0;min-width:120px}
+.line:hover .line-tools{display:none}
+.line:focus-within .line-tools{display:flex;order:5;flex:0 0 100%;gap:2px;margin-top:5px}
+.line:focus-within .line-tools .tool-remove{margin-left:auto}
+/* Links */
+.fmt a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;word-break:break-word;cursor:pointer}
+
+.tc-edit-foot .ed-right{display:flex;gap:7px;margin-left:auto}
+.agd-schedule{display:inline-flex;align-items:center;gap:6px}
+.agd-schedule .ic.duo{width:16px;height:16px}
+.paper textarea.pe-title{resize:none;overflow:hidden;line-height:1.2;font-family:inherit}
 </style>
 </head>
 <body>
@@ -1293,7 +1312,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:30px;backgrou
   <div class="dlg-backdrop" id="dlg-backdrop"></div>
   <div class="dlg-card" role="alertdialog" aria-modal="true" aria-labelledby="dlg-msg">
     <p class="dlg-msg" id="dlg-msg"></p>
-    <input class="input" id="dlg-input" maxlength="120" aria-labelledby="dlg-msg" hidden>
+    <input class="input" id="dlg-input" maxlength="2000" aria-labelledby="dlg-msg" hidden>
     <div class="dlg-foot"><button type="button" class="btn" id="dlg-cancel">Cancel</button><button type="button" class="btn primary" id="dlg-ok">OK</button></div>
   </div>
 </div>
@@ -1590,6 +1609,7 @@ function serialise(node, depth) {
     const color = st.color || (tag === 'FONT' ? ch.getAttribute('color') : '');
     const bg = st.backgroundColor;
     if (inner) {
+      if (tag === 'A') { const h = safeHref(ch.getAttribute('href')); if (h) inner = `<a href="${esc(h)}" target="_blank" rel="noopener noreferrer">${inner}</a>`; }
       if (tag === 'B' || tag === 'STRONG' || fw === 'bold' || +fw >= 600) inner = `<b>${inner}</b>`;
       if (tag === 'I' || tag === 'EM' || st.fontStyle === 'italic') inner = `<i>${inner}</i>`;
       if (tag === 'U' || deco.includes('underline')) inner = `<u>${inner}</u>`;
@@ -1641,6 +1661,7 @@ const TOOLBAR = [
   { cmd: 'red', html: '<span class="swatch" style="background:#d32f2f"></span>Red', title: 'Red text' },
   { cmd: 'black', html: '<span class="swatch sw-ink"></span>Black', title: 'Black text' },
   { sep: true },
+  { cmd: 'link', html: 'Link', title: 'Link: select text, then add a web address. Web addresses you type or paste become links automatically' },
   { cmd: 'clear', html: 'Clear', title: 'Clear formatting' },
 ];
 function buildRich(html, placeholder) {
@@ -1680,12 +1701,27 @@ function buildRich(html, placeholder) {
   ed.addEventListener('paste', e => {
     e.preventDefault();
     const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    const one = text.trim();
+    if (/^(?:https?:\/\/|www\.)\S+$/i.test(one) && safeHref(normLink(one))) {
+      document.execCommand('insertHTML', false, `<a href="${esc(safeHref(normLink(one)))}" target="_blank" rel="noopener noreferrer">${esc(one)}</a>&nbsp;`);
+      return;
+    }
     document.execCommand('insertText', false, text);
   });
+  // A single click opens a link, even while editing
+  ed.addEventListener('click', e => {
+    const a = e.target.closest('a');
+    if (!a || !ed.contains(a)) return;
+    e.preventDefault();
+    const h = safeHref(a.getAttribute('href'));
+    if (h) window.open(h, '_blank', 'noopener');
+  });
+  ed.addEventListener('focusout', () => { if (linkifyAll(ed)) ed.dispatchEvent(new Event('input', { bubbles: true })); });
   ed.addEventListener('input', e => {
     if (!ed.textContent.trim() && !ed.querySelector('li') && ed.innerHTML !== '') { ed.innerHTML = ''; return; }
     // "- " or "* " at the start of a line becomes a dotpoint
     if (e.inputType !== 'insertText' || e.data !== ' ') return;
+    autoLinkBeforeCaret(ed);
     const sel = window.getSelection(), n = sel.anchorNode;
     if (!n || n.nodeType !== 3 || !ed.contains(n) || n.parentElement.closest('li')) return;
     const typed = n.nodeValue.slice(0, sel.anchorOffset).replace(/\u00a0/g, ' ');
@@ -1703,7 +1739,76 @@ function buildRich(html, placeholder) {
   wrap.append(tb, ed);
   return { el: wrap, editor: ed, getHTML: () => sanitizeHTML(ed.innerHTML) };
 }
+// Links: web addresses become links as you type (after a space), on paste, and when you leave the box
+const URL_RE = /(?:https?:\/\/|www\.)[^\s\u00a0<>"]+/gi;
+const trimUrl = u => u.replace(/[.,;:!?)\]]+$/, '');
+function makeAnchor(text) {
+  const a = document.createElement('a');
+  a.href = safeHref(normLink(text)) || '#';
+  a.target = '_blank'; a.rel = 'noopener noreferrer';
+  return a;
+}
+function linkifyAll(ed) {
+  const walker = document.createTreeWalker(ed, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) if (!n.parentElement.closest('a')) nodes.push(n);
+  let changed = false;
+  nodes.forEach(n => {
+    const hits = [...n.nodeValue.matchAll(URL_RE)].reverse();
+    hits.forEach(m => {
+      const url = trimUrl(m[0]);
+      if (!safeHref(normLink(url))) return;
+      const r = document.createRange();
+      r.setStart(n, m.index); r.setEnd(n, m.index + url.length);
+      r.surroundContents(makeAnchor(url));
+      changed = true;
+    });
+  });
+  return changed;
+}
+function autoLinkBeforeCaret(ed) {
+  const sel = window.getSelection(), n = sel.anchorNode, o = sel.anchorOffset;
+  if (!n || n.nodeType !== 3 || !ed.contains(n) || n.parentElement.closest('a')) return;
+  const before = n.nodeValue.slice(0, o - 1);
+  const m = before.match(/(?:^|[\s\u00a0(])((?:https?:\/\/|www\.)[^\s\u00a0<>"]+)$/i);
+  if (!m) return;
+  const url = trimUrl(m[1]);
+  if (!safeHref(normLink(url))) return;
+  const start = before.length - m[1].length;
+  const r = document.createRange();
+  r.setStart(n, start); r.setEnd(n, start + url.length);
+  const a = makeAnchor(url);
+  r.surroundContents(a);
+  const rest = a.nextSibling;
+  if (rest && rest.nodeType === 3) {
+    const c = document.createRange();
+    c.setStart(rest, Math.min(rest.nodeValue.length, (m[1].length - url.length) + 1)); c.collapse(true);
+    sel.removeAllRanges(); sel.addRange(c);
+  }
+}
+async function linkFromSelection(ed) {
+  const sel = window.getSelection();
+  const range = sel.rangeCount && ed.contains(sel.anchorNode) ? sel.getRangeAt(0).cloneRange() : null;
+  const node = sel.anchorNode && (sel.anchorNode.nodeType === 3 ? sel.anchorNode.parentElement : sel.anchorNode);
+  const existing = node && ed.contains(node) ? node.closest('a') : null;
+  const input = await askText(existing ? 'Change the link address (leave it empty to remove the link)' : 'Link address', existing ? existing.getAttribute('href') : 'https://');
+  ed.focus();
+  if (range) { sel.removeAllRanges(); sel.addRange(range); }
+  if (input === null) return;
+  const typed = input.trim() === 'https://' ? '' : input.trim();
+  const href = typed ? safeHref(normLink(typed)) : '';
+  if (typed && !href) { toast('That doesn’t look like a web address.', true); return; }
+  if (existing) {
+    if (href) existing.setAttribute('href', href); else existing.replaceWith(...existing.childNodes);
+  } else if (href) {
+    if (range && !range.collapsed) document.execCommand('createLink', false, href);
+    else document.execCommand('insertHTML', false, `<a href="${esc(href)}">${esc(typed)}</a>&nbsp;`);
+    ed.querySelectorAll('a').forEach(a => { a.target = '_blank'; a.rel = 'noopener noreferrer'; });
+  }
+  ed.dispatchEvent(new Event('input', { bubbles: true }));
+}
 function applyFmt(cmd, ed) {
+  if (cmd === 'link') { linkFromSelection(ed); return; }
   const sel = window.getSelection();
   if (!sel.rangeCount || !ed.contains(sel.anchorNode)) { ed.focus(); return; }
   const exec = (c, v = null, css = false) => { document.execCommand('styleWithCSS', false, css); return document.execCommand(c, false, v); };
@@ -1870,6 +1975,10 @@ function buildLine(it, mode, ctx) {
   const ocBox = el.querySelector('.det-outcome'), ocIn = el.querySelector('.oc-in');
   if (ocIn) { ocIn.value = it.outcome || ''; ocBox.hidden = !ocIn.value.trim(); }
   const ocFit = () => { if (ocIn) { ocIn.style.height = 'auto'; ocIn.style.height = ocIn.scrollHeight + 'px'; } };
+  // The tools row appears and disappears with focus, so re-measure the text box each time
+  const refit = () => requestAnimationFrame(() => api.fit());
+  el.addEventListener('focusin', refit);
+  el.addEventListener('focusout', refit);
   const desc = buildRich(it.description, 'Add a description');
   P.desc.appendChild(desc.el);
 
@@ -2085,7 +2194,7 @@ function buildTaskEditor(data, mode, handlers = {}) {
       ? `<span><kbd>Enter</kbd> next item</span><span><kbd>Tab</kbd> sub-item</span><span><code># </code> divider</span><span><code>@name</code> assign</span><span><code>!+3</code> due 3 days after the start</span><span><kbd>${MOD}+Enter</kbd> save</span>`
       : `<span><kbd>Enter</kbd> next item</span><span><kbd>Tab</kbd> sub-item</span><span><code># </code> divider</span><span><code>@name</code> assign</span><span><code>!fri</code> due date</span><span><kbd>${MOD}+Enter</kbd> save</span><span><kbd>Esc</kbd> close</span>`;
   root.innerHTML = `
-    <input class="pe-title" maxlength="200" placeholder="Task title" aria-label="Task title">
+    <textarea class="pe-title" rows="1" maxlength="200" placeholder="Task title" aria-label="Task title"></textarea>
     <div class="pe-sub"></div>
     <div class="pe-meta"><button type="button" class="pe-repeat pe-client" aria-label="Client"></button><span class="pe-cats"></span><button type="button" class="pe-repeat pe-catbtn" aria-label="Choose categories" title="Categories">${ICONS.tag}<span>Category</span></button>
       <button type="button" class="pe-repeat pe-prio" aria-label="Priority"></button>
@@ -2236,8 +2345,16 @@ function buildTaskEditor(data, mode, handlers = {}) {
   ctx.updateGhost();
 
   const toFirstLine = () => { const f = lines()[0]; f ? f.focusEnd() : ctx.newAfter(null); };
+  const fitTitle = () => { titleIn.style.height = 'auto'; titleIn.style.height = titleIn.scrollHeight + 'px'; };
+  requestAnimationFrame(fitTitle);
+  titleIn.addEventListener('input', () => {
+    if (/[\r\n]/.test(titleIn.value)) titleIn.value = titleIn.value.replace(/\s*[\r\n]+\s*/g, ' ');
+    fitTitle();
+  });
   titleIn.addEventListener('keydown', e => {
-    if ((e.key === 'Enter' && !e.ctrlKey && !e.metaKey) || e.key === 'ArrowDown') { e.preventDefault(); toFirstLine(); }
+    if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); toFirstLine(); return; }
+    // Arrow down leaves the title only from its last line
+    if (e.key === 'ArrowDown' && titleIn.selectionEnd === titleIn.value.length) { e.preventDefault(); toFirstLine(); }
   });
   const addAtEnd = () => { const ls = lines(); ctx.newAfter(ls[ls.length - 1] || null); };
   ghost.addEventListener('click', addAtEnd);
@@ -2261,7 +2378,7 @@ function buildTaskEditor(data, mode, handlers = {}) {
 
   return {
     el: root, titleIn, lines,
-    fit: () => lines().forEach(l => l.fit()),
+    fit: () => { fitTitle(); lines().forEach(l => l.fit()); },
     applyShortcuts: () => lines().forEach(l => l.applyShortcuts()),
     refreshCats: renderCats, refreshClient: renderClient,
     getData: () => ({ title: titleIn.value, subtitle: sub.getHTML(), category_ids: [...cats].filter(id => findCat(id)), client_id: client, priority: prio, items: lines().map(l => l.getData()), recurRule: rec.rule ? { ...rec.rule } : null, recurDue: rec.due }),
@@ -2400,8 +2517,8 @@ function openEditor(id) {
   card.appendChild(api.el);
   const foot = document.createElement('div');
   foot.className = 'tc-edit-foot';
-  foot.innerHTML = `<button type="button" class="btn ghost danger ed-delete">Delete task</button><button type="button" class="btn ghost ed-more" aria-label="More options" title="Defer or save as template">${ICONS.dots}More</button><span class="spacer"></span>
-    <button type="button" class="btn ed-cancel">Cancel</button><button type="button" class="btn primary ed-save">Save changes</button>`;
+  foot.innerHTML = `<button type="button" class="btn ghost danger ed-delete">Delete task</button><button type="button" class="btn ghost ed-more" aria-label="More options" title="Defer or save as template">${ICONS.dots}More</button>
+    <span class="ed-right"><button type="button" class="btn ed-cancel">Cancel</button><button type="button" class="btn primary ed-save">Save changes</button></span>`;
   card.appendChild(foot);
 
   const ed = { taskId: id, card, api, dirty: false };
@@ -2532,7 +2649,8 @@ async function deferTask(id, days) {
 /* ---------- Small pop-up menu ---------- */
 let menuEl = null;
 function closeMenu() { if (menuEl) { menuEl.remove(); menuEl = null; document.removeEventListener('mousedown', menuOutside, true); } }
-function menuOutside(e) { if (menuEl && !menuEl.contains(e.target)) closeMenu(); }
+let menuDismissedAt = 0;
+function menuOutside(e) { if (menuEl && !menuEl.contains(e.target)) { closeMenu(); menuDismissedAt = Date.now(); } }
 function openMenu(anchor, items) {
   closeMenu();
   const m = document.createElement('div');
@@ -2792,19 +2910,20 @@ function openClientManager() {
 
 /* ---------- In-app dialogs (instead of the browser's confirm / prompt boxes) ---------- */
 let dlgResolve = null;
-function showDialog({ message, input, value, okLabel, cancelLabel, danger }) {
+function showDialog({ message, input, inputType, value, okLabel, cancelLabel, danger }) {
   return new Promise(res => {
     if (dlgResolve) dlgResolve(null);
     closeMenu();
     $('#dlg-msg').textContent = message;
     const inp = $('#dlg-input');
+    inp.type = inputType || 'text';
     inp.hidden = !input; inp.value = value || '';
     const ok = $('#dlg-ok');
     ok.textContent = okLabel || 'OK'; ok.classList.toggle('danger-solid', !!danger);
     $('#dlg-cancel').textContent = cancelLabel || 'Cancel';
     $('#dlg').hidden = false;
     dlgResolve = res;
-    if (input) { inp.focus(); inp.select(); } else ok.focus();
+    if (input) { inp.focus(); if (inp.type === 'text') inp.select(); } else ok.focus();
   });
 }
 function closeDialog(val) {
@@ -2824,8 +2943,12 @@ async function askConfirm(message) {
     : /^Replace/.test(m) ? { okLabel: 'Replace' } : { okLabel: 'OK' };
   return (await showDialog({ message: m, ...o })) === true;
 }
+async function askDate(message, value) {
+  const v = await showDialog({ message, input: true, inputType: 'date', value, okLabel: 'Schedule' });
+  return typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null;
+}
 async function askText(message, value) {
-  const v = await showDialog({ message, input: true, value, okLabel: /^Rename/.test(message) ? 'Rename' : 'Add' });
+  const v = await showDialog({ message, input: true, value, okLabel: /^Rename/.test(message) ? 'Rename' : /^Change/.test(message) ? 'Save' : 'Add' });
   return typeof v === 'string' ? v : null;
 }
 function wireDialog() {
@@ -3259,11 +3382,12 @@ function wireEvents() {
   $('#templates-btn').addEventListener('click', () => openTemplates());
   $('#am-close').innerHTML = ICONS.x;
   $('#am-close').addEventListener('click', () => closeAppModal());
-  $('#am-backdrop').addEventListener('click', () => closeAppModal());
+  $('#am-backdrop').addEventListener('click', () => { if (Date.now() - menuDismissedAt > 400) closeAppModal(); });
   $('#clear-draft').addEventListener('click', clearDraft);
   $('#overdue-strip').addEventListener('click', () => { state.tab = 'overdue'; renderRight(); });
   wireAgendas();
   wireDialog();
+  document.addEventListener('click', e => { const a = e.target.closest('.fmt a'); if (a && !a.closest('[contenteditable="true"]')) e.stopPropagation(); }, true);
   // Collapse / open the New task and New note column (remembered in this browser)
   const setComposer = open => {
     document.body.classList.toggle('composer-closed', !open);
@@ -3798,7 +3922,9 @@ function setView(v) {
 
 /* ---------- Agendas ---------- */
 const AGENDA_MIGRATION_MSG = 'Run update-agendas.sql in Supabase first (see the banner at the top).';
-const AG_FREQS = [['weekly', 'Weekly'], ['fortnightly', 'Fortnightly'], ['monthly', 'Monthly'], ['quarterly', 'Quarterly']];
+const AG_FREQS = [['weekly', 'Weekly'], ['fortnightly', 'Fortnightly'], ['monthly', 'Monthly'], ['quarterly', 'Quarterly'], ['adhoc', 'As needed (no fixed schedule)']];
+const agAdhoc = a => !!a && (a.rule || {}).freq === 'adhoc';
+const agRuleLabel = a => (agAdhoc(a) ? 'As needed' : '↻ ' + describeAgRule(a.rule));
 const findAgenda = id => state.agendas.find(a => a.id === id);
 const nextDay = d => ymd(addDays(parseYmd(d), 1));
 const longDate = d => { const x = parseYmd(d); return `${WD_LONG[x.getDay()]} ${x.getDate()} ${MON_LONG[x.getMonth()]}`; };
@@ -3816,6 +3942,8 @@ function agRecur(r) {
 }
 function agNextAfter(a, after) {
   const r = a.rule || {};
+  // As-needed agendas: only the dates you've scheduled
+  if (r.freq === 'adhoc') return (r.dates || []).filter(d => d > after).sort()[0] || null;
   if (r.freq === 'fortnightly') {
     const anc = r.anchor || state.today;
     if (after < anc) return anc;
@@ -3844,6 +3972,7 @@ function describeAgRule(r) {
   if (r.freq === 'fortnightly') return `Fortnightly · ${wd}`;
   if (r.freq === 'monthly') return `Monthly · ${ordinal(+r.day || 1)}`;
   if (r.freq === 'quarterly') return `Quarterly · ${ordinal(+r.day || 1)} of the quarter`;
+  if (r.freq === 'adhoc') return 'As needed';
   return '';
 }
 
@@ -3878,7 +4007,8 @@ async function agRollover(a, force) {
     changed = true; force = false;
   }
   if (changed) {
-    const { error } = await sb.from('agendas').update({ items: a.items, outcomes: a.outcomes, meeting_date: a.meeting_date }).eq('id', a.id);
+    if (agAdhoc(a)) a.rule = { ...a.rule, dates: (a.rule.dates || []).filter(d => a.meeting_date && d >= a.meeting_date).sort() };
+    const { error } = await sb.from('agendas').update({ items: a.items, outcomes: a.outcomes, meeting_date: a.meeting_date, rule: a.rule }).eq('id', a.id);
     if (error) console.error(error);
   }
   return changed;
@@ -3939,7 +4069,7 @@ function renderAgendas() {
     const next = a.meeting_date;
     return `<button type="button" class="agd-card ${a.id === state.agSel ? 'on' : ''}" data-agenda="${esc(a.id)}">
       <span class="agd-card-name">${esc(a.name)}</span>
-      <span class="agd-card-sub">↻ ${esc(describeAgRule(a.rule))}${next ? ` · next ${esc(shortDate(next))}` : ''}</span></button>`;
+      <span class="agd-card-sub">${esc(agRuleLabel(a))}${next ? ` · next ${esc(shortDate(next))}` : agAdhoc(a) ? ' · no meeting scheduled' : ''}</span></button>`;
   };
   let html = '';
   if (!state.agendas.length) html = '<div class="agd-empty small">No agendas yet. Use <b>New agenda</b> to set up a regular client meeting.</div>';
@@ -3965,7 +4095,7 @@ function agTimelineHTML(a) {
     const cur = d === a.meeting_date && !can;
     h += `<div class="agd-tl-row ${cur ? 'cur' : ''} ${can ? 'can' : ''} ${cur && !state.agViewing ? 'sel' : ''}" ${cur ? 'data-current="1"' : ''}>
       <span class="agd-tl-dot"></span><span class="agd-tl-date">${esc(shortDate(d))}</span>
-      ${cur ? `<span class="agd-chip">${d === state.today ? 'Today' : 'Next'}</span>` : can ? `<span class="agd-tl-note">Cancelled</span><button type="button" class="agd-link" data-undo="${esc(can.id)}">Undo</button>` : `<span class="agd-tl-note">upcoming</span><button type="button" class="agd-link agd-tl-cancel" data-cancel="${esc(d)}">Cancel</button>`}
+      ${cur ? `<span class="agd-chip">${d === state.today ? 'Today' : 'Next'}</span>${agAdhoc(a) ? `<button type="button" class="agd-link agd-tl-cancel" data-remove="${esc(d)}">Remove</button>` : ''}` : can ? `<span class="agd-tl-note">Cancelled</span><button type="button" class="agd-link" data-undo="${esc(can.id)}">Undo</button>` : agAdhoc(a) ? `<span class="agd-tl-note">upcoming</span><button type="button" class="agd-link agd-tl-cancel" data-remove="${esc(d)}">Remove</button>` : `<span class="agd-tl-note">upcoming</span><button type="button" class="agd-link agd-tl-cancel" data-cancel="${esc(d)}">Cancel</button>`}
     </div>`;
   });
   const past = state.meetings.filter(m => m.agenda_id === a.id && (m.status === 'held' || (a.meeting_date && m.date < a.meeting_date) || m.date < state.today) && !upcoming.includes(m.date))
@@ -3979,7 +4109,7 @@ function agTimelineHTML(a) {
       ${!held && m.date >= state.today ? `<button type="button" class="agd-link" data-undo="${esc(m.id)}">Undo</button>` : ''}
     </div>`;
   });
-  if (!upcoming.length && !past.length) h += '<div class="agd-tl-note">No meetings scheduled.</div>';
+  if (!upcoming.length && !past.length) h += `<div class="agd-tl-note">${agAdhoc(a) ? 'No meetings yet. Use Schedule meeting to add a date.' : 'No meetings scheduled.'}</div>`;
   return h + '</div>';
 }
 
@@ -4004,7 +4134,7 @@ function renderAgendaDoc() {
       <div class="agd-kicker">${c ? esc(c.name) + ' · ' : ''}${esc(a.name)}</div>
       <div class="agd-date-row"><h2>${date ? esc(longDate(date)) : 'No meeting scheduled'}</h2>
         ${past ? '<span class="agd-chip held">Held</span><button type="button" class="agd-link agd-back">Back to the next meeting</button>' : date ? `<span class="agd-chip">${date === state.today ? 'Today' : 'Next meeting'}</span>` : ''}</div>
-      <div class="agd-people"><span class="agd-sub">↻ ${esc(describeAgRule(a.rule))}</span>${people.map(p => `<span class="agd-av" title="${esc(p.name)}${p.role ? ' · ' + esc(p.role) : ''}">${esc(initials(p.name))}</span>`).join('')}<span class="agd-av me" title="Me">ME</span>${colleagues().slice(0, 4).map(p => `<span class="agd-av col" title="${esc(p.name)}${p.role ? ' · ' + esc(p.role) : ''}">${esc(initials(p.name))}</span>`).join('')}
+      <div class="agd-people"><span class="agd-sub">${esc(agRuleLabel(a))}</span>${people.map(p => `<span class="agd-av" title="${esc(p.name)}${p.role ? ' · ' + esc(p.role) : ''}">${esc(initials(p.name))}</span>`).join('')}<span class="agd-av me" title="Me">ME</span>${colleagues().slice(0, 4).map(p => `<span class="agd-av col" title="${esc(p.name)}${p.role ? ' · ' + esc(p.role) : ''}">${esc(initials(p.name))}</span>`).join('')}
         <button type="button" class="agd-pill agd-people-btn">${duo('user-card')}People</button></div>
     </div>
     <div class="agd-actions">
@@ -4013,6 +4143,7 @@ function renderAgendaDoc() {
         <button type="button" class="tab ${state.agView === 'assignee' ? 'active' : ''}" data-agview="assignee" role="tab">Assignee</button>
       </div>
       <button type="button" class="btn primary agd-copy">${duo('file')}Copy</button>
+      ${!past && agAdhoc(a) ? `<button type="button" class="btn agd-schedule">${duo('calendar')}Schedule meeting</button>` : ''}
       ${!past && date ? '<button type="button" class="btn agd-close-mtg" title="Save this meeting to the history now and start the next one">Close meeting</button><button type="button" class="btn agd-cancel-mtg">Cancel meeting</button>' : ''}
       <button type="button" class="icon-btn agd-more" aria-label="Agenda settings" title="Agenda settings">${duo('settings')}</button>
     </div>
@@ -4273,6 +4404,33 @@ async function agUndoCancel(meetingId) {
   renderAgendas(); renderWeek();
   toast('Meeting restored');
 }
+async function agSaveSchedule(a) {
+  a.rule = { ...a.rule, dates: [...new Set(a.rule.dates || [])].sort() };
+  a.meeting_date = agNextOpen(a, state.today);
+  const { error } = await sb.from('agendas').update({ rule: a.rule, meeting_date: a.meeting_date }).eq('id', a.id);
+  if (error) { console.error(error); toast('Couldn’t save the meeting date. Try again.', true); return false; }
+  state.agEditorKey = '';
+  renderAgendas(); renderWeek();
+  return true;
+}
+async function agSchedule() {
+  const a = findAgenda(state.agSel);
+  if (!a || !agAdhoc(a)) return;
+  const d = await askDate('Meeting date', '');
+  if (!d) return;
+  if (d < state.today) { toast('Choose today or a later date.', true); return; }
+  if ((a.rule.dates || []).includes(d)) { toast('That date is already scheduled.', true); return; }
+  await agFlush();
+  a.rule = { ...a.rule, dates: [...(a.rule.dates || []), d] };
+  if (await agSaveSchedule(a)) toast(`Meeting scheduled for ${shortDate(d)}`);
+}
+async function agRemoveDate(d) {
+  const a = findAgenda(state.agSel);
+  if (!a || !agAdhoc(a)) return;
+  await agFlush();
+  a.rule = { ...a.rule, dates: (a.rule.dates || []).filter(x => x !== d) };
+  if (await agSaveSchedule(a)) toast(`${shortDate(d)} meeting removed`);
+}
 async function agMakeTask(a, it) {
   if (!a || !it) return;
   if (state.draftEditor && draftHasContent() && !(await askConfirm('Replace your current New task draft with this item?'))) return;
@@ -4361,16 +4519,17 @@ function openAgendaForm(a) {
     const c = findClient(clientId);
     const preview = (() => { const fake = { id: 'x', rule: r }; const d = agOnOrAfter(fake, state.today); return d ? longDate(d) : ''; })();
     el.innerHTML = `
-      <label class="field"><span class="field-label">Client</span><button type="button" class="pe-repeat pe-client agf-client ${c ? 'has' : ''}">${c ? `<span class="cl-badge" style="${clStyle(c)}">${esc(c.name)}</span>` : `${duo('briefcase')}<span>Choose a client</span>`}</button></label>
+      <div class="field"><span class="field-label">Client</span><button type="button" class="pe-repeat pe-client agf-client ${c ? 'has' : ''}" aria-label="Client">${c ? `<span class="cl-badge" style="${clStyle(c)}">${esc(c.name)}</span>` : `${duo('briefcase')}<span>Choose a client</span>`}</button></div>
       <label class="field"><span class="field-label">Meeting name</span><input class="input agf-name" maxlength="120" placeholder="e.g. Weekly compliance check-in" value="${esc(a ? a.name : el.dataset.name || '')}"></label>
       <div class="agf-row">
         <label class="field"><span class="field-label">How often</span><select class="input agf-freq">${AG_FREQS.map(([v, l]) => `<option value="${v}" ${r.freq === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
-        ${r.freq === 'weekly' || r.freq === 'fortnightly'
+        ${r.freq === 'adhoc' ? '' : r.freq === 'weekly' || r.freq === 'fortnightly'
           ? `<label class="field"><span class="field-label">Day</span><select class="input agf-wd">${[1, 2, 3, 4, 5].map(d => `<option value="${d}" ${+r.weekday === d ? 'selected' : ''}>${WD_LONG[d]}</option>`).join('')}</select></label>`
           : `<label class="field"><span class="field-label">${r.freq === 'quarterly' ? 'Date (first month of each quarter)' : 'Date each month'}</span><select class="input agf-day">${Array.from({ length: 31 }, (_, i) => i + 1).map(d => `<option value="${d}" ${+r.day === d ? 'selected' : ''}>${ordinal(d)}</option>`).join('')}</select></label>`}
       </div>
       ${r.freq === 'fortnightly' ? `<label class="field"><span class="field-label">First meeting</span><input class="input agf-anchor" type="date" value="${esc(r.anchor || '')}"></label>` : ''}
-      <p class="muted small agf-preview">${preview ? `Next meeting: <b>${esc(preview)}</b>` : 'Choose the first meeting date.'}${r.freq === 'monthly' || r.freq === 'quarterly' ? ' (weekends move to the Friday before)' : ''}</p>
+      ${r.freq === 'adhoc' && !(a && agAdhoc(a)) ? `<label class="field"><span class="field-label">First meeting (optional)</span><input class="input agf-first" type="date" min="${state.today}" value="${esc(r.first || '')}"></label>` : ''}
+      <p class="muted small agf-preview">${r.freq === 'adhoc' ? 'No fixed schedule. Add meeting dates as you go with <b>Schedule meeting</b>; the agenda stays editable in between.' : preview ? `Next meeting: <b>${esc(preview)}</b>` : 'Choose the first meeting date.'}${r.freq === 'monthly' || r.freq === 'quarterly' ? ' (weekends move to the Friday before)' : ''}</p>
       <div class="agf-foot">${a ? '<button type="button" class="btn ghost danger agf-del">Delete agenda</button>' : ''}<span class="spacer"></span><button type="button" class="btn agf-cancel">Cancel</button><button type="button" class="btn primary agf-save">${a ? 'Save changes' : 'Create agenda'}</button></div>`;
   };
   render();
@@ -4381,6 +4540,7 @@ function openAgendaForm(a) {
     else if (t.matches('.agf-wd')) { r.weekday = +t.value; if (r.freq === 'fortnightly') r.anchor = agOnOrAfter({ rule: { freq: 'weekly', weekday: r.weekday } }, r.anchor && r.anchor > state.today ? r.anchor : state.today); }
     else if (t.matches('.agf-day')) r.day = +t.value;
     else if (t.matches('.agf-anchor')) { r.anchor = t.value; if (t.value) r.weekday = parseYmd(t.value).getDay(); }
+    else if (t.matches('.agf-first')) { r.first = t.value; return; }
     else return;
     render();
   });
@@ -4405,7 +4565,10 @@ function openAgendaForm(a) {
       if (!clientId) { toast('Choose a client for this agenda.', true); return; }
       if (!name) { toast('Give the meeting a name.', true); el.querySelector('.agf-name').focus(); return; }
       if (r.freq === 'fortnightly' && !r.anchor) { toast('Choose the first meeting date.', true); return; }
-      const rule = r.freq === 'weekly' ? { freq: 'weekly', weekday: +r.weekday } : r.freq === 'fortnightly' ? { freq: 'fortnightly', weekday: +r.weekday, anchor: r.anchor } : { freq: r.freq, day: +r.day };
+      if (r.freq === 'adhoc' && r.first && r.first < state.today) { toast('Choose today or a later date for the first meeting.', true); return; }
+      const adhocDates = a && agAdhoc(a) ? (a.rule.dates || []) : r.first ? [r.first] : a && a.meeting_date ? [a.meeting_date] : [];
+      const rule = r.freq === 'adhoc' ? { freq: 'adhoc', dates: adhocDates }
+        : r.freq === 'weekly' ? { freq: 'weekly', weekday: +r.weekday } : r.freq === 'fortnightly' ? { freq: 'fortnightly', weekday: +r.weekday, anchor: r.anchor } : { freq: r.freq, day: +r.day };
       if (a) {
         const ruleChanged = JSON.stringify(rule) !== JSON.stringify(a.rule);
         Object.assign(a, { name, client_id: clientId, rule });
@@ -4490,6 +4653,8 @@ function wireAgendas() {
     if (e.target.closest('.agd-new')) { openAgendaForm(null); return; }
     const undo = e.target.closest('[data-undo]');
     if (undo) { agUndoCancel(undo.dataset.undo); return; }
+    const rem = e.target.closest('[data-remove]');
+    if (rem) { if (await askConfirm(`Remove the ${longDate(rem.dataset.remove)} meeting from the schedule?`)) agRemoveDate(rem.dataset.remove); return; }
     const can = e.target.closest('[data-cancel]');
     if (can) { if ((await askConfirm(`Cancel the ${longDate(can.dataset.cancel)} meeting?`))) agCancelMeeting(can.dataset.cancel); return; }
     const card = e.target.closest('.agd-card');
@@ -4505,6 +4670,7 @@ function wireAgendas() {
     const v = e.target.closest('[data-agview]');
     if (v) { await agFlush(); state.agView = v.dataset.agview; state.agEditorKey = ''; renderAgendaDoc(); return; }
     if (e.target.closest('.agd-copy')) { agCopy(); return; }
+    if (e.target.closest('.agd-schedule')) { agSchedule(); return; }
     if (e.target.closest('.agd-close-mtg')) { agCloseMeeting(); return; }
     if (e.target.closest('.agd-cancel-mtg')) { if (D && (await askConfirm(`Cancel the ${longDate(D.date)} meeting? Its items carry over to the next meeting.`))) agCancelMeeting(D.date); return; }
     if (e.target.closest('.agd-more')) { if (D) openAgendaForm(D.a); return; }
